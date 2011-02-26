@@ -32,33 +32,25 @@ public class RealShopPlayerListener extends PlayerListener
 			// /shop
 			Player player = event.getPlayer();
 			String param = ((cmd.length > 1) ? cmd[1].toLowerCase() : "");
-			if (param.equals("check")) {
-				// /shop check : display info about RealShop
-				if (player.isOp()) {
-					event.setCancelled(true);
+			if (player.isOp()) {
+				// operator events
+				event.setCancelled(true);
+				if (param.equals("check")) {
+					// /shop check : display info about RealShop
 					plugin.pluginInfos(player);
-				}
-			} else if (param.equals("prices")) {
-				// /shop log : show transactions log (summary) of the day
-				if (player.isOp()) {
-					event.setCancelled(true);
+				} else if (param.equals("prices")) {
+					// /shop log : show transactions log (summary) of the day
 					plugin.pluginInfosPrices(player);
-				}
-			} else if (param.equals("simul")) {
-				// /shop simul : simulate new prices using last prices and transactions log
-				if (player.isOp()) {
-					event.setCancelled(true);
-					plugin.marketFile.dailyCalc(plugin.dailyLog);
-				}
-			} else if (param.equals("log")) {
-				if (player.isOp()) {
-					event.setCancelled(true);
+				} else if (param.equals("simul")) {
+					// /shop simul : simulate new prices using last prices and transactions log
+					plugin.marketFile.dailyPricesCalculation(plugin.dailyLog, true);
+				} else if (param.equals("daily")) {
+					// /shop daily : calculate and save new prices using last prices and transactions log
+					plugin.marketFile.dailyPricesCalculation(plugin.dailyLog);
+				} else if (param.equals("log")) {
 					plugin.pluginInfosDailyLog(player);
-				}
-			} else {
-				// /shop without param : simply create/remove a shop
-				if (player.isOp()) {
-					event.setCancelled(true);
+				} else if (param.equals("")) {
+					// /shop without parameter : simply create/remove a shop
 					String playerName = player.getName();
 					if (plugin.shopCommand.get(playerName) == null) {
 						player.sendMessage(plugin.lang.tr("Click on the chest-shop to activate/desactivate"));
@@ -69,7 +61,7 @@ public class RealShopPlayerListener extends PlayerListener
 						plugin.shopCommand.remove(playerName);
 					}
 				} else {
-					player.sendMessage(plugin.lang.tr("Only ops can activate/desactivate chest-shops"));
+					event.setCancelled(false);
 				}
 			}
 		}

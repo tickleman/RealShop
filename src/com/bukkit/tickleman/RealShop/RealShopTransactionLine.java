@@ -18,7 +18,7 @@ public class RealShopTransactionLine extends RealItemStack
 	//-------------------------------------------------------------------------------- getLinePrice
 	public double getLinePrice()
 	{
-		return Math.round(getUnitPrice() * getAmount() * 100) / 100;
+		return Math.ceil((double)100 * getUnitPrice() * (double)getAmount()) / (double)100;
 	}
 
 	//-------------------------------------------------------------------------------- getUnitPrice

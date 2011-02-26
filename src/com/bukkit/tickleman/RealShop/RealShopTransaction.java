@@ -16,7 +16,7 @@ public class RealShopTransaction
 	private String playerName;
 	private RealItemStackHashMap itemStackHashMap;
 	private RealPricesFile pricesFile;
-	private int totalPrice = 0;
+	private double totalPrice = (double)0;
 	private boolean cancelAll = false;
 
 	public ArrayList<RealItemStack> canceledLines = null;
@@ -55,7 +55,7 @@ public class RealShopTransaction
 	}
 
 	//------------------------------------------------------------------------------- getTotalPrice
-	public int getTotalPrice()
+	public double getTotalPrice()
 	{
 		return totalPrice;
 	}
@@ -73,7 +73,7 @@ public class RealShopTransaction
 		cancelAll = false;
 		canceledLines = new ArrayList<RealItemStack>();
 		transactionLines = new ArrayList<RealShopTransactionLine>();
-		double totalPrice = 0;
+		double totalPrice = (double)0;
 		// create lines and canceled lines
 		Iterator<RealItemStack> iterator = itemStackHashMap.getContents().iterator();
 		while (iterator.hasNext()) {
@@ -90,7 +90,7 @@ public class RealShopTransaction
 			}
 		}
 		// if total amount exceeds available player amount, then cancel all
-		this.totalPrice = (int)Math.round((double)Math.ceil(totalPrice));
+		this.totalPrice = Math.ceil(totalPrice * (double)100) / (double)100;
 		if (this.totalPrice > RealEconomy.getBalance(playerName)) {
 			cancelAll = true;
 		}

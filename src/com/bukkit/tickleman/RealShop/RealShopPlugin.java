@@ -38,7 +38,7 @@ public class RealShopPlugin extends RealPlugin
 	//-------------------------------------------------------------------------------- RealShopPlugin
 	public RealShopPlugin()
 	{
-		super("Tickleman", "RealShop", "0.15");
+		super("Tickleman", "RealShop", "0.17");
 	}
 
 	//----------------------------------------------------------------------------------- onDisable

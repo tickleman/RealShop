@@ -75,23 +75,22 @@ public class RealShopBlockListener extends BlockListener
 		plugin.log.debug("looking for a shop at " + key);
 		if (plugin.shopsFile.shops.get(key) != null) {
 			// calculate daily prices fluctuations
-			World world = block.getWorld();
-			String worldName = world.getName();
-			Long worldTime = world.getFullTime();
-			Long lastTime = plugin.lastDayTime.get(worldName);
-			if (lastTime == null) {
-				lastTime = (long)0;
-			}
-			if (worldTime > lastTime) {
-				// notice that a world begins at 6000 (6:00am),
-				// so we have to translate if we want to fix the prices at midnight
-				long nextTime = ((worldTime + 6000) / 24000) * 24000 + 18000;
-				player.sendMessage("WORLD TIME IS " + worldTime);
-				player.sendMessage("NEXT TIME WAS " + lastTime);
-				player.sendMessage("NEXT TIME WILL BE " + nextTime);
-				plugin.lastDayTime.put(worldName, nextTime);
-				// daily prices calculation
-				plugin.marketFile.dailyCalc(plugin.dailyLog);
+			if (plugin.config.dailyPricesCalculation == "true") {
+				World world = block.getWorld();
+				String worldName = world.getName();
+				Long worldTime = world.getFullTime();
+				Long lastTime = plugin.lastDayTime.get(worldName);
+				if (lastTime == null) {
+					lastTime = (long)0;
+				}
+				if (worldTime > lastTime) {
+					// notice that a world begins at 6000 (6:00am),
+					// so we have to translate if we want to fix the prices at midnight
+					long nextTime = ((worldTime + 6000) / 24000) * 24000 + 18000;
+					plugin.lastDayTime.put(worldName, nextTime);
+					// daily prices calculation
+					plugin.marketFile.dailyPricesCalculation(plugin.dailyLog);
+				}
 			}
 			// enter chest
 			plugin.log.debug(player.getName() + " : this is a shop !");

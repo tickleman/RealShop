@@ -81,7 +81,7 @@ public class RealConfig
 	}
 
 	//---------------------------------------------------------------------------------------- save
-	public void saveValue(BufferedWriter writer, String field)
+	protected void saveValue(BufferedWriter writer, String field)
 	{
 		try {
 			writer.write(field + "=" + getClass().getField(field).get(this) + "\n");
@@ -94,7 +94,7 @@ public class RealConfig
 	}
 
 	//---------------------------------------------------------------------------------------- save
-	public void saveValues(BufferedWriter writer)
+	protected void saveValues(BufferedWriter writer)
 	{
 		saveValue(writer, "language");
 	}

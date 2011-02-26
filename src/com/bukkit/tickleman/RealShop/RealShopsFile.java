@@ -71,7 +71,7 @@ public class RealShopsFile
 	{
 		try {
 			BufferedWriter writer = new BufferedWriter(
-				new FileWriter("plugins/RealShop/" + fileName + ".cfg")
+				new FileWriter("plugins/" + plugin.name + "/" + fileName + ".cfg")
 			);
 			Iterator<RealShop> iterator = shops.values().iterator();
 			while (iterator.hasNext()) {

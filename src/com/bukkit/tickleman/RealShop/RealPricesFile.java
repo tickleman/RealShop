@@ -1,7 +1,9 @@
 package com.bukkit.tickleman.RealShop;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.StringTokenizer;
@@ -10,7 +12,20 @@ import java.util.StringTokenizer;
 public class RealPricesFile
 {
 
-	public double RATIO = (double)1.1;
+	/** margin ratio to pay workers that craft items */
+	public double WORKERS_RATIO = (double)1.1;
+
+	/** commercial ration to calculate sell price from buy price */
+	public double COMMERCIAL_RATIO = (double)0.9;
+
+	/** minimal daily price decrease (0.05 means that you can go down to 5% of last price) */
+	public double MIN_DAILY_RATIO = (double)0.05;
+
+	/** maximal daily price increase (1.95 means that you can go up to 95% of last price) */
+	public double MAX_DAILY_RATIO = (double)1.95;
+
+	/** base amount of sold / purchased items quantity used for calculation */
+	public double AMOUNT_RATIO = (double)5000;
 
 	private final RealShopPlugin plugin;
 	private final String fileName;
@@ -26,16 +41,22 @@ public class RealPricesFile
 		this.fileName = fileName;
 	}
 
-	//------------------------------------------------------------------------------------- dailyCalc
+	//------------------------------------------------------------------------ dailyPricesCalculation
+	public void dailyPricesCalculation(RealShopDailyLog dailyLog)
+	{
+		dailyPricesCalculation(dailyLog, false);
+	}
+
+	//------------------------------------------------------------------------ dailyPricesCalculation
 	/**
 	 * Daily price calculation
 	 * Takes care of :
 	 * - the last day transactions log
 	 * - the last items price
 	 */
-	public void dailyCalc(RealShopDailyLog dailyLog)
+	public void dailyPricesCalculation(RealShopDailyLog dailyLog, boolean simulation)
 	{
-		plugin.log.info("dailyCalc simulation");
+		plugin.log.info("dailyPricesCalculation" + (simulation ? " SIMULATION" : " REAL"));
 		// take each item id that has had a movement today, and that has a price
 		Iterator<Integer> iterator = dailyLog.moves.keySet().iterator();
 		while (iterator.hasNext()) {
@@ -46,22 +67,28 @@ public class RealPricesFile
 				int amount = dailyLog.moves.get(typeId);
 				double ratio;
 				if (amount < 0) {
-					ratio = Math.max((double)0.05, (double)1 + ((double)amount / (double)5000));
+					ratio = Math.max(MIN_DAILY_RATIO, (double)1 + ((double)amount / (double)AMOUNT_RATIO));
 				} else {
-					ratio = Math.min((double)1.95, (double)1 + ((double)amount / (double)5000));
+					ratio = Math.min(MAX_DAILY_RATIO, (double)1 + ((double)amount / (double)AMOUNT_RATIO));
 				}
 				String log = "- " + plugin.dataValuesFile.getName(typeId) + " :"
 					+ " amount " + amount + " ratio " + ratio
 					+ " OLD " + price.sell + ", " + price.buy;
-				price.sell = Math.round(
-					Math.max((double)0.1, price.sell * ratio * (double)100)
+				price.buy = Math.ceil(
+						(double)100 * Math.max((double)0.1, price.buy * ratio)
 				) / (double)100;
-				price.buy = Math.round(
-					Math.max((double)0.1, price.sell * 0.9 * (double)100)
+				price.sell = Math.floor(
+						(double)100 * Math.max((double)0.1, price.buy / COMMERCIAL_RATIO)
 				) / (double)100;
 				log += " NEW " + price.sell + ", " + price.buy;
 				plugin.log.info(log);
+			} else {
+				plugin.log.info("- no market price for item " + plugin.dataValuesFile.getName(typeId));
 			}
+		}
+		if (!simulation) {
+			plugin.log.info("SAVE new prices into " + fileName + ".cfg");
+			save();
 		}
 	}
 
@@ -92,9 +119,9 @@ public class RealPricesFile
 				plugin.log.warning("Recurse security warning : " + typeId);
 			}
 			// resQty : result quantity
-			int resQty = 1;
+			double resQty = (double)1;
 			if (recipe.indexOf("=") > 0) {
-				try { resQty = Integer.parseInt(recipe.split("\\=")[1]); } catch (Exception e) {}
+				try { resQty = Double.parseDouble(recipe.split("\\=")[1]); } catch (Exception e) {}
 				recipe = recipe.substring(0, recipe.indexOf("="));
 			}
 			System.out.println("resQty = " + resQty + ", recipe = " + recipe);
@@ -127,17 +154,17 @@ public class RealPricesFile
 					price = null;
 					break;
 				} else {
-					price.buy += compPrice.getBuy() * mulQty / divQty;
-					price.sell += compPrice.getSell() * mulQty / divQty;
+					price.buy += Math.ceil((double)100 * compPrice.getBuy() * (double)mulQty / (double)divQty) / (double)100;
+					price.sell += Math.floor((double)100 * compPrice.getSell() * (double)mulQty / (double)divQty) / (double)100;
 				}
-				System.out.println("  sum price = buy " + price.buy+ ", sell " + price.sell);
+				System.out.println("  sum price = buy " + price.buy + ", sell " + price.sell);
 			}
 			if (price != null) {
 				// round final price
-				System.out.println("  divide by resQty and multiply by RATIO " + RATIO);
-				System.out.println("  divide by resQty and multiply by RATIO " + RATIO);
-				price.buy = Math.round(price.buy / resQty * 100 * RATIO) / 100;
-				price.sell = Math.round(price.sell / resQty * 100 * RATIO) / 100;
+				System.out.println("  divide by resQty and multiply by RATIO " + WORKERS_RATIO);
+				System.out.println("  divide by resQty and multiply by RATIO " + WORKERS_RATIO);
+				price.buy = Math.ceil(price.buy / resQty * (double)100 * WORKERS_RATIO) / (double)100;
+				price.sell = Math.floor(price.sell / resQty * (double)100 * WORKERS_RATIO) / (double)100;
 				System.out.println("  RESULT PRICE = buy " + price.buy + ", sell " + price.sell);
 			}
 			recurseSecurity--;
@@ -186,6 +213,33 @@ public class RealPricesFile
 			reader.close();
 		} catch (Exception e) {
 			plugin.log.severe("Needs plugins/" + plugin.name + "/" + fileName + ".cfg file");
+		}
+	}
+
+	//------------------------------------------------------------------------------------------ save
+	public void save()
+	{
+		try {
+			BufferedWriter writer = new BufferedWriter(
+				new FileWriter("plugins/" + plugin.name + "/" + fileName + ".cfg")
+			);
+			writer.write("item;buy;sell;name\n");
+			Iterator<Integer> iterator = prices.keySet().iterator();
+			while (iterator.hasNext()) {
+				Integer typeId = iterator.next();
+				RealPrice price = prices.get(typeId);
+				writer.write(
+					typeId + ";"
+					+ price.buy + ";"
+					+ price.sell + ";"
+					+ plugin.dataValuesFile.getName(typeId)
+					+ "\n"
+				);
+			}
+			writer.flush();
+			writer.close();
+		} catch (Exception e) {
+			plugin.log.severe("Could not save plugins/" + plugin.name + "/" + fileName + ".cfg file");
 		}
 	}
 

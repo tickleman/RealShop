@@ -28,7 +28,7 @@ public class RealPrice
 	//---------------------------------------------------------------------------------------- getBuy
 	public double getBuy(int quantity)
 	{
-		return Math.round(buy * 100 * quantity) / 100;
+		return Math.floor((double)100 * buy * (double)quantity) / (double)100;
 	}
 
 	//--------------------------------------------------------------------------------------- getSell
@@ -40,7 +40,7 @@ public class RealPrice
 	//--------------------------------------------------------------------------------------- getSell
 	public double getSell(int quantity)
 	{
-		return Math.round(sell * 100 * quantity) / 100;
+		return Math.ceil((double)100 * sell * (double)quantity) / (double)100;
 	}
 
 }

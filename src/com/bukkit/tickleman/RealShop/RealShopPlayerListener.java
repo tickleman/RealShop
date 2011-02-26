@@ -17,24 +17,60 @@ public class RealShopPlayerListener extends PlayerListener
 
 	private final RealShopPlugin plugin;
 
-	//---------------------------------------------------------------------- RealShopPlayerListener
+	//------------------------------------------------------------------------ RealShopPlayerListener
 	public RealShopPlayerListener(RealShopPlugin instance)
 	{
 		plugin = instance;
 	}
 
-	//----------------------------------------------------------------------------- onPlayerCommand
+	//------------------------------------------------------------------------------- onPlayerCommand
 	public void onPlayerCommand(PlayerChatEvent event)
 	{
 		String[] cmd = event.getMessage().split(" ");
 		String command = ((cmd.length > 0) ? cmd[0].toLowerCase() : "");
 		if (command.equals("/shop")) {
+			event.setCancelled(true);
 			// /shop
 			Player player = event.getPlayer();
 			String param = ((cmd.length > 1) ? cmd[1].toLowerCase() : "");
-			if (player.isOp()) {
-				// operator events
-				event.setCancelled(true);
+			// ALL PLAYERS
+			if (param.equals("")) {
+				// /shop without parameter : simply create/remove a shop
+				String playerName = player.getName();
+				if (plugin.shopCommand.get(playerName) == null) {
+					plugin.log.info("[PLAYER_COMMAND] " + playerName + ": /shop");
+					plugin.shopCommand.put(playerName, "/shop");
+					player.sendMessage(plugin.lang.tr("Click on the shop-chest to activate/desactivate"));
+				} else {
+					plugin.shopCommand.remove(playerName);
+					player.sendMessage(plugin.lang.tr("Shop-chest activation/desactivation cancelled"));
+				}
+			} else if (param.equals("buy")) {
+				// /shop buy : give the list of item typeIds that players can buy into the shop
+				String playerName = player.getName();
+				String param2 = (cmd.length > 2) ? cmd[2] : "";
+				plugin.shopCommand.put(playerName, "/shop " + param + " " + param2);
+				player.sendMessage(plugin.lang.tr("Click on the shop-chest to add buy items"));
+			} else if (param.equals("sell")) {
+				// /shop sell : give the list of item typeIds that players can sell into the shop
+				String playerName = player.getName();
+				String param2 = (cmd.length > 2) ? cmd[2] : "";
+				plugin.shopCommand.put(playerName, "/shop " + param + " " + param2);
+				player.sendMessage(plugin.lang.tr("Click on the shop-chest to add sell items"));
+			} else if (param.equals("xbuy")) {
+				// /shop xbuy : give the list of item typeIds that players cannot buy into the shop
+				String playerName = player.getName();
+				String param2 = (cmd.length > 2) ? cmd[2] : "";
+				plugin.shopCommand.put(playerName, "/shop " + param + " " + param2);
+				player.sendMessage(plugin.lang.tr("Click on the shop-chest to exclude buy items"));
+			} else if (param.equals("xsell")) {
+				// /shop xsell : give the list of item typeIds that players cannot sell into the shop
+				String playerName = player.getName();
+				String param2 = (cmd.length > 2) ? cmd[2] : "";
+				plugin.shopCommand.put(playerName, "/shop " + param + " " + param2);
+				player.sendMessage(plugin.lang.tr("Click on the shop-chest to exclude sell items"));
+			} else if (player.isOp()) {
+				// OPERATORS ONLY
 				if (param.equals("check")) {
 					// /shop check : display info about RealShop
 					plugin.pluginInfos(player);
@@ -44,30 +80,25 @@ public class RealShopPlayerListener extends PlayerListener
 				} else if (param.equals("simul")) {
 					// /shop simul : simulate new prices using last prices and transactions log
 					plugin.marketFile.dailyPricesCalculation(plugin.dailyLog, true);
+					player.sendMessage(plugin.lang.tr("Daily prices calculation simulation is into the realshop.log file"));
 				} else if (param.equals("daily")) {
 					// /shop daily : calculate and save new prices using last prices and transactions log
 					plugin.marketFile.dailyPricesCalculation(plugin.dailyLog);
+					player.sendMessage(plugin.lang.tr("Real daily prices calculation log is into the realshop.log file"));
 				} else if (param.equals("log")) {
+					// /shop log : log daily movements
 					plugin.pluginInfosDailyLog(player);
-				} else if (param.equals("")) {
-					// /shop without parameter : simply create/remove a shop
-					String playerName = player.getName();
-					if (plugin.shopCommand.get(playerName) == null) {
-						player.sendMessage(plugin.lang.tr("Click on the chest-shop to activate/desactivate"));
-						plugin.log.info("[PLAYER_COMMAND] " + playerName + ": /shop");
-						plugin.shopCommand.put(playerName, "/shop");
-					} else {
-						player.sendMessage(plugin.lang.tr("Chest-shop activation/desactivation cancelled"));
-						plugin.shopCommand.remove(playerName);
-					}
+					player.sendMessage(plugin.lang.tr("Daily log was dumped into the realshop.log file"));
 				} else {
 					event.setCancelled(false);
 				}
+			} else {
+				event.setCancelled(false);
 			}
 		}
 	}
 
-	//---------------------------------------------------------------------------- onPlayerDropItem
+	//------------------------------------------------------------------------------ onPlayerDropItem
 	public void onPlayerDropItem(PlayerDropItemEvent event)
 	{
 		if (plugin.playersInChestCounter > 0) {
@@ -75,7 +106,7 @@ public class RealShopPlayerListener extends PlayerListener
 		}
 	}
 
-	//-------------------------------------------------------------------------------- onPlayerMove
+	//---------------------------------------------------------------------------------- onPlayerMove
 	public void onPlayerMove(PlayerMoveEvent event)
 	{
 		if (plugin.playersInChestCounter > 0) {
@@ -93,7 +124,7 @@ public class RealShopPlayerListener extends PlayerListener
 		}
 	}
 
-	//-------------------------------------------------------------------------------- onPlayerQuit
+	//---------------------------------------------------------------------------------- onPlayerQuit
 	public void onPlayerQuit(PlayerEvent event)
 	{
 		if (plugin.playersInChestCounter > 0) {
@@ -102,51 +133,3 @@ public class RealShopPlayerListener extends PlayerListener
 	}
 
 }
-
-/*
-
-##### COMMAND EXAMPLES TO GET INFO / ADD / REMOVE ITEMS 
-
-System.out.println("command is " + command);
-// /i DEBUG : INFO
-if (
-	(command.charAt(0) == '/')
-	&& (command.charAt(1) == 'i')
-) {
-	RealInventory inventory = RealInventory.create(event.getPlayer());
-	System.out.println(inventory.toString());
-	event.setCancelled(true);
-}
-// /a <typeId> <amount> DEBUG : ADD ITEM	
-if (
-	(command.charAt(0) == '/')
-	&& (command.charAt(1) == 'a')
-) {
-	int typeId = Integer.parseInt(cmd.nextToken());
-	int amount = Integer.parseInt(cmd.nextToken());
-	if ((typeId > 0) && (amount > 0)) {
-		System.out.println(
-			"add item " + typeId + " x" + amount + " => "
-			+ RealInventory.create(event.getPlayer()).add(typeId, amount)
-		);
-		
-	}
-	event.setCancelled(true);
-}
-// /r <typeId> <amount> DEBUG : REMOVE ITEM
-if (
-	(command.charAt(0) == '/')
-	&& (command.charAt(1) == 'r')
-) {
-	int typeId = Integer.parseInt(cmd.nextToken());
-	int amount = Integer.parseInt(cmd.nextToken());
-	if ((typeId > 0) && (amount > 0)) {
-		
-		System.out.println(
-			"remove item " + typeId + " x" + amount + " => "
-			+ RealInventory.create(event.getPlayer()).remove(typeId, amount)
-		);
-	}
-	event.setCancelled(true);
-}
-*/

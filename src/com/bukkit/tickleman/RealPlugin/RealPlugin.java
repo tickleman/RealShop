@@ -11,6 +11,7 @@ public class RealPlugin extends JavaPlugin
 	public String version;
 
 	public RealTranslationFile lang;
+	public String language = "en";
 	public RealLog log;
 
 	//------------------------------------------------------------------------------------ RealPlugin
@@ -38,7 +39,7 @@ public class RealPlugin extends JavaPlugin
 	public void onEnable()
 	{
 		// read language file
-		lang = new RealTranslationFile(this);
+		lang = new RealTranslationFile(this, language);
 		lang.load();
 		// enabled
 		log.info("version [" + version + "] (" + author + ") loaded", true);

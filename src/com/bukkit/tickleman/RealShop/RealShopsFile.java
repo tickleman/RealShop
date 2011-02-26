@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 
+import org.bukkit.World;
 import org.bukkit.block.Block;
 
 //################################################################################### RealShopsFile
@@ -28,9 +29,26 @@ public class RealShopsFile
 	//---------------------------------------------------------------------------------------- isShop
 	public boolean isShop(Block block)
 	{
-		String key = block.getWorld()
-			+ ";" + block.getX() + ";" + block.getY() + ";" + block.getZ();
-		return (shops.get(key) != null);
+		return (shopAt(block) != null);
+	}
+
+	//---------------------------------------------------------------------------------------- shopAt
+	public RealShop shopAt(Block block)
+	{
+		return shopAt(block.getWorld().getName(), block.getX(), block.getY(), block.getZ());
+	}
+
+	//---------------------------------------------------------------------------------------- shopAt
+	public RealShop shopAt(String world, int x, int y, int z)
+	{
+		String key = world + ";" + x + ";" + y + ";" + z;
+		return shops.get(key); 
+	}
+
+	//---------------------------------------------------------------------------------------- shopAt
+	public RealShop shopAt(World world, int x, int y, int z)
+	{
+		return shopAt(world.getName(), x, y, z); 
 	}
 
 	//------------------------------------------------------------------------------------------ load
@@ -52,7 +70,15 @@ public class RealShopsFile
 						Integer posZ = Integer.parseInt(line.nextToken().trim());
 						String player = line.nextToken().trim();
 						String key = world + ";" + posX + ";" + posY + ";" + posZ;
-						shops.put(key, new RealShop(world, posX, posY, posZ, player));
+						RealShop shop = new RealShop(world, posX, posY, posZ, player);
+						try {
+							shop.buyOnly = RealShop.csvToHashMap(line.nextToken().trim());
+							shop.sellOnly = RealShop.csvToHashMap(line.nextToken().trim());
+							shop.buyExclude = RealShop.csvToHashMap(line.nextToken().trim());
+							shop.sellExclude = RealShop.csvToHashMap(line.nextToken().trim());
+						} catch (Exception e) {
+						}
+						shops.put(key, shop);
 					} catch (Exception e) {
 						// when some values are not number, then ignore
 					}
@@ -65,7 +91,7 @@ public class RealShopsFile
 			);
 		}
 	}
-	
+
 	//------------------------------------------------------------------------------------------ save
 	public void save()
 	{
@@ -81,7 +107,11 @@ public class RealShopsFile
 					+ shop.posX + ";"
 					+ shop.posY + ";"
 					+ shop.posZ + ";"
-					+ shop.player
+					+ shop.player + ";"
+					+ RealShop.HashMapToCsv(shop.buyOnly) + ";"
+					+ RealShop.HashMapToCsv(shop.sellOnly) + ";"
+					+ RealShop.HashMapToCsv(shop.buyExclude) + ";"
+					+ RealShop.HashMapToCsv(shop.sellExclude)
 					+ "\n"
 				);
 			}

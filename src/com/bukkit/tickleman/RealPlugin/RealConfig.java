@@ -60,6 +60,7 @@ public class RealConfig
 			);
 			save();
 		}
+		plugin.language = language;
 	}
 
 	//---------------------------------------------------------------------------------------- save

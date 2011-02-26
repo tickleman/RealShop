@@ -67,7 +67,7 @@ public class RealShopTransaction
 	}
 
 	//--------------------------------------------------------------------------------- prepareBill
-	public RealShopTransaction prepareBill()
+	public RealShopTransaction prepareBill(RealShop shop)
 	{
 		// Initialization
 		cancelAll = false;
@@ -78,12 +78,18 @@ public class RealShopTransaction
 		Iterator<RealItemStack> iterator = itemStackHashMap.getContents().iterator();
 		while (iterator.hasNext()) {
 			RealItemStack itemStack = iterator.next();
-			RealPrice price = pricesFile.getPrice(itemStack.getTypeId());
-			if (price == null) {
+			int amount = itemStack.getAmount();
+			int typeId = itemStack.getTypeId();
+			RealPrice price = pricesFile.getPrice(typeId);
+			if (
+				(price == null)
+				|| ((amount > 0) && !shop.isItemBuyAllowed(typeId))
+				|| ((amount < 0) && !shop.isItemSellAllowed(typeId))
+			) {
 				canceledLines.add(itemStack);
 			} else {
 				RealShopTransactionLine transactionLine = new RealShopTransactionLine(
-					itemStack, price
+						itemStack, price
 				); 
 				transactionLines.add(transactionLine);
 				totalPrice += transactionLine.getLinePrice();

@@ -1,5 +1,7 @@
 package com.bukkit.tickleman.RealShop;
 
+import org.bukkit.block.Block;
+
 import com.bukkit.tickleman.RealPlugin.RealChest;
 import com.bukkit.tickleman.RealPlugin.RealItemStackHashMap;
 
@@ -9,6 +11,7 @@ public class RealInChestState
 
 	public boolean inChest = false;
 	
+	public Block block;
 	public RealChest chest;
 	public RealItemStackHashMap itemStackHashMap;
 

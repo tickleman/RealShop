@@ -13,7 +13,7 @@ public class RealShopConfig extends RealConfig
 	//------------------------------------------------------------------------------ RealShopConfig
 	public RealShopConfig(final RealShopPlugin plugin)
 	{
-		super(plugin, "config");
+		super(plugin);
 	}
 
 	//---------------------------------------------------------------------------------------- save

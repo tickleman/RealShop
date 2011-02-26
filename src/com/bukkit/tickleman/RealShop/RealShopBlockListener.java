@@ -31,23 +31,48 @@ public class RealShopBlockListener extends BlockListener
 		if (plugin.playersInChestCounter > 0) {
 			plugin.exitChest(event.getPlayer());
 		}
-		if (plugin.shopCommand.size() > 0) {
-			Player player = event.getPlayer();
-			String playerName = player.getName();
+		Player player = event.getPlayer();
+		if (player != null) {
 			Block block = event.getBlock();
-			if (plugin.shopCommand.get(playerName) == "/shop") {
-				// create / remove shop-chest
-				if (block.getType().equals(Material.CHEST)) {
-					plugin.registerBlockAsShop(player, block);
-				} else {
-					player.sendMessage(plugin.lang.tr("Chest-shop activation/desactivation cancelled"));
-				}
-				plugin.shopCommand.remove(playerName);
-			} else if (block.getType().equals(Material.CHEST)) {
-				// protects shop chests from damages
-				if (plugin.shopsFile.isShop(block)) {
+			if (plugin.shopCommand.size() > 0) {
+				String playerName = player.getName();
+				String command = plugin.shopCommand.get(playerName); 
+				if ((command != null) && command.substring(0, 5).equals("/shop")) {
+					// create / remove shop-chest
+					if (block.getType().equals(Material.CHEST)) {
+						if (command.equals("/shop")) {
+							event.setCancelled(true);
+							plugin.registerBlockAsShop(player, block);
+						} else if (plugin.shopsFile.isShop(block)) {
+							event.setCancelled(true);
+							if (command.substring(0, 9).equals("/shop buy")) {
+								plugin.shopAddBuy(player, block, command);
+							} else if (command.substring(0, 10).equals("/shop sell")) {
+								plugin.shopAddSell(player, block, command);
+							} else if (command.substring(0, 10).equals("/shop xbuy")) {
+								plugin.shopExclBuy(player, block, command);
+							} else if (command.substring(0, 11).equals("/shop xsell")) {
+								plugin.shopExclSell(player, block, command);
+							}
+						}
+					} else {
+						player.sendMessage(plugin.lang.tr("Shop-chest command cancelled"));
+					}
+					plugin.shopCommand.remove(playerName);
+				} else if (
+					block.getType().equals(Material.CHEST)
+					&& plugin.shopsFile.isShop(block)
+				) {
+					// protects shop chests from damages
 					event.setCancelled(true);
 				}
+			} else if (
+				block.getType().equals(Material.CHEST)
+				&& plugin.shopsFile.isShop(block)
+			) {
+				// display shop current prices and protect from damages
+				plugin.shopPricesInfos(player, block);
+				event.setCancelled(true);
 			}
 		}
 	}
@@ -72,7 +97,6 @@ public class RealShopBlockListener extends BlockListener
 		// only if chest block is a shop
 		String key = block.getWorld().getName()
 			+ ";" + block.getX() + ";" + block.getY() + ";" + block.getZ();
-		plugin.log.debug("looking for a shop at " + key);
 		if (plugin.shopsFile.shops.get(key) != null) {
 			// calculate daily prices fluctuations
 			if (plugin.config.dailyPricesCalculation == "true") {
@@ -93,7 +117,6 @@ public class RealShopBlockListener extends BlockListener
 				}
 			}
 			// enter chest
-			plugin.log.debug(player.getName() + " : this is a shop !");
 			plugin.enterChest(player, block);
 		}
 	}

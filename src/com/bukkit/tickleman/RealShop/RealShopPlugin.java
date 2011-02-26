@@ -18,30 +18,50 @@ import com.bukkit.tickleman.RealPlugin.RealItemStack;
 import com.bukkit.tickleman.RealPlugin.RealItemStackHashMap;
 import com.bukkit.tickleman.RealPlugin.RealPlugin;
 
+//################################################################################## RealShopPlugin
 public class RealShopPlugin extends RealPlugin
 {
 
+	/** Global configuration */
 	public RealShopConfig config;
 
+	/** Shop command typed by the player (ie "tickleman1" => "/shop") */
 	public final HashMap<String, String> shopCommand = new HashMap<String, String>();
+	
+	/** Says if the player is into a chest, and stores chest state info */
 	public final HashMap<String, RealInChestState> inChestStates = new HashMap<String, RealInChestState>();
+
+	/** Daily log stores movements for each buy / sold item */
 	public RealShopDailyLog dailyLog = null;
+
+	/** Number of players that have opened a shop-chest */
 	public int playersInChestCounter = 0;
+
+	/** Data values files : complete list of Minecraft blocks and items */
 	public RealDataValuesFile dataValuesFile;
+
+	/** Market prices file (market.cfg) : global market price for each item */
 	public RealPricesFile marketFile;
+
+	/** Shops list and file link */
 	public RealShopsFile shopsFile;
+
+	/** Last day time, per world (ie : in reality this is the time of the NEXT day change) */
 	public HashMap<String, Long> lastDayTime = new HashMap<String, Long>();
 
+	/** Block events Listener */
 	private final RealShopBlockListener blockListener = new RealShopBlockListener(this);
+
+	/** Player events Listener */
 	private final RealShopPlayerListener playerListener = new RealShopPlayerListener(this);
 
 	//-------------------------------------------------------------------------------- RealShopPlugin
 	public RealShopPlugin()
 	{
-		super("Tickleman", "RealShop", "0.17");
+		super("Tickleman", "RealShop", "0.2");
 	}
 
-	//----------------------------------------------------------------------------------- onDisable
+	//------------------------------------------------------------------------------------- onDisable
 	@Override
 	public void onDisable()
 	{
@@ -53,7 +73,7 @@ public class RealShopPlugin extends RealPlugin
 		super.onDisable();
 	}
 
-	//------------------------------------------------------------------------------------ onEnable
+	//-------------------------------------------------------------------------------------- onEnable
 	@Override
 	public void onEnable()
 	{
@@ -91,7 +111,7 @@ public class RealShopPlugin extends RealPlugin
 		}
 	}
 
-	//---------------------------------------------------------------------------------- enterChest
+	//------------------------------------------------------------------------------------ enterChest
 	public void enterChest(Player player, Block block)
 	{
 		// write in-chest state (inChest = true, player's coordinates, inventory backup)
@@ -100,12 +120,9 @@ public class RealShopPlugin extends RealPlugin
 		if (inChestState == null) {
 			inChestState = new RealInChestState();
 			inChestStates.put(playerName, inChestState);
-			log.info(
-				"Player " + playerName + " enters in shop chest "
-				+ block.getWorld() + "," + block.getX() + "," + block.getY() + "," + block.getZ() 
-			);
 		}
 		inChestState.inChest = true;
+		inChestState.block = block;
 		inChestState.chest = RealChest.create(block);
 		inChestState.lastX = Math.round(player.getLocation().getX());
 		inChestState.lastZ = Math.round(player.getLocation().getZ());
@@ -119,16 +136,14 @@ public class RealShopPlugin extends RealPlugin
 			+ " " + lang.tr("into your pocket")
 		);
 		playersInChestCounter = inChestStates.size();
-		log.info("Players in chest counter = " + playersInChestCounter);
 	}
 
-	//----------------------------------------------------------------------------------- exitChest
+	//------------------------------------------------------------------------------------- exitChest
 	public void exitChest(Player player)
 	{
 		String playerName = player.getName();
 		RealInChestState inChestState = inChestStates.get(playerName);
 		if (inChestState != null) {
-			log.info("Player " + playerName + " exits from shop chest ");
 			if (inChestState.inChest) {
 				inChestState.inChest = false;
 				// reload prices
@@ -139,7 +154,7 @@ public class RealShopPlugin extends RealPlugin
 				// prepare bill
 				RealShopTransaction transaction = RealShopTransaction.create(
 					this, playerName, inChestState.itemStackHashMap, marketFile
-				).prepareBill();
+				).prepareBill(shopsFile.shopAt(inChestState.block));
 				log.info(transaction.toString());
 				if (transaction.isCanceled()) {
 					// transaction is fully canceled : items go back in their original inventories
@@ -207,17 +222,16 @@ public class RealShopPlugin extends RealPlugin
 			}
 			inChestStates.remove(playerName);
 			playersInChestCounter = inChestStates.size();
-			log.info("Players in chest counter = " + playersInChestCounter);
 		}
 	}
 
-	//------------------------------------------------------------------------- registerBlockAsShop
+	//--------------------------------------------------------------------------- registerBlockAsShop
 	public void registerBlockAsShop(Player player, Block block)
 	{
 		registerBlockAsShop(player, block, 0);
 	}
 
-	//------------------------------------------------------------------------- registerBlockAsShop
+	//--------------------------------------------------------------------------- registerBlockAsShop
 	private void registerBlockAsShop(Player player, Block block, int mode)
 	{
 		String message = null;
@@ -266,7 +280,7 @@ public class RealShopPlugin extends RealPlugin
 		}
 	}
 
-	//-------------------------------------------------------------------------------- pluginsInfos
+	//---------------------------------------------------------------------------------- pluginsInfos
 	/**
 	 * Displays informations about RealShop
 	 * Operators will get it using "/shop check" command
@@ -292,7 +306,7 @@ public class RealShopPlugin extends RealPlugin
 		log.info(marketFile.prices.size() + " market prices");
 	}
 
-	//--------------------------------------------------------------------------- pluginInfosPrices
+	//----------------------------------------------------------------------------- pluginInfosPrices
 	/**
 	 * Displays the whole market prices from RealShop
 	 * (includes calculated prices)
@@ -313,7 +327,7 @@ public class RealShopPlugin extends RealPlugin
 		}
 	}
 
-	//------------------------------------------------------------------------- pluginInfosDailyLog
+	//--------------------------------------------------------------------------- pluginInfosDailyLog
 	/**
 	 * Displays current daily moves log status
 	 * (includes calculated prices)
@@ -322,6 +336,139 @@ public class RealShopPlugin extends RealPlugin
 	public void pluginInfosDailyLog(Player player)
 	{
 		log.info("Daily log status is : " + dailyLog.toString());
+	}
+
+	//------------------------------------------------------------------------------------ shopAddBuy
+	public void shopAddBuy(Player player, Block block, String command)
+	{
+		RealShop shop = shopsFile.shopAt(block);
+		if (player.getName().equals(shop.player)) {
+			shopAddExclBuySell(player, shop.buyOnly, command, "buy");
+		} else {
+			player.sendMessage(lang.tr("This chest belongs to") + " " + shop.player);
+		}
+	}
+
+	//---------------------------------------------------------------------------- shopAddExclBuySell
+	private void shopAddExclBuySell(
+		Player player, HashMap<Integer, Boolean> addTo, String command, String what
+	) {
+		command += "+";
+		int index = command.lastIndexOf(' ') + 1;
+		boolean plus = true;
+		String strTypeId = "";
+		while (index < command.length()) {
+			char c = command.charAt(index);
+			if ((c == '+') || (c == '-')) {
+				if (!strTypeId.equals("")) {
+					try {
+						int typeId = Integer.parseInt(strTypeId);
+						if (plus) {
+							addTo.put(typeId, true);
+						} else {
+							addTo.remove(typeId);
+						}
+					} catch (Exception e) {
+					}
+				}
+				strTypeId = "";
+				if (c == '+') {
+					plus = true;
+				} else if (c == '-') {
+					plus = false;
+				}
+			} else if ((c >= '0') && (c <= '9')) {
+				strTypeId += c;
+			}
+			index ++;
+		}
+		shopsFile.save();
+		player.sendMessage(
+			lang.tr("Now players can " + what) + " " + RealShop.HashMapToCsv(addTo).replaceAll(",", ", ")
+		);
+	}
+
+	//----------------------------------------------------------------------------------- shopAddSell
+	public void shopAddSell(Player player, Block block, String command)
+	{
+		RealShop shop = shopsFile.shopAt(block);
+		if (player.getName().equals(shop.player)) {
+			shopAddExclBuySell(player, shop.sellOnly, command, "sell");
+		} else {
+			player.sendMessage(lang.tr("This chest belongs to") + " " + shop.player);
+		}
+	}
+
+	//----------------------------------------------------------------------------------- shopExclBuy
+	public void shopExclBuy(Player player, Block block, String command)
+	{
+		RealShop shop = shopsFile.shopAt(block);
+		if (player.getName().equals(shop.player)) {
+			shopAddExclBuySell(player, shop.buyExclude, command, "not buy");
+		} else {
+			player.sendMessage(lang.tr("This chest belongs to") + " " + shop.player);
+		}
+	}
+
+	//---------------------------------------------------------------------------------- shopExclSell
+	public void shopExclSell(Player player, Block block, String command)
+	{
+		RealShop shop = shopsFile.shopAt(block);
+		if (player.getName().equals(shop.player)) {
+			shopAddExclBuySell(player, shop.sellExclude, command, "not sell");
+		} else {
+			player.sendMessage(lang.tr("This chest belongs to") + " " + shop.player);
+		}
+	}
+
+	//------------------------------------------------------------------------------- shopPricesInfos
+	public void shopPricesInfos(Player player, Block block)
+	{
+		RealShop shop = shopsFile.shopAt(block);
+		String list;
+		// sell (may be a very long list)
+		list = "";
+		Iterator<Integer> sellIterator = shop.sellOnly.keySet().iterator();
+		if (!sellIterator.hasNext()) {
+			sellIterator = dataValuesFile.getIdsIterator();
+		}
+		while (sellIterator.hasNext()) {
+			int typeId = sellIterator.next();
+			RealPrice price = marketFile.getPrice(typeId);
+			if ((price != null) && shop.isItemSellAllowed(typeId)) {
+				if (!list.equals("")) {
+					list += ", ";
+				}
+				list += dataValuesFile.getName(typeId) + ": " + price.sell;
+			}
+		}
+		if (list.equals("")) {
+			player.sendMessage(lang.tr("Nothing can be sold here"));
+		} else {
+			player.sendMessage(lang.tr("You can sell") + " " + list);
+		}
+		// buy (may be as long as the number of filled slots!) 
+		list = "";
+		RealItemStackHashMap itemStack = RealItemStackHashMap.create().storeRealInventory(
+			RealInventory.create(RealChest.create(block)), false
+		); 
+		Iterator<RealItemStack> buyIterator = itemStack.getContents().iterator();
+		while (buyIterator.hasNext()) {
+			RealItemStack item = buyIterator.next();
+			int typeId = item.getTypeId();
+			RealPrice price = marketFile.getPrice(typeId);
+			if ((price != null) && shop.isItemBuyAllowed(typeId)) {
+				if (!list.equals("")) {
+					list += ", ";
+				}
+				list += dataValuesFile.getName(typeId) + ": " + price.buy;
+			}
+		}
+		if (list.equals("")) {
+			player.sendMessage(lang.tr("Nothing to buy here"));
+		} else {
+			player.sendMessage(lang.tr("You can buy") + " " + list);
+		}
 	}
 
 }

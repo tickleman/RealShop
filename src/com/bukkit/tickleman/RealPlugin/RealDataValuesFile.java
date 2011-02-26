@@ -15,14 +15,14 @@ public class RealDataValuesFile
 	private HashMap<Integer, String> names = new HashMap<Integer, String>();
 	private HashMap<Integer, String> recipes = new HashMap<Integer, String>();
 
-	//------------------------------------------------------------------------------ DataValuesFile
+	//-------------------------------------------------------------------------------- DataValuesFile
 	public RealDataValuesFile(final RealPlugin plugin, final String fileName)
 	{
 		this.plugin = plugin;
 		this.fileName = fileName;
 	}
 
-	//---------------------------------------------------------------------------------------- load
+	//------------------------------------------------------------------------------------------ load
 	/**
 	 * Load data values file from disk
 	 */
@@ -61,7 +61,7 @@ public class RealDataValuesFile
 		}
 	}
 
-	//-------------------------------------------------------------------------------------- getIds
+	//---------------------------------------------------------------------------------------- getIds
 	/**
 	 * Get full id list into an integer array
 	 */
@@ -76,7 +76,13 @@ public class RealDataValuesFile
 		return ids;
 	}
 
-	//----------------------------------------------------------------------------------------- get
+	//---------------------------------------------------------------------------------- getIdIerator
+	public Iterator<Integer> getIdsIterator()
+	{
+		return names.keySet().iterator();
+	}
+
+	//------------------------------------------------------------------------------------------- get
 	/**
 	 * Get name for given item type id
 	 * Returns "#typeId" if no name known
@@ -90,7 +96,7 @@ public class RealDataValuesFile
 		return result;
 	}
 
-	//----------------------------------------------------------------------------------------- get
+	//------------------------------------------------------------------------------------------- get
 	/**
 	 * Get main recipe for given item type id
 	 * Returns empty string if no recipe known 

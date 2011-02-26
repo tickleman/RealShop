@@ -51,7 +51,7 @@ public class RealTranslationFile
 		} catch (Exception e) {
 			if (fileName.equals("en")) {
 				plugin.log.info(
-					"You could create plugins/" + plugin.name + "/" + fileName + ".lang file"
+					"You can create plugins/" + plugin.name + "/" + fileName + ".lang file"
 					+ " to change texts"
 				);
 			} else {

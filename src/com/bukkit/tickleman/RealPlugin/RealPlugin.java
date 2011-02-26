@@ -1,38 +1,47 @@
 package com.bukkit.tickleman.RealPlugin;
 
-import java.util.logging.Logger;
 import org.bukkit.plugin.java.JavaPlugin;
 
 //###################################################################################### RealPlugin
 public class RealPlugin extends JavaPlugin
 {
 
-	protected final String author = "Tickleman";
-	protected final String name = "RealPlugin";
-	protected final String version = "0.1";
+	public String author;
+	public String name;
+	public String version;
 
 	public RealTranslationFile lang;
-	public final Logger log;
-	public RealLog realLog;
+	public RealLog log;
 
-	//----------------------------------------------------------------------------------- onDisable
-	@Override
-	public void onDisable() {
-		realLog = null;
-		log.info("[" + name + "] version [" + version + "] (" + author + ") un-loaded");
+	//------------------------------------------------------------------------------------ RealPlugin
+	public RealPlugin(String author, String name, String version)
+	{
+		super();
+		this.author = author;
+		this.name = name;
+		this.version = version;
+		log = new RealLog(this);
 	}
 
-	//------------------------------------------------------------------------------------ onEnable
+	//------------------------------------------------------------------------------------- onDisable
+	@Override
+	public void onDisable()
+	{
+		// disable language file
+		lang = null;
+		// disabled
+		log.info("version [" + version + "] (" + author + ") un-loaded", true);
+	}
+
+	//-------------------------------------------------------------------------------------- onEnable
 	@Override
 	public void onEnable()
 	{
 		// read language file
 		lang = new RealTranslationFile(this);
 		lang.load();
-		// construct realLog
-		realLog = new RealLog(this);
 		// enabled
-		log.info("[" + name + " ] version [" + version + "] (" + author + ") loaded");
+		log.info("version [" + version + "] (" + author + ") loaded", true);
 	}
 
 }

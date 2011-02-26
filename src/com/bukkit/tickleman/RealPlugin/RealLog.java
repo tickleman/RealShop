@@ -68,7 +68,6 @@ public class RealLog
 	public void severe(String text)
 	{
 		log("SEVERE", text, true);
-		plugin.log.severe("[" + plugin.name + "] " + text);
 	}
 
 	//-------------------------------------------------------------------------------------- severe
@@ -98,8 +97,8 @@ public class RealLog
 			writer.flush();
 			writer.close();
 		} catch (Exception e) {
-			plugin.log.severe(
-				"[" + plugin.name + "] Could not write into log " + logFile
+			globalLog.severe(
+				"[" + plugin.name + "] Could not write into log file " + logFile
 				+ " file : [" + mark + "] " + text
 			);
 		}
@@ -110,16 +109,16 @@ public class RealLog
 	{
 		log(mark, text);
 		if (global) {
-			if (text == "info") {
-				globalLog.info("[" + plugin.name + "]" + text);
-			} else if (text == "warning") {
-				globalLog.warning("[" + plugin.name + "]" + text);
-			} else if (text == "severe") {
-				globalLog.severe("[" + plugin.name + "]" + text);
-			} else if (text == "error") {
-				globalLog.info("[ERROR] [" + plugin.name + "]" + text);
-			} else if (text == "debug") {
-				globalLog.info("[DEBUG] [" + plugin.name + "]" + text);
+			if (mark == "INFO") {
+				globalLog.info("[" + plugin.name + "] " + text);
+			} else if (mark == "WARNING") {
+				globalLog.warning("[" + plugin.name + "] " + text);
+			} else if (mark == "SEVERE") {
+				globalLog.severe("[" + plugin.name + "] " + text);
+			} else if (mark == "ERROR") {
+				globalLog.info("[ERROR] [" + plugin.name + "] " + text);
+			} else if (mark == "DEBUG") {
+				globalLog.info("[DEBUG] [" + plugin.name + "] " + text);
 			}
 			
 		}

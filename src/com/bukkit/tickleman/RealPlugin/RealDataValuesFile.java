@@ -57,7 +57,7 @@ public class RealDataValuesFile
 			}
 			reader.close();
 		} catch (Exception e) {
-			plugin.log.severe("[" + plugin.name + "] Needs plugins/RealShop/" + fileName + ".cfg file");
+			plugin.log.severe("Needs plugins/" + plugin.name + "/" + fileName + ".cfg file");
 		}
 	}
 

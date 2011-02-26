@@ -19,14 +19,14 @@ public class RealPricesFile
 
 	private int recurseSecurity = 0;
 	
-	//---------------------------------------------------------------------------------- PricesFile
+	//-------------------------------------------------------------------------------- RealPricesFile
 	public RealPricesFile(final RealShopPlugin plugin, final String fileName)
 	{
 		this.plugin = plugin;
 		this.fileName = fileName;
 	}
 
-	//----------------------------------------------------------------------------------- dailyCalc
+	//------------------------------------------------------------------------------------- dailyCalc
 	/**
 	 * Daily price calculation
 	 * Takes care of :
@@ -35,8 +35,7 @@ public class RealPricesFile
 	 */
 	public void dailyCalc(RealShopDailyLog dailyLog)
 	{
-		System.out.println("RealShop dailyCalc simulation");
-		plugin.realLog.info("RealShop dailyCalc simulation");
+		plugin.log.info("dailyCalc simulation");
 		// take each item id that has had a movement today, and that has a price
 		Iterator<Integer> iterator = dailyLog.moves.keySet().iterator();
 		while (iterator.hasNext()) {
@@ -61,13 +60,12 @@ public class RealPricesFile
 					Math.max((double)0.1, price.sell * 0.9 * (double)100)
 				) / (double)100;
 				log += " NEW " + price.sell + ", " + price.buy;
-				System.out.println(log);
-				plugin.realLog.info(log);
+				plugin.log.info(log);
 			}
 		}
 	}
 
-	//---------------------------------------------------------------------------------- fromRecipe
+	//------------------------------------------------------------------------------------ fromRecipe
 	/**
 	 * Calculate Price using crafting recipes
 	 * - returns null if no price for any component
@@ -88,12 +86,10 @@ public class RealPricesFile
 			// recurse security
 			recurseSecurity++;
 			if (recurseSecurity > 20) {
-				plugin.log.severe("[RealShop] Recurse security error : " + typeId);
-				plugin.realLog.severe("Recurse security error : " + typeId);
+				plugin.log.severe("Recurse security error : " + typeId);
 				return null;
 			} else if (recurseSecurity > 15) {
-				plugin.log.warning("[RealShop] Recurse security warning : " + typeId);
-				plugin.realLog.warning("Recurse security warning : " + typeId);
+				plugin.log.warning("Recurse security warning : " + typeId);
 			}
 			// resQty : result quantity
 			int resQty = 1;
@@ -149,7 +145,7 @@ public class RealPricesFile
 		}
 	}
 
-	//------------------------------------------------------------------------------------ getPrice
+	//-------------------------------------------------------------------------------------- getPrice
 	public RealPrice getPrice(int typeId)
 	{
 		RealPrice price = prices.get(typeId);
@@ -159,13 +155,13 @@ public class RealPricesFile
 		return price; 
 	}
 
-	//---------------------------------------------------------------------------------------- load
+	//------------------------------------------------------------------------------------------ load
 	public void load()
 	{
 		try {
 			prices.clear();
 			BufferedReader reader = new BufferedReader(
-					new FileReader("plugins/RealShop/" + fileName + ".cfg")
+					new FileReader("plugins/" + plugin.name + "/" + fileName + ".cfg")
 			);
 			String buffer;
 			StringTokenizer line;
@@ -189,7 +185,7 @@ public class RealPricesFile
 			}
 			reader.close();
 		} catch (Exception e) {
-			plugin.log.severe("[RealShop] Needs plugins/RealShop/" + fileName + ".cfg file");
+			plugin.log.severe("Needs plugins/" + plugin.name + "/" + fileName + ".cfg file");
 		}
 	}
 

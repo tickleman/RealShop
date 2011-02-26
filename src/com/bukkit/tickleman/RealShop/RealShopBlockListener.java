@@ -9,6 +9,7 @@ import org.bukkit.event.block.BlockInteractEvent;
 import org.bukkit.event.block.BlockListener;
 import org.bukkit.event.block.BlockPlaceEvent;
 
+//########################################################################### RealShopBlockListener
 /**
  * HelloWorld block listener
  * @author tickleman
@@ -18,13 +19,13 @@ public class RealShopBlockListener extends BlockListener
 
 	private final RealShopPlugin plugin;
 
-	//----------------------------------------------------------------------- RealShopBlockListener
+	//------------------------------------------------------------------------- RealShopBlockListener
 	public RealShopBlockListener(final RealShopPlugin plugin)
 	{
 		this.plugin = plugin;
 	}
 
-	//------------------------------------------------------------------------------- onBlockDamage
+	//--------------------------------------------------------------------------------- onBlockDamage
 	public void onBlockDamage(BlockDamageEvent event)
 	{
 		if (plugin.playersInChestCounter > 0) {
@@ -51,7 +52,7 @@ public class RealShopBlockListener extends BlockListener
 		}
 	}
 
-	//----------------------------------------------------------------------------- onBlockInteract
+	//------------------------------------------------------------------------------- onBlockInteract
 	public void onBlockInteract(BlockInteractEvent event)
 	{
 		// works only with players
@@ -71,7 +72,7 @@ public class RealShopBlockListener extends BlockListener
 		// only if chest block is a shop
 		String key = block.getWorld().getName()
 			+ ";" + block.getX() + ";" + block.getY() + ";" + block.getZ();
-		plugin.realLog.debug("looking for a shop at " + key);
+		plugin.log.debug("looking for a shop at " + key);
 		if (plugin.shopsFile.shops.get(key) != null) {
 			// calculate daily prices fluctuations
 			World world = block.getWorld();
@@ -93,12 +94,12 @@ public class RealShopBlockListener extends BlockListener
 				plugin.marketFile.dailyCalc(plugin.dailyLog);
 			}
 			// enter chest
-			plugin.realLog.debug(player.getName() + " : this is a shop !");
+			plugin.log.debug(player.getName() + " : this is a shop !");
 			plugin.enterChest(player, block);
 		}
 	}
 
-	//------------------------------------------------------------------------------- onBlockPlaced
+	//--------------------------------------------------------------------------------- onBlockPlaced
 	public void onBlockPlace(BlockPlaceEvent event)
 	{
 		if (plugin.playersInChestCounter > 0) {

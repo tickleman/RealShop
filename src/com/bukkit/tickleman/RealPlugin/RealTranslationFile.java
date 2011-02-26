@@ -5,7 +5,7 @@ import java.io.FileReader;
 import java.util.HashMap;
 import java.util.StringTokenizer;
 
-//######################################################################### RealShopTranslationFile
+//############################################################################# RealTranslationFile
 public class RealTranslationFile
 {
 
@@ -14,20 +14,20 @@ public class RealTranslationFile
 
 	private HashMap<String, String> translations = new HashMap<String, String>();
 
-	//--------------------------------------------------------------------- RealShopTranslationFile
+	//--------------------------------------------------------------------------- RealTranslationFile
 	public RealTranslationFile(final RealPlugin plugin)
 	{
 		this(plugin, "en");
 	}
 	
-	//--------------------------------------------------------------------- RealShopTranslationFile
+	//--------------------------------------------------------------------------- RealTranslationFile
 	public RealTranslationFile(final RealPlugin plugin, final String fileName)
 	{
 		this.plugin = plugin;
 		this.fileName = fileName;
 	}
 
-	//---------------------------------------------------------------------------------------- load
+	//------------------------------------------------------------------------------------------ load
 	public void load()
 	{
 		translations.clear();
@@ -51,19 +51,19 @@ public class RealTranslationFile
 		} catch (Exception e) {
 			if (fileName.equals("en")) {
 				plugin.log.info(
-					"[RealShop] You could create plugins/RealShop/" + fileName + ".lang file"
+					"You could create plugins/" + plugin.name + "/" + fileName + ".lang file"
 					+ " to change texts"
 				);
 			} else {
 				plugin.log.warning(
-					"[RealShop] Needs plugins/RealShop/" + fileName + ".lang file"
+					"Needs plugins/" + plugin.name + "/" + fileName + ".lang file"
 					+ " (check your language configuration)"
 				);
 			}
 		}
 	}
 
-	//------------------------------------------------------------------------------------------ tr
+	//-------------------------------------------------------------------------------------------- tr
 	public String tr(String text)
 	{
 		String translated = translations.get(text);

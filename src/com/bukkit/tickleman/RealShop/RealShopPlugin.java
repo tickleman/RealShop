@@ -21,10 +21,6 @@ import com.bukkit.tickleman.RealPlugin.RealPlugin;
 public class RealShopPlugin extends RealPlugin
 {
 
-	protected final String author = "Tickleman";
-	protected final String name = "RealShop";
-	protected final String version = "0.13";
-
 	public RealShopConfig config;
 
 	public final HashMap<String, String> shopCommand = new HashMap<String, String>();
@@ -38,7 +34,12 @@ public class RealShopPlugin extends RealPlugin
 
 	private final RealShopBlockListener blockListener = new RealShopBlockListener(this);
 	private final RealShopPlayerListener playerListener = new RealShopPlayerListener(this);
-	private final HashMap<Player, Boolean> debugees = new HashMap<Player, Boolean>();
+
+	//-------------------------------------------------------------------------------- RealShopPlugin
+	public RealShopPlugin()
+	{
+		super("Tickleman", "RealShop", "0.15");
+	}
 
 	//----------------------------------------------------------------------------------- onDisable
 	@Override
@@ -56,8 +57,8 @@ public class RealShopPlugin extends RealPlugin
 	@Override
 	public void onEnable()
 	{
-		PluginManager pm = getServer().getPluginManager();
 		// events listeners 
+		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvent(Event.Type.BLOCK_DAMAGED, blockListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.BLOCK_INTERACT, blockListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.BLOCK_PLACED, blockListener, Priority.Normal, this);
@@ -81,31 +82,13 @@ public class RealShopPlugin extends RealPlugin
 		// read shops file
 		shopsFile = new RealShopsFile(this);
 		shopsFile.load();
+		// enable
 		super.onEnable();
 		// check mandatory dependencies
 		if (!RealEconomy.init(this)) {
-			log.severe(
-				"[" + name + "] version [" + version + "] (" + author + ")"
-				+ " ERROR: needs iConomy plugin"
-			);
+			log.severe("needs iConomy plugin");
 			pm.disablePlugin(this);
 		}
-	}
-
-	//--------------------------------------------------------------------------------- isDebugging
-	public boolean isDebugging(final Player player)
-	{
-		if (debugees.containsKey(player)) {
-			return debugees.get(player);
-		} else {
-			return false;
-		}
-	}
-
-	//-------------------------------------------------------------------------------- setDebugging
-	public void setDebugging(final Player player, final boolean value)
-	{
-		debugees.put(player, value);
 	}
 
 	//---------------------------------------------------------------------------------- enterChest
@@ -117,7 +100,7 @@ public class RealShopPlugin extends RealPlugin
 		if (inChestState == null) {
 			inChestState = new RealInChestState();
 			inChestStates.put(playerName, inChestState);
-			realLog.info(
+			log.info(
 				"Player " + playerName + " enters in shop chest "
 				+ block.getWorld() + "," + block.getX() + "," + block.getY() + "," + block.getZ() 
 			);
@@ -136,7 +119,7 @@ public class RealShopPlugin extends RealPlugin
 			+ " " + lang.tr("into your pocket")
 		);
 		playersInChestCounter = inChestStates.size();
-		realLog.info("Players in chest counter = " + playersInChestCounter);
+		log.info("Players in chest counter = " + playersInChestCounter);
 	}
 
 	//----------------------------------------------------------------------------------- exitChest
@@ -145,7 +128,7 @@ public class RealShopPlugin extends RealPlugin
 		String playerName = player.getName();
 		RealInChestState inChestState = inChestStates.get(playerName);
 		if (inChestState != null) {
-			realLog.info("Player " + playerName + " exits from shop chest ");
+			log.info("Player " + playerName + " exits from shop chest ");
 			if (inChestState.inChest) {
 				inChestState.inChest = false;
 				// reload prices
@@ -157,7 +140,7 @@ public class RealShopPlugin extends RealPlugin
 				RealShopTransaction transaction = RealShopTransaction.create(
 					this, playerName, inChestState.itemStackHashMap, marketFile
 				).prepareBill();
-				realLog.info(transaction.toString());
+				log.info(transaction.toString());
 				if (transaction.isCanceled()) {
 					// transaction is fully canceled : items go back in their original inventories
 					ArrayList<RealItemStack> itemStackList = inChestState.itemStackHashMap.getContents();
@@ -224,7 +207,7 @@ public class RealShopPlugin extends RealPlugin
 			}
 			inChestStates.remove(playerName);
 			playersInChestCounter = inChestStates.size();
-			realLog.info("Players in chest counter = " + playersInChestCounter);
+			log.info("Players in chest counter = " + playersInChestCounter);
 		}
 	}
 
@@ -303,10 +286,10 @@ public class RealShopPlugin extends RealPlugin
 		player.sendMessage("inChestStates for " + players);
 		player.sendMessage(shopsFile.shops.size() + " opened shops");
 		player.sendMessage(marketFile.prices.size() + " market prices");
-		realLog.info(playersInChestCounter + " players in chest counter");
-		realLog.info("inChestStates for " + players);
-		realLog.info(shopsFile.shops.size() + " opened shops");
-		realLog.info(marketFile.prices.size() + " market prices");
+		log.info(playersInChestCounter + " players in chest counter");
+		log.info("inChestStates for " + players);
+		log.info(shopsFile.shops.size() + " opened shops");
+		log.info(marketFile.prices.size() + " market prices");
 	}
 
 	//--------------------------------------------------------------------------- pluginInfosPrices
@@ -317,16 +300,12 @@ public class RealShopPlugin extends RealPlugin
 	 */
 	public void pluginInfosPrices(Player player)
 	{
-		System.out.println("RealShop Market prices list :");
+		log.info("Market prices list :");
 		int[] ids = dataValuesFile.getIds();
 		for (int i = 0; i < ids.length; i++) {
 			RealPrice price = marketFile.getPrice(ids[i]);
 			if (price != null) {
-				System.out.println(
-					"SHOP PRICES : " + ids[i] + " (" + dataValuesFile.getName(ids[i]) + ") :"
-					+ " buy " + price.getBuy() + " sell " + price.getSell()
-				);
-				realLog.info(
+				log.info(
 						"SHOP PRICES : " + ids[i] + " (" + dataValuesFile.getName(ids[i]) + ") :"
 						+ " buy " + price.getBuy() + " sell " + price.getSell()
 				);
@@ -342,10 +321,7 @@ public class RealShopPlugin extends RealPlugin
 	 */
 	public void pluginInfosDailyLog(Player player)
 	{
-		System.out.println("Realshop Daily log status is :");
-		System.out.println(dailyLog.toString());
-		realLog.info("Realshop Daily log status is :");
-		realLog.info(dailyLog.toString());
+		log.info("Daily log status is : " + dailyLog.toString());
 	}
 
 }

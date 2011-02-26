@@ -10,13 +10,13 @@ public class RealShopDailyLog
 	private final RealShopPlugin plugin;
 	public HashMap<Integer, Integer> moves = new HashMap<Integer, Integer>();
 
-	//-------------------------------------------------------------------------------------- plugin
+	//------------------------------------------------------------------------------ RealShopDailyLog
 	public RealShopDailyLog(final RealShopPlugin plugin)
 	{
 		this.plugin = plugin;
 	}
 
-	//----------------------------------------------------------------------------------------- add
+	//------------------------------------------------------------------------------------------- add
 	/**
 	 * Add an amount of an item typeId to daily moves
 	 * positive amount for buy, negative amount for sell
@@ -35,7 +35,7 @@ public class RealShopDailyLog
 		}
 	}
 
-	//------------------------------------------------------------------------------ addTransaction
+	//-------------------------------------------------------------------------------- addTransaction
 	/**
 	 * Add all amounts from a validated transaction
 	 */
@@ -50,7 +50,7 @@ public class RealShopDailyLog
 		}
 	}
 
-	//--------------------------------------------------------------------------------------- reset
+	//----------------------------------------------------------------------------------------- reset
 	/**
 	 * Resets moves log
 	 */
@@ -59,7 +59,7 @@ public class RealShopDailyLog
 		moves.clear();
 	}
 
-	//------------------------------------------------------------------------------------ toString
+	//-------------------------------------------------------------------------------------- toString
 	public String toString()
 	{
 		String result = "RealShopDailyLog status\n";

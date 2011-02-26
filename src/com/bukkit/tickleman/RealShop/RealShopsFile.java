@@ -10,6 +10,7 @@ import java.util.StringTokenizer;
 
 import org.bukkit.block.Block;
 
+//################################################################################### RealShopsFile
 public class RealShopsFile
 {
 
@@ -18,13 +19,13 @@ public class RealShopsFile
 
 	public HashMap<String, RealShop> shops = new HashMap<String, RealShop>();
 
-	//----------------------------------------------------------------------------------- ShopsFile
+	//--------------------------------------------------------------------------------- RealShopsFile
 	public RealShopsFile(final RealShopPlugin plugin)
 	{
 		this.plugin = plugin;
 	}
 
-	//-------------------------------------------------------------------------------------- isShop
+	//---------------------------------------------------------------------------------------- isShop
 	public boolean isShop(Block block)
 	{
 		String key = block.getWorld()
@@ -32,12 +33,12 @@ public class RealShopsFile
 		return (shops.get(key) != null);
 	}
 
-	//---------------------------------------------------------------------------------------- load
+	//------------------------------------------------------------------------------------------ load
 	public void load()
 	{
 		try {
 			BufferedReader reader = new BufferedReader(
-				new FileReader("plugins/RealShop/" + fileName + ".cfg")
+				new FileReader("plugins/" + plugin.name + "/" + fileName + ".cfg")
 			);
 			String buffer;
 			StringTokenizer line;
@@ -60,12 +61,12 @@ public class RealShopsFile
 			reader.close();
 		} catch (Exception e) {
 			plugin.log.warning(
-				"[RealShop] Needs plugins/RealShop/" + fileName + ".cfg file (will auto-create)"
+				"Needs plugins/" + plugin.name + "/" + fileName + ".cfg file (will auto-create)"
 			);
 		}
 	}
 	
-	//---------------------------------------------------------------------------------------- save
+	//------------------------------------------------------------------------------------------ save
 	public void save()
 	{
 		try {
@@ -87,9 +88,7 @@ public class RealShopsFile
 			writer.flush();
 			writer.close();
 		} catch (Exception e) {
-			plugin.log.severe(
-				"[RealShop] Could not save plugins/RealShop/" + fileName + ".cfg file"
-			);
+			plugin.log.severe("Could not save plugins/" + plugin.name + "/" + fileName + ".cfg file");
 		}
 	}
 

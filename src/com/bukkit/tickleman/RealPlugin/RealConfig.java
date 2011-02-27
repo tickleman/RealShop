@@ -38,17 +38,19 @@ public class RealConfig
 			String buffer;
 			StringTokenizer line;
 			while ((buffer = reader.readLine()) != null) {
-				line = new StringTokenizer(buffer, "=");
-				if (line.countTokens() >= 2) {
-					String key = line.nextToken().trim();
-					String value = line.nextToken().trim();
-					try {
-						getClass().getField(key).set(this, value);
-					} catch (Exception e) {
-						plugin.log.warning(
-							"[" + plugin.name + "] ignore configuration option "
-							+ key + " (unknown)"
-						);
+				if (buffer.charAt(0) != '#') {
+					line = new StringTokenizer(buffer, "=");
+					if (line.countTokens() >= 2) {
+						String key = line.nextToken().trim();
+						String value = line.nextToken().trim();
+						try {
+							getClass().getField(key).set(this, value);
+						} catch (Exception e) {
+							plugin.log.warning(
+									"[" + plugin.name + "] ignore configuration option "
+									+ key + " (unknown)"
+							);
+						}
 					}
 				}
 			}

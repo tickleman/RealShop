@@ -38,12 +38,14 @@ public class RealTranslationFile
 			String buffer;
 			StringTokenizer line;
 			while ((buffer = reader.readLine()) != null) {
-				line = new StringTokenizer(buffer, "=");
-				if (line.countTokens() >= 2) {
-					String key = line.nextToken().trim();
-					String value = line.nextToken().trim();
-					if ((key != "") && (value != "")) {
-						translations.put(key, value);
+				if (buffer.charAt(0) != '#') {
+					line = new StringTokenizer(buffer, "=");
+					if (line.countTokens() >= 2) {
+						String key = line.nextToken().trim();
+						String value = line.nextToken().trim();
+						if ((key != "") && (value != "")) {
+							translations.put(key, value);
+						}
 					}
 				}
 			}

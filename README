@@ -1,6 +1,6 @@
 --- plugins.bukkit.org description ---
 
-[ECON] RealShop v0.15 - Shop using chests [432]
+[ECON] RealShop - Shop using chests
 
 More documentation on my website here :
 
@@ -26,9 +26,11 @@ REALSHOP PLUGIN INSTALLATION
 
 - download and install RealShop.jar into your server's plugins/ sub-directory
 
+- FIRST TIME ONLY (not for update) : unzip the plugins/RealShop/ directory from the zip package filz
+
 - restart your Minecraft server (ie using /stop command from your administrator player chat)
 
-- watch your Minecraft server : the following lines should be displayed
+- watch your Minecraft server (craftbukkit.jar) : the following lines should be displayed
   (and some others, if you installed some plugins) :
 
 [INFO] Starting minecraft server version Beta 1.3
@@ -40,13 +42,13 @@ REALSHOP PLUGIN INSTALLATION
 [INFO] [iConomy] version [2.2] (Aime) loaded
 [INFO] [RealShop] version [0.11] (Tickleman) loaded
 
---- how to use ---
-
 --- misc ---
 
 LICENCE INFORMATION
 
-This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 Unported License.
-    To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/
-                                       or send a letter to
-   Creative Commons, 171 Second Street, Suite 300, San Francisco, California, 94105, USA.
+I'd like to put my work on LGPL or Creative Commons.
+Don't know...
+
+Do what you want with everything of this !
+The only limit : if you fork my projects please don't name it with the Real* prefix,
+that I want to keep by myself for all my plugins as my building-mark. Thanks.

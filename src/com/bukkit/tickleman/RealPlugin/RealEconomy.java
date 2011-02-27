@@ -1,13 +1,13 @@
 package com.bukkit.tickleman.RealPlugin;
 
-import com.nijikokun.bukkit.iConomy.iConomy;
+import com.nijiko.coelho.iConomy.iConomy;
+import com.nijiko.coelho.iConomy.system.Account;
 
 //##################################################################################### IConomyLink
 public abstract class RealEconomy
 {
 
-	//private static String iConomyVersion = "2.x";
-	private static String iConomyVersion = "3.x";
+	private static String iConomyVersion = "4.x";
 
 	//----------------------------------------------------------------------------------- isInstalled
 	public static boolean init(RealPlugin plugin)
@@ -22,27 +22,21 @@ public abstract class RealEconomy
 	//---------------------------------------------------------------------------------- getBalance
 	public static double getBalance(String playerName)
 	{
-		//return iConomy.db.get_balance(playerName);
-		return iConomy.database.getBalance(playerName);
+		return iConomy.getBank().getAccount(playerName).getBalance();
 	}
 
 	//---------------------------------------------------------------------------------- getBalance
 	public static String getCurrency()
 	{
-		return iConomy.currency;
+		return iConomy.getBank().getCurrency();
 	}
 
 	//---------------------------------------------------------------------------------- getBalance
-	public static void setBalance(String player, double balance)
+	public static void setBalance(String playerName, double balance)
 	{
-		//iConomy.db.set_balance(player, (int)balance);
-		iConomy.database.setBalance(player, balance);
-	}
-
-	//---------------------------------------------------------------------------------- getBalance
-	public static void setBalance(String player, long balance)
-	{
-		setBalance(player, (double)balance);
+		Account account = iConomy.getBank().getAccount(playerName); 
+		account.setBalance(balance);
+		account.save();
 	}
 
 }

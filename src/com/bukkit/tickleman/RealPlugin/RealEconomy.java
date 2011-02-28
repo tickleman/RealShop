@@ -14,7 +14,18 @@ public abstract class RealEconomy
 	{
 		boolean ok = (plugin.getServer().getPluginManager().getPlugin("iConomy") != null);
 		if (ok) {
-			plugin.log.info("load dependency : iConomy " + iConomyVersion + " ok", true);
+			try {
+				getCurrency();
+			} catch (Exception e) {
+				ok = false;
+			}
+			if (ok) {
+				plugin.log.info("load dependency : iConomy " + iConomyVersion + " ok", true);
+			} else {
+				plugin.log.severe(
+					"load dependency : iConomy was found but was not version " + iConomyVersion, true
+				);
+			}
 		}
 		return ok;
 	}

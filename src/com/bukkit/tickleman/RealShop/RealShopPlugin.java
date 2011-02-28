@@ -17,6 +17,7 @@ import com.bukkit.tickleman.RealPlugin.RealInventory;
 import com.bukkit.tickleman.RealPlugin.RealItemStack;
 import com.bukkit.tickleman.RealPlugin.RealItemStackHashMap;
 import com.bukkit.tickleman.RealPlugin.RealPlugin;
+import com.bukkit.tickleman.RealPlugin.RealTime;
 
 //################################################################################## RealShopPlugin
 public class RealShopPlugin extends RealPlugin
@@ -124,29 +125,36 @@ public class RealShopPlugin extends RealPlugin
 			inChestState = new RealInChestState();
 			inChestStates.put(playerName, inChestState);
 		}
+		inChestState.enterTime = RealTime.worldToRealTime(player.getWorld());
 		inChestState.inChest = true;
 		inChestState.block = block;
-		inChestState.chest = RealChest.create(block);
-		String chestId = inChestState.chest.getChestId();
-		if (lockedChests.get(chestId) != null) {
-			lang.tr("This shop is already in use by another player");
+		if (shopsFile.shopAt(inChestState.block).player.equals(playerName)) {
+			player.sendMessage(lang.tr("Welcome into your shop"));
 			inChestStates.remove(playerName);
-			return false;
-		} else {
-			lockedChests.put(chestId, true);
-			inChestState.lastX = Math.round(player.getLocation().getX());
-			inChestState.lastZ = Math.round(player.getLocation().getZ());
-			inChestState.itemStackHashMap = RealItemStackHashMap.create().storeInventory(
-					RealInventory.create(inChestState.chest), false
-			);
-			// shop information
-			player.sendMessage(
-					lang.tr("Welcome into this shop") + ". " + lang.tr("You've got") + " "
-					+ RealEconomy.getBalance(player.getName()) + " " + RealEconomy.getCurrency()
-					+ " " + lang.tr("into your pocket")
-			);
-			playersInChestCounter = inChestStates.size();
 			return true;
+		} else {
+			inChestState.chest = RealChest.create(block);
+			String chestId = inChestState.chest.getChestId();
+			if (lockedChests.get(chestId) != null) {
+				player.sendMessage(lang.tr("This shop is already in use by another player"));
+				inChestStates.remove(playerName);
+				return false;
+			} else {
+				lockedChests.put(chestId, true);
+				inChestState.lastX = Math.round(player.getLocation().getX());
+				inChestState.lastZ = Math.round(player.getLocation().getZ());
+				inChestState.itemStackHashMap = RealItemStackHashMap.create().storeInventory(
+						RealInventory.create(inChestState.chest), false
+				);
+				// shop information
+				player.sendMessage(
+						lang.tr("Welcome into this shop") + ". " + lang.tr("You've got") + " "
+						+ RealEconomy.getBalance(player.getName()) + " " + RealEconomy.getCurrency()
+						+ " " + lang.tr("into your pocket")
+				);
+				playersInChestCounter = inChestStates.size();
+				return true;
+			}
 		}
 	}
 
@@ -158,6 +166,8 @@ public class RealShopPlugin extends RealPlugin
 		if (inChestState != null) {
 			if (inChestState.inChest) {
 				inChestState.inChest = false;
+				String shopPlayerName = shopsFile.shopAt(inChestState.block).player;
+				Player shopPlayer = getServer().getPlayer(shopPlayerName);
 				// reload prices
 				marketFile.load();
 				// remove new chest's inventory items from old chest's inventory
@@ -167,7 +177,7 @@ public class RealShopPlugin extends RealPlugin
 				);
 				// prepare bill
 				RealShopTransaction transaction = RealShopTransaction.create(
-					this, playerName, inChestState.itemStackHashMap, marketFile
+					this, playerName, shopPlayerName, inChestState.itemStackHashMap, marketFile
 				).prepareBill(shopsFile.shopAt(inChestState.block));
 				log.info(transaction.toString());
 				if (transaction.isCanceled()) {
@@ -202,19 +212,25 @@ public class RealShopPlugin extends RealPlugin
 					RealEconomy.setBalance(
 						playerName, RealEconomy.getBalance(playerName) - transaction.getTotalPrice() 
 					);
+					// update shop player's account
+					RealEconomy.setBalance(
+						shopPlayerName, RealEconomy.getBalance(shopPlayerName) + transaction.getTotalPrice()
+					);
 					// store transaction lines into daily log
 					dailyLog.addTransaction(transaction);
 					// display transaction lines information
 					Iterator<RealShopTransactionLine> iterator = transaction.transactionLines.iterator();
 					while (iterator.hasNext()) {
 						RealShopTransactionLine transactionLine = iterator.next();
-						String strGain, strSide;
+						String strGain, strSide, shopStrGain;
 						if (transactionLine.getAmount() < 0) {
 							strSide = lang.tr("sale");
 							strGain = lang.tr("profit");
+							shopStrGain = lang.tr("expense");
 						} else {
 							strSide = lang.tr("purchase");
 							strGain = lang.tr("expense");
+							shopStrGain = lang.tr("purchase");
 						}
 						player.sendMessage(
 							"- " + dataValuesFile.getName(transactionLine.getTypeId()) + ": "
@@ -225,6 +241,18 @@ public class RealShopPlugin extends RealPlugin
 							+ " " + strGain + " "
 							+ Math.abs(transactionLine.getLinePrice()) + RealEconomy.getCurrency()
 						);
+						if (shopPlayer != null) {
+							shopPlayer.sendMessage(
+								"SHOP " + playerName
+								+ " " + dataValuesFile.getName(transactionLine.getTypeId()) + ": "
+								+ strSide
+								+ " x" + Math.abs(transactionLine.getAmount())
+								+ " " + lang.tr("price")
+								+ " " + transactionLine.getUnitPrice() + RealEconomy.getCurrency()
+								+ " " + shopStrGain + " "
+								+ Math.abs(transactionLine.getLinePrice()) + RealEconomy.getCurrency()
+							);
+						}
 					}
 					// display transaction total
 					String strSide = transaction.getTotalPrice() < 0 ? lang.tr("earned") :lang.tr("spent");
@@ -232,6 +260,17 @@ public class RealShopPlugin extends RealPlugin
 						lang.tr("Transaction total") + " : " + lang.tr("you have") + " " + strSide + " "
 						+ Math.abs(transaction.getTotalPrice()) + RealEconomy.getCurrency()
 					);
+					/*
+					// It is not useful. Less lines !
+					String shopStrSide = transaction.getTotalPrice() > 0 ? lang.tr("earned") :lang.tr("spent");
+					if (shopPlayer != null) {
+						shopPlayer.sendMessage(
+							"SHOP " + playerName + " "
+							+ lang.tr("Transaction total") + " : " + lang.tr("you have") + " " + shopStrSide + " "
+							+ Math.abs(transaction.getTotalPrice()) + RealEconomy.getCurrency()
+						);
+					}
+					*/
 				}
 			}
 			lockedChests.remove(inChestState.chest.getChestId());

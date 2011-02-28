@@ -18,4 +18,6 @@ public class RealInChestState
 	public long lastX = 0;
 	public long lastZ = 0;
 
+	public long enterTime;
+
 }

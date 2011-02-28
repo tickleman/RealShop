@@ -14,6 +14,7 @@ public class RealShopTransaction
 	private RealShopPlugin plugin;
 
 	private String playerName;
+	private String shopPlayerName;
 	private RealItemStackHashMap itemStackHashMap;
 	private RealPricesFile pricesFile;
 	private double totalPrice = (double)0;
@@ -28,11 +29,13 @@ public class RealShopTransaction
 	private RealShopTransaction(
 		RealShopPlugin plugin,
 		String playerName,
+		String shopPlayerName,
 		RealItemStackHashMap itemStackHashMap,
 		RealPricesFile pricesFile
 	) {
 		this.plugin = plugin;
 		this.playerName = playerName;
+		this.shopPlayerName = shopPlayerName;
 		this.itemStackHashMap = itemStackHashMap;
 		this.pricesFile = pricesFile;
 	}
@@ -43,12 +46,14 @@ public class RealShopTransaction
 	public static RealShopTransaction create(
 		RealShopPlugin plugin,
 		String playerName,
+		String shopPlayerName,
 		RealItemStackHashMap itemStackHashMap,
 		RealPricesFile pricesFile
 	) {
 		return new RealShopTransaction(
 			plugin,
 			playerName,
+			shopPlayerName,
 			itemStackHashMap,
 			pricesFile
 		);
@@ -97,7 +102,10 @@ public class RealShopTransaction
 		}
 		// if total amount exceeds available player amount, then cancel all
 		this.totalPrice = Math.ceil(totalPrice * (double)100) / (double)100;
-		if (this.totalPrice > RealEconomy.getBalance(playerName)) {
+		if (
+			this.totalPrice > RealEconomy.getBalance(playerName)
+			|| (-this.totalPrice) > RealEconomy.getBalance(shopPlayerName)
+		) {
 			cancelAll = true;
 		}
 		return this;

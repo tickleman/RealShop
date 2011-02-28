@@ -33,7 +33,13 @@ public abstract class RealEconomy
 	//---------------------------------------------------------------------------------- getBalance
 	public static double getBalance(String playerName)
 	{
-		return iConomy.getBank().getAccount(playerName).getBalance();
+		Account account = iConomy.getBank().getAccount(playerName);
+		if (account == null) {
+			System.out.println("[RealShop] iConomy.getAccount(" + playerName + ") returned null !");
+			return 0;
+		} else {
+			return account.getBalance();
+		}
 	}
 
 	//---------------------------------------------------------------------------------- getBalance
@@ -45,9 +51,13 @@ public abstract class RealEconomy
 	//---------------------------------------------------------------------------------- getBalance
 	public static void setBalance(String playerName, double balance)
 	{
-		Account account = iConomy.getBank().getAccount(playerName); 
-		account.setBalance(balance);
-		account.save();
+		Account account = iConomy.getBank().getAccount(playerName);
+		if (account == null) {
+			System.out.println("[RealShop] iConomy.getAccount(" + playerName + ") returned null !");
+		} else {
+			account.setBalance(Math.round(balance * 100) / 100);
+			account.save();
+		}
 	}
 
 }

@@ -17,6 +17,7 @@ public class RealChest
 	 * - always set by constructor 
 	 */
 	private final Chest mainChest;
+	private String mainChestId;
 
 	/**
 	 * Neighbor chest object
@@ -24,8 +25,9 @@ public class RealChest
 	 * - another Chest object for the secondary chest when two adjacent blocks contain a big Chest
 	 */
 	private final Chest neighborChest;
+	private String neighborChestId;
 
-	//----------------------------------------------------------------------------------- ReadChest
+	//------------------------------------------------------------------------------------- ReadChest
 	/**
 	 * Constructor #1 : create chest from an existing block reference
 	 * - block must be a chest tested with block.getType().equals(Material.CHEST) !
@@ -43,7 +45,7 @@ public class RealChest
 		}
 	}
 
-	//----------------------------------------------------------------------------------- RealChest
+	//------------------------------------------------------------------------------------- RealChest
 	/**
 	 * Constructor #2 : create chest from an existing word and coordinates
 	 * - block at coordinates must be a chest tested with 
@@ -52,17 +54,21 @@ public class RealChest
 	private RealChest(World world, int x, int y, int z)
 	{
 		mainChest = (Chest)world.getBlockAt(x, y, z).getState();
+		mainChestId = world.getName() + "," + x + "," + y + "," + z;
 		Block neighborBlock = scanForNeighborChest(world, x, y, z);
 		if (neighborBlock == null) {
 			neighborChest = null;
+			neighborChestId = "";
 		} else {
 			neighborChest = (Chest)neighborBlock.getState();
+			neighborChestId = world.getName() + ","
+			+ neighborBlock.getX() + "," + neighborBlock.getY() + "," + neighborBlock.getZ();
 		}
 	}
 
-	//###################################################################################### PUBLIC
+	//######################################################################################## PUBLIC
 
-	//-------------------------------------------------------------------------------------- create
+	//---------------------------------------------------------------------------------------- create
 	/**
 	 * Static constructor #1
 	 * - returns null if block is not a chest, or a pointer to RealChest 
@@ -76,7 +82,7 @@ public class RealChest
 		}
 	}
 
-	//-------------------------------------------------------------------------------------- create
+	//---------------------------------------------------------------------------------------- create
 	/**
 	 * Static constructor #2
 	 * - returns null if block is not a chest, or a pointer to RealChest 
@@ -90,19 +96,29 @@ public class RealChest
 		}
 	}
 
-	//-------------------------------------------------------------------------------- getMainChest
+	//---------------------------------------------------------------------------------------- fullId
+	public String getChestId()
+	{
+		if (mainChestId.compareTo(neighborChestId) < 0) {
+			return mainChestId + "-" + neighborChestId;
+		} else {
+			return neighborChestId + "-" + mainChestId;
+		}
+	}
+
+	//---------------------------------------------------------------------------------- getMainChest
 	public Chest getMainChest()
 	{
 		return mainChest;
 	}
 
-	//---------------------------------------------------------------------------- getNeighborChest
+	//------------------------------------------------------------------------------ getNeighborChest
 	public Chest getNeighborChest()
 	{
 		return neighborChest;
 	}
 
-	//------------------------------------------------------------------------ scanForNeighborChest
+	//-------------------------------------------------------------------------- scanForNeighborChest
 	/**
 	 * Return foreign chest block for big chests, or null if no foreign chest was found
 	 * This is for internal use, but could be useful to any other mod

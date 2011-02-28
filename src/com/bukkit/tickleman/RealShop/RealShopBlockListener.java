@@ -117,7 +117,9 @@ public class RealShopBlockListener extends BlockListener
 				}
 			}
 			// enter chest
-			plugin.enterChest(player, block);
+			if (!plugin.enterChest(player, block)) {
+				event.setCancelled(true);
+			}
 		}
 	}
 

@@ -53,15 +53,15 @@ public class RealItemStackHashMap
 		}
 	}
 
-	//###################################################################################### PUBLIC
+	//######################################################################################## PUBLIC
 
-	//-------------------------------------------------------------------------------------- create
+	//---------------------------------------------------------------------------------------- create
 	public static RealItemStackHashMap create()
 	{
 		return new RealItemStackHashMap();
 	}
 
-	//--------------------------------------------------------------------------------- getContents
+	//----------------------------------------------------------------------------------- getContents
 	public ArrayList<RealItemStack> getContents()
 	{
 		ArrayList<RealItemStack> result = new ArrayList<RealItemStack>();
@@ -79,7 +79,7 @@ public class RealItemStackHashMap
 		return result;
 	}
 
-	//------------------------------------------------------------------------------ storeInventory
+	//-------------------------------------------------------------------------------- storeInventory
 	public RealItemStackHashMap storeInventory(Inventory inventory, boolean removal)
 	{
 		ItemStack[] inventoryItems = inventory.getContents();
@@ -89,8 +89,8 @@ public class RealItemStackHashMap
 		return this;
 	}
 
-	//-------------------------------------------------------------------------- storeRealInventory
-	public RealItemStackHashMap storeRealInventory(RealInventory realInventory, boolean removal)
+	//-------------------------------------------------------------------------------- storeInventory
+	public RealItemStackHashMap storeInventory(RealInventory realInventory, boolean removal)
 	{
 		for (int i = 0; i < realInventory.inventories.length; i++) {
 			storeInventory(realInventory.inventories[i], removal);

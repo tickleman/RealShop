@@ -31,6 +31,9 @@ public class RealShopPlugin extends RealPlugin
 	/** Says if the player is into a chest, and stores chest state info */
 	public final HashMap<String, RealInChestState> inChestStates = new HashMap<String, RealInChestState>();
 
+	/** Says if the player is into a chest, and stores chest state info */
+	public final HashMap<String, Boolean> lockedChests = new HashMap<String, Boolean>(); 
+
 	/** Daily log stores movements for each buy / sold item */
 	public RealShopDailyLog dailyLog = null;
 
@@ -58,7 +61,7 @@ public class RealShopPlugin extends RealPlugin
 	//-------------------------------------------------------------------------------- RealShopPlugin
 	public RealShopPlugin()
 	{
-		super("Tickleman", "RealShop", "0.22");
+		super("Tickleman", "RealShop", "0.23");
 	}
 
 	//------------------------------------------------------------------------------------- onDisable
@@ -112,7 +115,7 @@ public class RealShopPlugin extends RealPlugin
 	}
 
 	//------------------------------------------------------------------------------------ enterChest
-	public void enterChest(Player player, Block block)
+	public boolean enterChest(Player player, Block block)
 	{
 		// write in-chest state (inChest = true, player's coordinates, inventory backup)
 		String playerName = player.getName();
@@ -124,18 +127,27 @@ public class RealShopPlugin extends RealPlugin
 		inChestState.inChest = true;
 		inChestState.block = block;
 		inChestState.chest = RealChest.create(block);
-		inChestState.lastX = Math.round(player.getLocation().getX());
-		inChestState.lastZ = Math.round(player.getLocation().getZ());
-		inChestState.itemStackHashMap = RealItemStackHashMap.create().storeInventory(
-			player.getInventory(), true
-		);
-		// shop information
-		player.sendMessage(
-			lang.tr("Welcome into this shop") + ". " + lang.tr("You've got") + " "
-			+ RealEconomy.getBalance(player.getName()) + " " + RealEconomy.getCurrency()
-			+ " " + lang.tr("into your pocket")
-		);
-		playersInChestCounter = inChestStates.size();
+		String chestId = inChestState.chest.getChestId();
+		if (lockedChests.get(chestId) != null) {
+			lang.tr("This shop is already in use by another player");
+			inChestStates.remove(playerName);
+			return false;
+		} else {
+			lockedChests.put(chestId, true);
+			inChestState.lastX = Math.round(player.getLocation().getX());
+			inChestState.lastZ = Math.round(player.getLocation().getZ());
+			inChestState.itemStackHashMap = RealItemStackHashMap.create().storeInventory(
+					RealInventory.create(inChestState.chest), false
+			);
+			// shop information
+			player.sendMessage(
+					lang.tr("Welcome into this shop") + ". " + lang.tr("You've got") + " "
+					+ RealEconomy.getBalance(player.getName()) + " " + RealEconomy.getCurrency()
+					+ " " + lang.tr("into your pocket")
+			);
+			playersInChestCounter = inChestStates.size();
+			return true;
+		}
 	}
 
 	//------------------------------------------------------------------------------------- exitChest
@@ -148,9 +160,11 @@ public class RealShopPlugin extends RealPlugin
 				inChestState.inChest = false;
 				// reload prices
 				marketFile.load();
-				// remove new player's inventory items from old player's inventory
+				// remove new chest's inventory items from old chest's inventory
 				// in order to know how many of each has been buy (positive) / sold (negative)
-				inChestState.itemStackHashMap.storeInventory(player.getInventory(), false);
+				inChestState.itemStackHashMap.storeInventory(
+					RealInventory.create(inChestState.chest), true
+				);
 				// prepare bill
 				RealShopTransaction transaction = RealShopTransaction.create(
 					this, playerName, inChestState.itemStackHashMap, marketFile
@@ -220,6 +234,7 @@ public class RealShopPlugin extends RealPlugin
 					);
 				}
 			}
+			lockedChests.remove(inChestState.chest.getChestId());
 			inChestStates.remove(playerName);
 			playersInChestCounter = inChestStates.size();
 		}
@@ -449,7 +464,7 @@ public class RealShopPlugin extends RealPlugin
 		}
 		// buy (may be as long as the number of filled slots!) 
 		list = "";
-		RealItemStackHashMap itemStack = RealItemStackHashMap.create().storeRealInventory(
+		RealItemStackHashMap itemStack = RealItemStackHashMap.create().storeInventory(
 			RealInventory.create(RealChest.create(block)), false
 		); 
 		Iterator<RealItemStack> buyIterator = itemStack.getContents().iterator();

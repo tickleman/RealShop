@@ -1,4 +1,4 @@
-package com.bukkit.tickleman.RealShop;
+package fr.crafter.tickleman.RealShop;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,14 +10,16 @@ import org.bukkit.event.Event.Priority;
 import org.bukkit.event.Event;
 import org.bukkit.plugin.PluginManager;
 
-import com.bukkit.tickleman.RealPlugin.RealChest;
-import com.bukkit.tickleman.RealPlugin.RealDataValuesFile;
-import com.bukkit.tickleman.RealPlugin.RealEconomy;
-import com.bukkit.tickleman.RealPlugin.RealInventory;
-import com.bukkit.tickleman.RealPlugin.RealItemStack;
-import com.bukkit.tickleman.RealPlugin.RealItemStackHashMap;
-import com.bukkit.tickleman.RealPlugin.RealPlugin;
-import com.bukkit.tickleman.RealPlugin.RealTime;
+import com.nijiko.coelho.iConomy.iConomy;
+
+import fr.crafter.tickleman.RealEconomy.RealEconomy;
+import fr.crafter.tickleman.RealPlugin.RealChest;
+import fr.crafter.tickleman.RealPlugin.RealDataValuesFile;
+import fr.crafter.tickleman.RealPlugin.RealInventory;
+import fr.crafter.tickleman.RealPlugin.RealItemStack;
+import fr.crafter.tickleman.RealPlugin.RealItemStackHashMap;
+import fr.crafter.tickleman.RealPlugin.RealPlugin;
+import fr.crafter.tickleman.RealPlugin.RealTime;
 
 //################################################################################## RealShopPlugin
 public class RealShopPlugin extends RealPlugin
@@ -59,10 +61,19 @@ public class RealShopPlugin extends RealPlugin
 	/** Player events Listener */
 	private final RealShopPlayerListener playerListener = new RealShopPlayerListener(this);
 
+	/** Server events Listener */
+	private final RealShopServerListener serverListener = new RealShopServerListener(this);
+
+	/** RealEconomy */
+	public final RealEconomy realEconomy = new RealEconomy(this);
+
+	/** iConomy link for a further back-to-compatibility */
+	public iConomy iConomy;
+
 	//-------------------------------------------------------------------------------- RealShopPlugin
 	public RealShopPlugin()
 	{
-		super("Tickleman", "RealShop", "0.23");
+		super("Tickleman", "RealShop", "0.24");
 	}
 
 	//------------------------------------------------------------------------------------- onDisable
@@ -83,6 +94,7 @@ public class RealShopPlugin extends RealPlugin
 	{
 		// events listeners 
 		PluginManager pm = getServer().getPluginManager();
+		pm.registerEvent(Event.Type.PLUGIN_ENABLE, serverListener, Priority.Monitor, this);
 		pm.registerEvent(Event.Type.BLOCK_DAMAGED, blockListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.BLOCK_INTERACT, blockListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.BLOCK_PLACED, blockListener, Priority.Normal, this);
@@ -108,11 +120,6 @@ public class RealShopPlugin extends RealPlugin
 		shopsFile.load();
 		// enable
 		super.onEnable();
-		// check mandatory dependencies
-		if (!RealEconomy.init(this)) {
-			log.severe("needs iConomy plugin");
-			pm.disablePlugin(this);
-		}
 	}
 
 	//------------------------------------------------------------------------------------ enterChest
@@ -149,7 +156,7 @@ public class RealShopPlugin extends RealPlugin
 				// shop information
 				player.sendMessage(
 						lang.tr("Welcome into this shop") + ". " + lang.tr("You've got") + " "
-						+ RealEconomy.getBalance(player.getName()) + " " + RealEconomy.getCurrency()
+						+ realEconomy.getBalance(player.getName()) + " " + realEconomy.getCurrency()
 						+ " " + lang.tr("into your pocket")
 				);
 				playersInChestCounter = inChestStates.size();
@@ -209,12 +216,12 @@ public class RealShopPlugin extends RealPlugin
 						}
 					}
 					// update player's account
-					RealEconomy.setBalance(
-						playerName, RealEconomy.getBalance(playerName) - transaction.getTotalPrice() 
+					realEconomy.setBalance(
+						playerName, realEconomy.getBalance(playerName) - transaction.getTotalPrice() 
 					);
 					// update shop player's account
-					RealEconomy.setBalance(
-						shopPlayerName, RealEconomy.getBalance(shopPlayerName) + transaction.getTotalPrice()
+					realEconomy.setBalance(
+						shopPlayerName, realEconomy.getBalance(shopPlayerName) + transaction.getTotalPrice()
 					);
 					// store transaction lines into daily log
 					dailyLog.addTransaction(transaction);
@@ -237,9 +244,9 @@ public class RealShopPlugin extends RealPlugin
 							+ strSide
 							+ " x" + Math.abs(transactionLine.getAmount())
 							+ " " + lang.tr("price")
-							+ " " + transactionLine.getUnitPrice() + RealEconomy.getCurrency()
+							+ " " + transactionLine.getUnitPrice() + realEconomy.getCurrency()
 							+ " " + strGain + " "
-							+ Math.abs(transactionLine.getLinePrice()) + RealEconomy.getCurrency()
+							+ Math.abs(transactionLine.getLinePrice()) + realEconomy.getCurrency()
 						);
 						if (shopPlayer != null) {
 							shopPlayer.sendMessage(
@@ -248,9 +255,9 @@ public class RealShopPlugin extends RealPlugin
 								+ strSide
 								+ " x" + Math.abs(transactionLine.getAmount())
 								+ " " + lang.tr("price")
-								+ " " + transactionLine.getUnitPrice() + RealEconomy.getCurrency()
+								+ " " + transactionLine.getUnitPrice() + realEconomy.getCurrency()
 								+ " " + shopStrGain + " "
-								+ Math.abs(transactionLine.getLinePrice()) + RealEconomy.getCurrency()
+								+ Math.abs(transactionLine.getLinePrice()) + realEconomy.getCurrency()
 							);
 						}
 					}
@@ -258,7 +265,7 @@ public class RealShopPlugin extends RealPlugin
 					String strSide = transaction.getTotalPrice() < 0 ? lang.tr("earned") :lang.tr("spent");
 					player.sendMessage(
 						lang.tr("Transaction total") + " : " + lang.tr("you have") + " " + strSide + " "
-						+ Math.abs(transaction.getTotalPrice()) + RealEconomy.getCurrency()
+						+ Math.abs(transaction.getTotalPrice()) + realEconomy.getCurrency()
 					);
 					/*
 					// It is not useful. Less lines !

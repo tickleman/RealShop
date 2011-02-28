@@ -1,4 +1,4 @@
-package com.bukkit.tickleman.RealPlugin;
+package fr.crafter.tickleman.RealPlugin;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

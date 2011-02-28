@@ -1,4 +1,4 @@
-package com.bukkit.tickleman.RealShop;
+package fr.crafter.tickleman.RealShop;
 
 //####################################################################################### RealPrice
 public class RealPrice

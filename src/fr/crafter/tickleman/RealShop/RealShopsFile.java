@@ -1,4 +1,4 @@
-package com.bukkit.tickleman.RealShop;
+package fr.crafter.tickleman.RealShop;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

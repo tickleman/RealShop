@@ -1,10 +1,16 @@
-package com.bukkit.tickleman.RealPlugin;
+package fr.crafter.tickleman.RealEconomy;
 
 import com.nijiko.coelho.iConomy.iConomy;
 import com.nijiko.coelho.iConomy.system.Account;
 
+import fr.crafter.tickleman.RealPlugin.RealPlugin;
+
 //##################################################################################### IConomyLink
-public abstract class RealEconomy
+/**
+ * This is not used anymore in 0.30
+ * TODO remove or reactivate this
+ */
+public abstract class iConomyLink
 {
 
 	private static String iConomyVersion = "4.x";

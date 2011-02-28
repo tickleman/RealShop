@@ -1,6 +1,6 @@
-package com.bukkit.tickleman.RealShop;
+package fr.crafter.tickleman.RealShop;
 
-import com.bukkit.tickleman.RealPlugin.RealItemStack;
+import fr.crafter.tickleman.RealPlugin.RealItemStack;
 
 //######################################################################### RealShopTransactionLine
 public class RealShopTransactionLine extends RealItemStack 

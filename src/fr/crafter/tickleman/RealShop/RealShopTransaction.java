@@ -1,11 +1,10 @@
-package com.bukkit.tickleman.RealShop;
+package fr.crafter.tickleman.RealShop;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import com.bukkit.tickleman.RealPlugin.RealEconomy;
-import com.bukkit.tickleman.RealPlugin.RealItemStack;
-import com.bukkit.tickleman.RealPlugin.RealItemStackHashMap;
+import fr.crafter.tickleman.RealPlugin.RealItemStack;
+import fr.crafter.tickleman.RealPlugin.RealItemStackHashMap;
 
 //############################################################################# RealShopTransaction
 public class RealShopTransaction
@@ -103,8 +102,8 @@ public class RealShopTransaction
 		// if total amount exceeds available player amount, then cancel all
 		this.totalPrice = Math.ceil(totalPrice * (double)100) / (double)100;
 		if (
-			this.totalPrice > RealEconomy.getBalance(playerName)
-			|| (-this.totalPrice) > RealEconomy.getBalance(shopPlayerName)
+			this.totalPrice > plugin.realEconomy.getBalance(playerName)
+			|| (-this.totalPrice) > plugin.realEconomy.getBalance(shopPlayerName)
 		) {
 			cancelAll = true;
 		}
@@ -147,9 +146,9 @@ public class RealShopTransaction
 				result += prefix + plugin.dataValuesFile.getName(transactionLine.getTypeId()) + ": "
 					+ strSide
 					+ " x" + Math.abs(transactionLine.getAmount())
-					+ " price " + transactionLine.getUnitPrice() + RealEconomy.getCurrency()
+					+ " price " + transactionLine.getUnitPrice() + plugin.realEconomy.getCurrency()
 					+ " " + strGain + " "
-					+ Math.abs(transactionLine.getLinePrice()) + RealEconomy.getCurrency()
+					+ Math.abs(transactionLine.getLinePrice()) + plugin.realEconomy.getCurrency()
 					+ "\n";
 			}
 		}

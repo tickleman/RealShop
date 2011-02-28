@@ -1,8 +1,8 @@
-package com.bukkit.tickleman.RealShop;
+package fr.crafter.tickleman.RealShop;
 
 import java.io.BufferedWriter;
 
-import com.bukkit.tickleman.RealPlugin.RealConfig;
+import fr.crafter.tickleman.RealPlugin.RealConfig;
 
 //################################################################################## RealShopConfig
 public class RealShopConfig extends RealConfig

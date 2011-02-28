@@ -1,9 +1,9 @@
-package com.bukkit.tickleman.RealShop;
+package fr.crafter.tickleman.RealShop;
 
 import org.bukkit.block.Block;
 
-import com.bukkit.tickleman.RealPlugin.RealChest;
-import com.bukkit.tickleman.RealPlugin.RealItemStackHashMap;
+import fr.crafter.tickleman.RealPlugin.RealChest;
+import fr.crafter.tickleman.RealPlugin.RealItemStackHashMap;
 
 //#################################################################################### InChestState
 public class RealInChestState

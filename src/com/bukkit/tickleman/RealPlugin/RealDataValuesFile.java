@@ -24,7 +24,7 @@ public class RealDataValuesFile
 
 	//------------------------------------------------------------------------------------------ load
 	/**
-	 * Load data values file from disk
+	 * Load data values file from hard drive
 	 */
 	public void load()
 	{

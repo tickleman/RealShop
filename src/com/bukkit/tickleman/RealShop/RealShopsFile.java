@@ -18,6 +18,7 @@ public class RealShopsFile
 	private final RealShopPlugin plugin;
 	private final String fileName = "shops";
 
+	/** Shops list : "world;x;y;z" => RealShop */
 	public HashMap<String, RealShop> shops = new HashMap<String, RealShop>();
 
 	//--------------------------------------------------------------------------------- RealShopsFile

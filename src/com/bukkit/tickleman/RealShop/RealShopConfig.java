@@ -8,6 +8,7 @@ import com.bukkit.tickleman.RealPlugin.RealConfig;
 public class RealShopConfig extends RealConfig
 {
 
+	/** Default configuration values (if not in file) */
 	public String dailyPricesCalculation = "false"; 
 
 	//------------------------------------------------------------------------------ RealShopConfig
@@ -17,6 +18,9 @@ public class RealShopConfig extends RealConfig
 	}
 
 	//---------------------------------------------------------------------------------------- save
+	/*
+	 * Save values. Override original to add my own configuration values.
+	 */
 	@Override
 	protected void saveValues(BufferedWriter writer)
 	{

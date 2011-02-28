@@ -27,11 +27,16 @@ public class RealPricesFile
 	/** base amount of sold / purchased items quantity used for calculation */
 	public double AMOUNT_RATIO = (double)5000;
 
+	/** master plugin */
 	private final RealShopPlugin plugin;
+
+	/** stored file name */
 	private final String fileName;
 	
+	/** prices list : typeId => RealPrice(buy, sell) */
 	public HashMap<Integer, RealPrice> prices = new HashMap<Integer, RealPrice>();
 
+	/** anti-recurse security flag for recipes */
 	private int recurseSecurity = 0;
 	
 	//-------------------------------------------------------------------------------- RealPricesFile

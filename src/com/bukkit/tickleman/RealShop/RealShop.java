@@ -7,7 +7,7 @@ import java.util.Iterator;
 public class RealShop
 {
 
-	/** Shop basics */
+	/** Shop basics : position and player */
 	public String world;
 	public Integer posX;
 	public Integer posY;

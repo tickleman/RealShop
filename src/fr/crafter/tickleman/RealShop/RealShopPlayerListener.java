@@ -99,6 +99,7 @@ public class RealShopPlayerListener extends PlayerListener
 				event.setCancelled(false);
 			}
 		} else if (command.equals("/mny")) {
+			event.setCancelled(true);
 			// simple /mny commands
 			String param = ((cmd.length > 1) ? cmd[1].toLowerCase() : "");
 			Player player = event.getPlayer();
@@ -111,6 +112,7 @@ public class RealShopPlayerListener extends PlayerListener
 				player.sendMessage("/mny burn amount : burn your money");
 				if (player.isOp()) {
 					player.sendMessage("RealEconomy operator help");
+					player.sendMessage("/mny tell <player> : tell me how many money the player has");
 					player.sendMessage("/mny set <player> <balance> : sets the balance of a player");
 					player.sendMessage("/mny inc <player> <amount> : increase balance of a player");
 					player.sendMessage("/mny dec <player> <amount> : decrease the balance of a player");
@@ -134,12 +136,18 @@ public class RealShopPlayerListener extends PlayerListener
 				}
 				if (amount > 0) {
 					if (plugin.realEconomy.getBalance(playerName) >= amount) {
-						plugin.realEconomy.setBalance(
+						// transfer money with rollback
+						if (plugin.realEconomy.setBalance(
 							playerName, plugin.realEconomy.getBalance(playerName) - amount
-						);
-						plugin.realEconomy.setBalance(
-							toPlayerName, plugin.realEconomy.getBalance(toPlayerName) + amount
-						);
+						)) {
+							if (!plugin.realEconomy.setBalance(
+									toPlayerName, plugin.realEconomy.getBalance(toPlayerName) + amount
+							)) {
+								plugin.realEconomy.setBalance(
+									playerName, plugin.realEconomy.getBalance(playerName) + amount
+								);
+							}
+						}
 						player.sendMessage(
 							"You give " + amount + plugin.realEconomy.getCurrency() + " to " + toPlayerName
 						);
@@ -153,6 +161,10 @@ public class RealShopPlayerListener extends PlayerListener
 							playerName + " gives " + amount + plugin.realEconomy.getCurrency()
 							+ " to " + toPlayerName
 						);
+					} else {
+						player.sendMessage(
+							"You don't have enough " + plugin.realEconomy.getCurrency()
+						);
 					}
 				}
  			} else if (param.equals("burn")) {
@@ -162,7 +174,7 @@ public class RealShopPlayerListener extends PlayerListener
  				} catch (Exception e) {
  					amount = 0;
  				}
- 				amount = Math.max(0, plugin.realEconomy.getBalance(playerName));
+ 				amount = Math.min(plugin.realEconomy.getBalance(playerName), amount);
  				if (amount > 0) {
 					plugin.realEconomy.setBalance(
 						playerName, plugin.realEconomy.getBalance(playerName) - amount
@@ -172,7 +184,15 @@ public class RealShopPlayerListener extends PlayerListener
 					);
  				}
  			} else if (player.isOp()) {
- 				if (param.equals("set")) {
+ 				if (param.equals("tell")) {
+ 					String toPlayerName = ((cmd.length > 2) ? cmd[2] : "");
+ 					// TELL
+ 					player.sendMessage(
+ 						toPlayerName + " has got "
+ 						+ plugin.realEconomy.getBalance(playerName) + plugin.realEconomy.getCurrency()
+ 						+ " in your pocket"
+ 					);
+ 				} else if (param.equals("set")) {
  					// SET
  					String toPlayerName = ((cmd.length > 2) ? cmd[2] : "");
  					double amount;
@@ -227,7 +247,7 @@ public class RealShopPlayerListener extends PlayerListener
  					} catch (Exception e) {
  						amount = 0;
  					}
- 					amount = Math.max(0, plugin.realEconomy.getBalance(toPlayerName) - amount);
+ 					amount = Math.min(plugin.realEconomy.getBalance(toPlayerName), amount);
  					plugin.realEconomy.setBalance(
  						toPlayerName, plugin.realEconomy.getBalance(toPlayerName) - amount
  					);
@@ -260,7 +280,11 @@ public class RealShopPlayerListener extends PlayerListener
  						
  					}
  					*/
+ 				} else {
+ 					event.setCancelled(false);
  				}
+ 			} else {
+ 				event.setCancelled(false);
  			}
 		}
 	}
@@ -288,7 +312,6 @@ public class RealShopPlayerListener extends PlayerListener
 					|| (Math.abs(player.getLocation().getZ()- inChestInfo.lastZ) >= 2)
 				)
 			) {
-				System.out.println(RealTime.worldToRealTime(player.getWorld()) + " - " + inChestInfo.enterTime);
 				if (RealTime.worldToRealTime(player.getWorld()) < (inChestInfo.enterTime + 5)) {
 					inChestInfo.lastX = Math.round(player.getLocation().getX());
 					inChestInfo.lastZ = Math.round(player.getLocation().getZ());

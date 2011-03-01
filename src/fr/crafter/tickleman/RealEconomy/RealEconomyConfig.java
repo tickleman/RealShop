@@ -11,7 +11,7 @@ public class RealEconomyConfig extends RealConfig
 
 	/** Default configuration values (if not in file) */
 	public String currency = "Coin"; 
-	public Double initialBalance = (double)100;
+	public String initialBalance = "100";
 
 	//----------------------------------------------------------------------------- RealEconomyConfig
 	public RealEconomyConfig(final RealPlugin plugin)

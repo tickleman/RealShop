@@ -8,12 +8,17 @@ public class RealEconomy
 
 	private RealAccountsFile accountsFile;
 	private RealEconomyConfig config;
+	private RealPlugin plugin;
+
+	public String economyPlugin = "RealEconomy";
 
 	//----------------------------------------------------------------------------------- RealEconomy
 	public RealEconomy(RealPlugin plugin)
 	{
+		this.plugin = plugin;
 		accountsFile = new RealAccountsFile(plugin);
 		config = new RealEconomyConfig(plugin);
+		config.load();
 	}
 
 	//------------------------------------------------------------------------------------ getBalance
@@ -21,7 +26,11 @@ public class RealEconomy
 	{
 		Double balance = accountsFile.accounts.get(playerName);
 		if (balance == null) {
-			return config.initialBalance;
+			try {
+				return Double.parseDouble(config.initialBalance);
+			} catch (Exception e) {
+				return 0;
+			}
 		} else {
 			return balance;
 		}
@@ -34,10 +43,27 @@ public class RealEconomy
 	}
 
 	//------------------------------------------------------------------------------------ setBalance
-	public void setBalance(String playerName, double balance)
+	public boolean setBalance(String playerName, double balance)
 	{
-		accountsFile.accounts.put(playerName, balance);
-		accountsFile.save();
+		if (economyPlugin == "iConomy") {
+			return iConomyLink.setBalance(playerName, balance);
+		} else {
+			try {
+				accountsFile.accounts.put(playerName, balance);
+				accountsFile.save();
+			} catch (Exception e) {
+				plugin.log.severe("RealEconomy.setBalance() crashed with this message :");
+				plugin.log.severe(e.getMessage());
+				for (int i = 0; i < e.getStackTrace().length; i++) {
+					StackTraceElement el = e.getStackTrace()[i];
+					plugin.log.info(
+						el.getClassName() + "." + el.getMethodName()
+						+ "(" + el.getFileName() + ":" + el.getLineNumber() + ")"
+					);
+				}
+			}
+			return true;
+		}
 	}
 
 }

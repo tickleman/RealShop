@@ -8,16 +8,18 @@ import fr.crafter.tickleman.RealPlugin.RealPlugin;
 //##################################################################################### IConomyLink
 /**
  * This is not used anymore in 0.30
- * TODO remove or reactivate this
+ * Back (optionally) with 0.31
  */
 public abstract class iConomyLink
 {
 
+	private static RealPlugin plugin;
 	private static String iConomyVersion = "4.x";
 
 	//----------------------------------------------------------------------------------- isInstalled
 	public static boolean init(RealPlugin plugin)
 	{
+		iConomyLink.plugin = plugin;
 		boolean ok = (plugin.getServer().getPluginManager().getPlugin("iConomy") != null);
 		if (ok) {
 			try {
@@ -41,29 +43,74 @@ public abstract class iConomyLink
 	{
 		Account account = iConomy.getBank().getAccount(playerName);
 		if (account == null) {
-			System.out.println("[RealShop] iConomy.getAccount(" + playerName + ") returned null !");
+			plugin.log.warning("iConomy.getAccount(" + playerName + ") returned null !");
 			return 0;
 		} else {
-			return account.getBalance();
+			try {
+				return account.getBalance();
+			} catch (Exception e) {
+				plugin.log.severe("iConomy.getBalance() crashed with this message :");
+				plugin.log.severe(e.getMessage());
+				for (int i = 0; i < e.getStackTrace().length; i++) {
+					StackTraceElement el = e.getStackTrace()[i];
+					plugin.log.info(
+						el.getClassName() + "." + el.getMethodName()
+						+ "(" + el.getFileName() + ":" + el.getLineNumber() + ")"
+					);
+				}
+				return 0;
+			}
 		}
 	}
 
 	//---------------------------------------------------------------------------------- getBalance
 	public static String getCurrency()
 	{
-		return iConomy.getBank().getCurrency();
+		try {
+			return iConomy.getBank().getCurrency();
+		} catch (Exception e) {
+			plugin.log.severe("iConomy.getCurency() crashed with this message :");
+			plugin.log.severe(e.getMessage());
+			for (int i = 0; i < e.getStackTrace().length; i++) {
+				StackTraceElement el = e.getStackTrace()[i];
+				plugin.log.info(
+					el.getClassName() + "." + el.getMethodName()
+					+ "(" + el.getFileName() + ":" + el.getLineNumber() + ")"
+				);
+			}
+			return "Coin";
+		}
 	}
 
 	//---------------------------------------------------------------------------------- getBalance
-	public static void setBalance(String playerName, double balance)
+	public static boolean setBalance(String playerName, double balance)
 	{
+		boolean result = false;
 		Account account = iConomy.getBank().getAccount(playerName);
 		if (account == null) {
-			System.out.println("[RealShop] iConomy.getAccount(" + playerName + ") returned null !");
+			plugin.log.warning("iConomy.getAccount(" + playerName + ") returned null !");
 		} else {
-			account.setBalance(Math.round(balance * 100) / 100);
-			account.save();
+			try {
+				account.setBalance(Math.round(balance * 100) / 100);
+				result = true;
+			} catch (Exception e) {
+				plugin.log.severe(
+					"iConomy.setBalance(" + playerName + ", " + (Math.round(balance * 100) / 100) + ")"
+					+ " crashed with this message :"
+				);
+				plugin.log.severe(e.getMessage());
+			}
+			try {
+				account.save();
+			} catch (Exception e) {
+				plugin.log.severe(
+					"iConomy.save(" + playerName + ", " + (Math.round(balance * 100) / 100) + ")"
+					+ " crashed with this message :"
+				);
+				plugin.log.severe(e.getMessage());
+			}
 		}
+		return result;
 	}
 
 }

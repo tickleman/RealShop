@@ -24,6 +24,7 @@ public class RealAccountsFile
 	public RealAccountsFile(final RealPlugin plugin)
 	{
 		this.plugin = plugin;
+		load();
 	}
 
 	//------------------------------------------------------------------------------------------ load

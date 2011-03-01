@@ -13,6 +13,7 @@ import org.bukkit.plugin.PluginManager;
 import com.nijiko.coelho.iConomy.iConomy;
 
 import fr.crafter.tickleman.RealEconomy.RealEconomy;
+import fr.crafter.tickleman.RealEconomy.iConomyLink;
 import fr.crafter.tickleman.RealPlugin.RealChest;
 import fr.crafter.tickleman.RealPlugin.RealDataValuesFile;
 import fr.crafter.tickleman.RealPlugin.RealInventory;
@@ -73,7 +74,7 @@ public class RealShopPlugin extends RealPlugin
 	//-------------------------------------------------------------------------------- RealShopPlugin
 	public RealShopPlugin()
 	{
-		super("Tickleman", "RealShop", "0.24");
+		super("Tickleman", "RealShop", "0.31");
 	}
 
 	//------------------------------------------------------------------------------------- onDisable
@@ -118,6 +119,15 @@ public class RealShopPlugin extends RealPlugin
 		// read shops file
 		shopsFile = new RealShopsFile(this);
 		shopsFile.load();
+		// Economy plugin link
+		realEconomy.economyPlugin = "RealEconomy";
+		if (config.economyPlugin == "iConomy") {
+			if (iConomyLink.init(this)) {
+				realEconomy.economyPlugin = "iConomy";
+			} else {
+				log.severe("Uses RealEconomy instead of iConomy !");
+			}
+		}
 		// enable
 		super.onEnable();
 	}
@@ -216,13 +226,19 @@ public class RealShopPlugin extends RealPlugin
 						}
 					}
 					// update player's account
-					realEconomy.setBalance(
+					if (realEconomy.setBalance(
 						playerName, realEconomy.getBalance(playerName) - transaction.getTotalPrice() 
-					);
-					// update shop player's account
-					realEconomy.setBalance(
-						shopPlayerName, realEconomy.getBalance(shopPlayerName) + transaction.getTotalPrice()
-					);
+					)) {
+						// update shop player's account
+						if (!realEconomy.setBalance(
+								shopPlayerName, realEconomy.getBalance(shopPlayerName) + transaction.getTotalPrice()
+						)) {
+							// rollback if any error
+							realEconomy.setBalance(
+								playerName, realEconomy.getBalance(playerName) + transaction.getTotalPrice() 
+							);
+						}
+					}
 					// store transaction lines into daily log
 					dailyLog.addTransaction(transaction);
 					// display transaction lines information

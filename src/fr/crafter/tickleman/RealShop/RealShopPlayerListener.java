@@ -98,7 +98,7 @@ public class RealShopPlayerListener extends PlayerListener
 			} else {
 				event.setCancelled(false);
 			}
-		} else if (command.equals("/mny")) {
+		} else if (command.equals("/mny") && (plugin.config.economyPlugin == "RealEconomy")) {
 			event.setCancelled(true);
 			// simple /mny commands
 			String param = ((cmd.length > 1) ? cmd[1].toLowerCase() : "");

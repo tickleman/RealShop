@@ -121,7 +121,7 @@ public class RealShopPlugin extends RealPlugin
 		shopsFile.load();
 		// Economy plugin link
 		realEconomy.economyPlugin = "RealEconomy";
-		if (config.economyPlugin == "iConomy") {
+		if (config.economyPlugin.equals("iConomy")) {
 			if (iConomyLink.init(this)) {
 				realEconomy.economyPlugin = "iConomy";
 			} else {

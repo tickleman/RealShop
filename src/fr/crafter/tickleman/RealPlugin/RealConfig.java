@@ -47,8 +47,8 @@ public class RealConfig
 							getClass().getField(key).set(this, value);
 						} catch (Exception e) {
 							plugin.log.warning(
-									"[" + plugin.name + "] ignore configuration option "
-									+ key + " (unknown)"
+								"[" + plugin.name + "] ignore configuration option "
+								+ key + " (unknown)"
 							);
 						}
 					}

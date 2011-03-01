@@ -10,12 +10,13 @@ public class RealEconomy
 	private RealEconomyConfig config;
 	private RealPlugin plugin;
 
-	public String economyPlugin = "RealEconomy";
+	public String economyPlugin;
 
 	//----------------------------------------------------------------------------------- RealEconomy
 	public RealEconomy(RealPlugin plugin)
 	{
 		this.plugin = plugin;
+		this.economyPlugin = "RealEconomy";
 		accountsFile = new RealAccountsFile(plugin);
 		config = new RealEconomyConfig(plugin);
 		config.load();
@@ -24,22 +25,30 @@ public class RealEconomy
 	//------------------------------------------------------------------------------------ getBalance
 	public double getBalance(String playerName)
 	{
-		Double balance = accountsFile.accounts.get(playerName);
-		if (balance == null) {
-			try {
-				return Double.parseDouble(config.initialBalance);
-			} catch (Exception e) {
-				return 0;
-			}
+		if (economyPlugin == "iConomy") {
+			return iConomyLink.getBalance(playerName);
 		} else {
-			return balance;
+			Double balance = accountsFile.accounts.get(playerName);
+			if (balance == null) {
+				try {
+					return Double.parseDouble(config.initialBalance);
+				} catch (Exception e) {
+					return 0;
+				}
+			} else {
+				return balance;
+			}
 		}
 	}
 
 	//----------------------------------------------------------------------------------- getCurrency
 	public String getCurrency()
 	{
-		return config.currency;
+		if (economyPlugin == "iConomy") {
+			return iConomyLink.getCurrency(); 
+		} else {
+			return config.currency;
+		}
 	}
 
 	//------------------------------------------------------------------------------------ setBalance

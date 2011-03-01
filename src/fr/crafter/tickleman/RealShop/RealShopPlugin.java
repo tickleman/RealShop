@@ -74,7 +74,7 @@ public class RealShopPlugin extends RealPlugin
 	//-------------------------------------------------------------------------------- RealShopPlugin
 	public RealShopPlugin()
 	{
-		super("Tickleman", "RealShop", "0.31");
+		super("Tickleman", "RealShop", "0.32");
 	}
 
 	//------------------------------------------------------------------------------------- onDisable
@@ -309,6 +309,11 @@ public class RealShopPlugin extends RealPlugin
 	}
 
 	//--------------------------------------------------------------------------- registerBlockAsShop
+	/**
+	 * mode  0 to auto register/unregister
+	 * mode  1 to force register of a neighbor chest
+	 * mode -1 to force unregister of a neighbor chest
+	 */
 	private void registerBlockAsShop(Player player, Block block, int mode)
 	{
 		String message = null;
@@ -329,7 +334,7 @@ public class RealShopPlugin extends RealPlugin
 		RealShop shop = shopsFile.shops.get(key);
 		if ((mode == -1) || ((mode == 0) && (shop != null))) {
 			// if shop already exists or force removal : check if player has same name or op
-			if ((mode == -1) || (shop.player == playerName) || player.isOp()) {
+			if ((mode == -1) || (shop.player.equals(playerName)) || player.isOp()) {
 				// remove shop
 				shopsFile.shops.remove(key);
 				if (neighborBlock != null) {

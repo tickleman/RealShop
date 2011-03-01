@@ -190,7 +190,7 @@ public class RealShopPlayerListener extends PlayerListener
  					player.sendMessage(
  						toPlayerName + " has got "
  						+ plugin.realEconomy.getBalance(playerName) + plugin.realEconomy.getCurrency()
- 						+ " in your pocket"
+ 						+ " in his pocket"
  					);
  				} else if (param.equals("set")) {
  					// SET

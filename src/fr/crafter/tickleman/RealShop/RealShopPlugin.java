@@ -10,8 +10,6 @@ import org.bukkit.event.Event.Priority;
 import org.bukkit.event.Event;
 import org.bukkit.plugin.PluginManager;
 
-import com.nijiko.coelho.iConomy.iConomy;
-
 import fr.crafter.tickleman.RealEconomy.RealEconomy;
 import fr.crafter.tickleman.RealEconomy.iConomyLink;
 import fr.crafter.tickleman.RealPlugin.RealChest;
@@ -62,19 +60,13 @@ public class RealShopPlugin extends RealPlugin
 	/** Player events Listener */
 	private final RealShopPlayerListener playerListener = new RealShopPlayerListener(this);
 
-	/** Server events Listener */
-	private final RealShopServerListener serverListener = new RealShopServerListener(this);
-
 	/** RealEconomy */
 	public final RealEconomy realEconomy = new RealEconomy(this);
-
-	/** iConomy link for a further back-to-compatibility */
-	public iConomy iConomy;
 
 	//-------------------------------------------------------------------------------- RealShopPlugin
 	public RealShopPlugin()
 	{
-		super("Tickleman", "RealShop", "0.32");
+		super("Tickleman", "RealShop", "0.33");
 	}
 
 	//------------------------------------------------------------------------------------- onDisable
@@ -95,7 +87,6 @@ public class RealShopPlugin extends RealPlugin
 	{
 		// events listeners 
 		PluginManager pm = getServer().getPluginManager();
-		pm.registerEvent(Event.Type.PLUGIN_ENABLE, serverListener, Priority.Monitor, this);
 		pm.registerEvent(Event.Type.BLOCK_DAMAGED, blockListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.BLOCK_INTERACT, blockListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.BLOCK_PLACED, blockListener, Priority.Normal, this);

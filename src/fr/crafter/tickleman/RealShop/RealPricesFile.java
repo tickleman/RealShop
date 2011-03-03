@@ -110,7 +110,7 @@ public class RealPricesFile
 	public RealPrice fromRecipe(int typeId)
 	{
 		String recipe = plugin.dataValuesFile.getRecipe(typeId);
-		if (recipe == "") {
+		if (recipe.equals("")) {
 			return null;
 		} else {
 			RealPrice price = new RealPrice();

@@ -69,7 +69,7 @@ public class RealTranslationFile
 	public String tr(String text)
 	{
 		String translated = translations.get(text);
-		if ((translated == null) || (translated == "")) {
+		if ((translated == null) || (translated.equals(""))) {
 			return text;
 		} else {
 			return translated;

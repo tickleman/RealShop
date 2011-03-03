@@ -66,7 +66,7 @@ public class RealShopPlugin extends RealPlugin
 	//-------------------------------------------------------------------------------- RealShopPlugin
 	public RealShopPlugin()
 	{
-		super("Tickleman", "RealShop", "0.34");
+		super("Tickleman", "RealShop", "0.35");
 	}
 
 	//------------------------------------------------------------------------------------- onDisable
@@ -219,75 +219,88 @@ public class RealShopPlugin extends RealPlugin
 							);
 						}
 					}
+					boolean transactionOk = false;
 					// update player's account
 					if (realEconomy.setBalance(
 						playerName, realEconomy.getBalance(playerName) - transaction.getTotalPrice() 
 					)) {
 						// update shop player's account
-						if (!realEconomy.setBalance(
+						if (realEconomy.setBalance(
 								shopPlayerName, realEconomy.getBalance(shopPlayerName) + transaction.getTotalPrice()
 						)) {
+							transactionOk = true;
+						} else {
 							// rollback if any error
 							realEconomy.setBalance(
 								playerName, realEconomy.getBalance(playerName) + transaction.getTotalPrice() 
 							);
 						}
 					}
-					// store transaction lines into daily log
-					dailyLog.addTransaction(transaction);
-					// display transaction lines information
-					Iterator<RealShopTransactionLine> iterator = transaction.transactionLines.iterator();
-					while (iterator.hasNext()) {
-						RealShopTransactionLine transactionLine = iterator.next();
-						String strGain, strSide, shopStrGain;
-						if (transactionLine.getAmount() < 0) {
-							strSide = lang.tr("sale");
-							strGain = lang.tr("profit");
-							shopStrGain = lang.tr("expense");
-						} else {
-							strSide = lang.tr("purchase");
-							strGain = lang.tr("expense");
-							shopStrGain = lang.tr("purchase");
-						}
-						player.sendMessage(
-							"- " + dataValuesFile.getName(transactionLine.getTypeId()) + ": "
-							+ strSide
-							+ " x" + Math.abs(transactionLine.getAmount())
-							+ " " + lang.tr("price")
-							+ " " + transactionLine.getUnitPrice() + realEconomy.getCurrency()
-							+ " " + strGain + " "
-							+ Math.abs(transactionLine.getLinePrice()) + realEconomy.getCurrency()
-						);
-						if (shopPlayer != null) {
-							shopPlayer.sendMessage(
-								"SHOP " + playerName
-								+ " " + dataValuesFile.getName(transactionLine.getTypeId()) + ": "
+					if (transactionOk) { 
+						// store transaction lines into daily log
+						dailyLog.addTransaction(transaction);
+						// display transaction lines information
+						Iterator<RealShopTransactionLine> iterator = transaction.transactionLines.iterator();
+						while (iterator.hasNext()) {
+							RealShopTransactionLine transactionLine = iterator.next();
+							String strGain, strSide, shopStrGain;
+							if (transactionLine.getAmount() < 0) {
+								strSide = lang.tr("sale");
+								strGain = lang.tr("profit");
+								shopStrGain = lang.tr("expense");
+								if (config.shopInfiniteSell.equals("true")) {
+									// infinite sell : remove new items from chest
+log.debug("infiniteSell " + transactionLine.getTypeId() + " " + transactionLine.getAmount());
+									if (
+										!RealInventory.create(inChestState.chest)
+										.storeRealItemStack(transactionLine, false)
+									) {
+										log.severe(
+											"Can't infiniteSell " + transactionLine.getTypeId()
+											+ " " + transactionLine.getAmount()
+										);
+									}
+								}
+							} else {
+								strSide = lang.tr("purchase");
+								strGain = lang.tr("expense");
+								shopStrGain = lang.tr("purchase");
+								if (config.shopInfiniteBuy.equals("true")) {
+									// infinite buy : create items back into chest
+									RealInventory
+									.create(inChestState.chest)
+									.storeRealItemStack(transactionLine, false);
+								}
+							}
+							player.sendMessage(
+								"- " + dataValuesFile.getName(transactionLine.getTypeId()) + ": "
 								+ strSide
 								+ " x" + Math.abs(transactionLine.getAmount())
 								+ " " + lang.tr("price")
 								+ " " + transactionLine.getUnitPrice() + realEconomy.getCurrency()
-								+ " " + shopStrGain + " "
+								+ " " + strGain + " "
 								+ Math.abs(transactionLine.getLinePrice()) + realEconomy.getCurrency()
 							);
+							if (shopPlayer != null) {
+								shopPlayer.sendMessage(
+									"SHOP " + playerName
+									+ " " + dataValuesFile.getName(transactionLine.getTypeId()) + ": "
+									+ strSide
+									+ " x" + Math.abs(transactionLine.getAmount())
+									+ " " + lang.tr("price")
+									+ " " + transactionLine.getUnitPrice() + realEconomy.getCurrency()
+									+ " " + shopStrGain + " "
+									+ Math.abs(transactionLine.getLinePrice()) + realEconomy.getCurrency()
+								);
+							}
 						}
-					}
-					// display transaction total
-					String strSide = transaction.getTotalPrice() < 0 ? lang.tr("earned") :lang.tr("spent");
-					player.sendMessage(
-						lang.tr("Transaction total") + " : " + lang.tr("you have") + " " + strSide + " "
-						+ Math.abs(transaction.getTotalPrice()) + realEconomy.getCurrency()
-					);
-					/*
-					// It is not useful. Less lines !
-					String shopStrSide = transaction.getTotalPrice() > 0 ? lang.tr("earned") :lang.tr("spent");
-					if (shopPlayer != null) {
-						shopPlayer.sendMessage(
-							"SHOP " + playerName + " "
-							+ lang.tr("Transaction total") + " : " + lang.tr("you have") + " " + shopStrSide + " "
-							+ Math.abs(transaction.getTotalPrice()) + RealEconomy.getCurrency()
+						// display transaction total
+						String strSide = transaction.getTotalPrice() < 0 ? lang.tr("earned") :lang.tr("spent");
+						player.sendMessage(
+							lang.tr("Transaction total") + " : " + lang.tr("you have") + " " + strSide + " "
+							+ Math.abs(transaction.getTotalPrice()) + realEconomy.getCurrency()
 						);
 					}
-					*/
 				}
 			}
 			lockedChests.remove(inChestState.chest.getChestId());
@@ -366,7 +379,7 @@ public class RealShopPlugin extends RealPlugin
 		Iterator<String> iterator = inChestStates.keySet().iterator();
 		String players = "";
 		while (iterator.hasNext()) {
-			if (players == "") {
+			if (players.equals("")) {
 				players = iterator.next();
 			} else {
 				players += ", " + iterator.next();

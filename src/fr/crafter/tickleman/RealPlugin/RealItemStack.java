@@ -8,9 +8,9 @@ public class RealItemStack
 	private int amount;
 	private short durability;
 
-	//###################################################################################### PUBLIC
+	//######################################################################################## PUBLIC
 
-	//------------------------------------------------------------------------------- RealItemStack
+	//--------------------------------------------------------------------------------- RealItemStack
 	public RealItemStack(int typeId, int amount, short durability)
 	{
 		this.typeId = typeId;
@@ -18,22 +18,40 @@ public class RealItemStack
 		this.durability = durability;
 	}
 
-	//----------------------------------------------------------------------------------- getTypeId
-	public int getTypeId()
-	{
-		return typeId;
-	}
-
-	//----------------------------------------------------------------------------------- getAmount
+	//------------------------------------------------------------------------------------- getAmount
 	public int getAmount()
 	{
 		return amount;
 	}
 
-	//------------------------------------------------------------------------------- getDurability
+	//--------------------------------------------------------------------------------- getDurability
 	public short getDurability()
 	{
 		return durability;
+	}
+
+	//------------------------------------------------------------------------------------- getTypeId
+	public int getTypeId()
+	{
+		return typeId;
+	}
+
+	//------------------------------------------------------------------------------------- setAmount
+	public void setAmount(int amount)
+	{
+		this.amount = amount;
+	}
+
+	//--------------------------------------------------------------------------------- setDurability
+	public void setDurability(short durability)
+	{
+		this.durability = durability;
+	}
+
+	//------------------------------------------------------------------------------------- setTypeId
+	public void setTypeId(int typeId)
+	{
+		this.typeId = typeId;
 	}
 
 }

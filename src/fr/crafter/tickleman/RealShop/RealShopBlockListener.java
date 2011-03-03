@@ -99,7 +99,7 @@ public class RealShopBlockListener extends BlockListener
 			+ ";" + block.getX() + ";" + block.getY() + ";" + block.getZ();
 		if (plugin.shopsFile.shops.get(key) != null) {
 			// calculate daily prices fluctuations
-			if (plugin.config.dailyPricesCalculation == "true") {
+			if (plugin.config.dailyPricesCalculation.equals("true")) {
 				World world = block.getWorld();
 				String worldName = world.getName();
 				Long worldTime = world.getFullTime();

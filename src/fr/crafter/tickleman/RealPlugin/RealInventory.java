@@ -44,9 +44,9 @@ public class RealInventory
 	 */
 	public Inventory[] inventories;
 
-	//##################################################################################### PRIVATE
+	//####################################################################################### PRIVATE
 
-	//------------------------------------------------------------------------------- RealInventory
+	//--------------------------------------------------------------------------------- RealInventory
 	/**
 	 * Constructor #0 : an empty inventory, for manual fill 
 	 */
@@ -55,7 +55,7 @@ public class RealInventory
 		clear();
 	}
 
-	//------------------------------------------------------------------------------- RealInventory
+	//--------------------------------------------------------------------------------- RealInventory
 	/**
 	 * Constructor #1 : fill inventory with all Player's inventory slots 
 	 */
@@ -64,7 +64,7 @@ public class RealInventory
 		loadFromPlayerInventory(player);
 	}
 
-	//------------------------------------------------------------------------------- RealInventory
+	//--------------------------------------------------------------------------------- RealInventory
 	/**
 	 * Constructor #2 : fill inventory with all RealChest's inventory slots
 	 */
@@ -73,7 +73,7 @@ public class RealInventory
 		loadFromRealChestInventory(chest);
 	}
 
-	//--------------------------------------------------------------------------------------- clear
+	//----------------------------------------------------------------------------------------- clear
 	/**
 	 * Clear inventory, resetting its collection of arrays of ItemStack objects
 	 */
@@ -83,7 +83,7 @@ public class RealInventory
 		inventories = new Inventory[0];
 	}
 
-	//------------------------------------------------------------------------------------ copyFrom
+	//-------------------------------------------------------------------------------------- copyFrom
 	/**
 	 * Copy a RealInventory content from another one
 	 * result ItemStack objects are newly created (independent, thus)
@@ -99,7 +99,7 @@ public class RealInventory
 	}
 	*/
 
-	//--------------------------------------------------------------------- loadFromPlayerInventory
+	//----------------------------------------------------------------------- loadFromPlayerInventory
 	/**
 	 * Clear current inventory (if set) and link RealInventory to a player's inventory
 	 * (excluding armor slots)
@@ -111,7 +111,7 @@ public class RealInventory
 		inventories[0] = player.getInventory();
 	}
 
-	//------------------------------------------------------------------ loadFromRealChestInventory
+	//-------------------------------------------------------------------- loadFromRealChestInventory
 	/**
 	 * Clear current inventory (if set) and link RealInventory to a chest's inventory
 	 * (including the neighbor chest inventory if big chest)
@@ -128,7 +128,7 @@ public class RealInventory
 		}
 	}
 
-	//-------------------------------------------------------------------------------------- update
+	//---------------------------------------------------------------------------------------- update
 	/**
 	 * Update chests states (if this is a chest inventory)
 	 * Called after each modification into the inventory
@@ -143,9 +143,9 @@ public class RealInventory
 		}
 	}
 
-	//###################################################################################### PUBLIC
+	//######################################################################################## PUBLIC
 
-	//-------------------------------------------------------------------------------------- create
+	//---------------------------------------------------------------------------------------- create
 	/**
 	 * Static constructor #1
 	 * - return the RealInventory linked to a player's inventory 
@@ -156,7 +156,7 @@ public class RealInventory
 		return new RealInventory(player);
 	}
 
-	//-------------------------------------------------------------------------------------- create
+	//---------------------------------------------------------------------------------------- create
 	/**
 	 * Static constructor #2
 	 * - return the RealInventory linked to a chest's inventory
@@ -167,7 +167,7 @@ public class RealInventory
 		return new RealInventory(chest);
 	}
 
-	//-------------------------------------------------------------------------------------- backup
+	//---------------------------------------------------------------------------------------- backup
 	/**
 	 * Backups RealInventory to a copy of the inventory
 	 */
@@ -180,7 +180,7 @@ public class RealInventory
 		return itemStackBackup;
 	}
 
-	//------------------------------------------------------------------------------------- restore
+	//--------------------------------------------------------------------------------------- restore
 	/**
 	 * Restore inventory from last backup
 	 */
@@ -189,7 +189,7 @@ public class RealInventory
 		restore(itemStackBackup);
 	}
 
-	//------------------------------------------------------------------------------------- restore
+	//--------------------------------------------------------------------------------------- restore
 	/**
 	 * Restore inventory from last backup
 	 */
@@ -201,13 +201,13 @@ public class RealInventory
 		update();
 	}
 
-	//----------------------------------------------------------------------------------------- add
+	//------------------------------------------------------------------------------------------- add
 	public boolean add(int typeId, int amount)
 	{
 		return add(typeId, amount, (short)0);
 	}
 
-	//----------------------------------------------------------------------------------------- add
+	//------------------------------------------------------------------------------------------- add
 	/**
 	 * Add an amount of item into the inventory
 	 * Return false if not enough space in inventory
@@ -230,7 +230,7 @@ public class RealInventory
 		return false;
 	}
 
-	//------------------------------------------------------------------------------------ contains
+	//-------------------------------------------------------------------------------------- contains
 	/**
 	 * Return true if the inventory contains at least amount of the given material
 	 * (amount is the sum of multiple slots if needed)
@@ -250,7 +250,7 @@ public class RealInventory
 		return false;
 	}
 
-	//------------------------------------------------------------------------------------ moveFrom
+	//-------------------------------------------------------------------------------------- moveFrom
 	public boolean moveFrom(RealInventory source, int typeId, int amount, short durability)
 	{
 		ArrayList<ItemStack[]> itemStackBackup = source.backup();
@@ -263,7 +263,7 @@ public class RealInventory
 		return false;
 	}
 
-	//------------------------------------------------------------------------------------ moveFrom
+	//-------------------------------------------------------------------------------------- moveFrom
 	public boolean moveFrom(RealInventory source, ItemStack itemStack)
 	{
 		return moveFrom(
@@ -272,7 +272,7 @@ public class RealInventory
 	}
 
 
-	//-------------------------------------------------------------------------------------- remove
+	//---------------------------------------------------------------------------------------- remove
 	/**
 	 * Remove an amount of item from the inventory
 	 * Return false if the inventory does not contain the given amount (then nothing is removed)
@@ -282,7 +282,7 @@ public class RealInventory
 		return remove(typeId, amount, null);
 	}
 
-	//-------------------------------------------------------------------------------------- remove
+	//---------------------------------------------------------------------------------------- remove
 	/**
 	 * Remove an amount of item from the inventory
 	 * Return false if the inventory does not contain the given amount (then nothing is removed)
@@ -299,7 +299,7 @@ public class RealInventory
 				ItemStack itemStack = itemStackList[j];
 				if (
 					(itemStack.getTypeId() == typeId)
-					&& ((durability == null) || (itemStack.getDurability() == durability))
+					&& ((durability == null) || (durability.equals(itemStack.getDurability())))
 				) {
 					int itemAmount = itemStack.getAmount();
 					if (amount < itemAmount) {
@@ -325,7 +325,27 @@ public class RealInventory
 		return false;
 	}
 
-	//---------------------------------------------------------------------- storeRealItemStackList
+	//---------------------------------------------------------------------------- storeRealItemStack
+	/**
+	 * Store ItemStack items descriptions into inventory
+	 * - positive quantities additions, negative quantities removal
+	 * - if reverse is set to true, negative quantities addition, positive quantities removal
+	 * - if any add / remove error, then cancel the whole operation and return false
+	 * - return true if everything is OK
+	 */
+	public boolean storeRealItemStack(RealItemStack itemStack, boolean reverse)
+	{
+		boolean ok = true;
+		int amount = (reverse ? -itemStack.getAmount() : itemStack.getAmount());
+		if (amount < 0) {
+			ok = remove(itemStack.getTypeId(), -amount, itemStack.getDurability());
+		} else {
+			ok = add(itemStack.getTypeId(), amount, itemStack.getDurability());
+		}
+		return ok;
+	}
+
+	//-------------------------------------------------------------------------- storeRealItemStackList
 	/**
 	 * Store ItemStack items descriptions into inventory
 	 * - positive quantities additions, negative quantities removal
@@ -354,7 +374,7 @@ public class RealInventory
 		return true;
 	}
 
-	//------------------------------------------------------------------------------------ toString
+	//-------------------------------------------------------------------------------------- toString
 	/**
 	 * This translate the inventories content into string
 	 * Use it for debugging

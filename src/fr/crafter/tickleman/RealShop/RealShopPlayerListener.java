@@ -31,10 +31,10 @@ public class RealShopPlayerListener extends PlayerListener
 		String[] cmd = event.getMessage().split(" ");
 		String command = ((cmd.length > 0) ? cmd[0].toLowerCase() : "");
 		// SHOP
-		if (command.equals("/shop")) {
+		Player player = event.getPlayer();
+		if (command.equals("/shop") && (player.isOp() || plugin.config.shopOpOnly.equals("false"))) {
 			event.setCancelled(true);
 			// /shop
-			Player player = event.getPlayer();
 			String param = ((cmd.length > 1) ? cmd[1].toLowerCase() : "");
 			// ALL PLAYERS
 			if (param.equals("")) {
@@ -98,11 +98,10 @@ public class RealShopPlayerListener extends PlayerListener
 			} else {
 				event.setCancelled(false);
 			}
-		} else if (command.equals("/mny") && (plugin.config.economyPlugin == "RealEconomy")) {
+		} else if (command.equals("/mny") && (plugin.config.economyPlugin.equals("RealEconomy"))) {
 			event.setCancelled(true);
 			// simple /mny commands
 			String param = ((cmd.length > 1) ? cmd[1].toLowerCase() : "");
-			Player player = event.getPlayer();
 			String playerName = player.getName();
 			if (param.equals("help")) {
 				// HELP

@@ -89,6 +89,8 @@ public class RealShopTransaction
 				(price == null)
 				|| ((amount > 0) && !shop.isItemBuyAllowed(typeId))
 				|| ((amount < 0) && !shop.isItemSellAllowed(typeId))
+				|| ((plugin.config.shopDamagedItems.equals("false")) && (itemStack.getDurability() != 0))
+				|| ((plugin.config.shopMarketItemsOnly.equals("true")) && !plugin.marketFile.prices.containsKey(typeId))
 			) {
 				canceledLines.add(itemStack);
 			} else {

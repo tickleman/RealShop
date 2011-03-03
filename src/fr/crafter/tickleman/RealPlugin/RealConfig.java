@@ -43,13 +43,14 @@ public class RealConfig
 					if (line.countTokens() >= 2) {
 						String key = line.nextToken().trim();
 						String value = line.nextToken().trim();
+						if (loadValue(key, value)) {
+							plugin.log.debug(fileName + " " + key + " = " + value);
+						} else {
+							plugin.log.warning(fileName + "ignore configuration option " + key + " (unknown)");
+						}
 						try {
 							getClass().getField(key).set(this, value);
 						} catch (Exception e) {
-							plugin.log.warning(
-								"[" + plugin.name + "] ignore configuration option "
-								+ key + " (unknown)"
-							);
 						}
 					}
 				}
@@ -63,6 +64,13 @@ public class RealConfig
 			save();
 		}
 		plugin.language = language;
+	}
+
+	//------------------------------------------------------------------------------------- loadValue
+	protected boolean loadValue(String key, String value)
+	{
+		if (key.equals("language")) { language = value; return true; }
+		return false;
 	}
 
 	//---------------------------------------------------------------------------------------- save

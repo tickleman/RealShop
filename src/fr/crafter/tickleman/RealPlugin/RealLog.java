@@ -109,15 +109,15 @@ public class RealLog
 	{
 		log(mark, text);
 		if (global) {
-			if (mark == "INFO") {
+			if (mark.equals("INFO")) {
 				globalLog.info("[" + plugin.name + "] " + text);
-			} else if (mark == "WARNING") {
+			} else if (mark.equals("WARNING")) {
 				globalLog.warning("[" + plugin.name + "] " + text);
-			} else if (mark == "SEVERE") {
+			} else if (mark.equals("SEVERE")) {
 				globalLog.severe("[" + plugin.name + "] " + text);
-			} else if (mark == "ERROR") {
+			} else if (mark.equals("ERROR")) {
 				globalLog.info("[ERROR] [" + plugin.name + "] " + text);
-			} else if (mark == "DEBUG") {
+			} else if (mark.equals("DEBUG")) {
 				globalLog.info("[DEBUG] [" + plugin.name + "] " + text);
 			}
 			

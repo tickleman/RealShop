@@ -20,6 +20,15 @@ public class RealEconomyConfig extends RealConfig
 		language = plugin.language;
 	}
 
+	//------------------------------------------------------------------------------------- loadValue
+	protected boolean loadValue(String key, String value)
+	{
+		if (key.equals("currency")) { currency = value; return true; }
+		if (key.equals("initialBalance")) { initialBalance = value; return true; }
+		if (key.equals("language")) { language = value; return true; }
+		return false;
+	}
+
 	//------------------------------------------------------------------------------------------ save
 	/*
 	 * Save values. Override original to add my own configuration values.

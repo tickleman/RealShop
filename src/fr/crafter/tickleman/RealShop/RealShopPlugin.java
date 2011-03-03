@@ -66,7 +66,7 @@ public class RealShopPlugin extends RealPlugin
 	//-------------------------------------------------------------------------------- RealShopPlugin
 	public RealShopPlugin()
 	{
-		super("Tickleman", "RealShop", "0.33");
+		super("Tickleman", "RealShop", "0.34");
 	}
 
 	//------------------------------------------------------------------------------------- onDisable
@@ -114,10 +114,13 @@ public class RealShopPlugin extends RealPlugin
 		realEconomy.economyPlugin = "RealEconomy";
 		if (config.economyPlugin.equals("iConomy")) {
 			if (iConomyLink.init(this)) {
+				log.info("Uses iConomy plugin (/money commands) as economy system", true);
 				realEconomy.economyPlugin = "iConomy";
 			} else {
 				log.severe("Uses RealEconomy instead of iConomy !");
 			}
+		} else {
+			log.info("Uses built-in RealEconomy (/mny commands) as economy system", true);
 		}
 		// enable
 		super.onEnable();

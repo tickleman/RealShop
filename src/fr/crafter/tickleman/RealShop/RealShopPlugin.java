@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import org.bukkit.block.Block;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.event.Event;
@@ -66,7 +68,7 @@ public class RealShopPlugin extends RealPlugin
 	//-------------------------------------------------------------------------------- RealShopPlugin
 	public RealShopPlugin()
 	{
-		super("Tickleman", "RealShop", "0.35");
+		super("Tickleman", "RealShop", "0.36");
 	}
 
 	//------------------------------------------------------------------------------------- onDisable
@@ -92,7 +94,6 @@ public class RealShopPlugin extends RealPlugin
 		pm.registerEvent(Event.Type.BLOCK_PLACED, blockListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_DROP_ITEM, playerListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_MOVE, playerListener, Priority.Normal, this);
-		pm.registerEvent(Event.Type.PLAYER_COMMAND, playerListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_QUIT, playerListener, Priority.Normal, this);
 		// read configuration file
 		config = new RealShopConfig(this);
@@ -250,7 +251,6 @@ public class RealShopPlugin extends RealPlugin
 								shopStrGain = lang.tr("expense");
 								if (config.shopInfiniteSell.equals("true")) {
 									// infinite sell : remove new items from chest
-log.debug("infiniteSell " + transactionLine.getTypeId() + " " + transactionLine.getAmount());
 									if (
 										!RealInventory.create(inChestState.chest)
 										.storeRealItemStack(transactionLine, false)
@@ -306,6 +306,278 @@ log.debug("infiniteSell " + transactionLine.getTypeId() + " " + transactionLine.
 			lockedChests.remove(inChestState.chest.getChestId());
 			inChestStates.remove(playerName);
 			playersInChestCounter = inChestStates.size();
+		}
+	}
+
+	//------------------------------------------------------------------------------- onPlayerCommand
+	@Override
+	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args)
+	{
+		if (!(sender instanceof Player)) {
+			return false;
+		} else {
+			//boolean cancelled = false;
+			Player player = (Player)sender;
+			String command = cmd.getName().toLowerCase();
+			for (int i = 0; i < args.length; i++) {
+				args[i] = args[i].toLowerCase();
+			}
+			// SHOP
+			if (command.equals("shop") && (player.isOp() || config.shopOpOnly.equals("false"))) {
+				//cancelled = true;
+				// /shop
+				String param = ((args.length > 0) ? args[0] : "");
+				// ALL PLAYERS
+				if (param.equals("")) {
+					// /shop without parameter : simply create/remove a shop
+					String playerName = player.getName();
+					if (shopCommand.get(playerName) == null) {
+						log.info("[PLAYER_COMMAND] " + playerName + ": /shop");
+						shopCommand.put(playerName, "/shop");
+						player.sendMessage(lang.tr("Click on the shop-chest to activate/desactivate"));
+					} else {
+						shopCommand.remove(playerName);
+						player.sendMessage(lang.tr("Shop-chest activation/desactivation cancelled"));
+					}
+				} else if (param.equals("buy")) {
+					// /shop buy : give the list of item typeIds that players can buy into the shop
+					String playerName = player.getName();
+					String param2 = (args.length > 1) ? args[1] : "";
+					shopCommand.put(playerName, "/shop " + param + " " + param2);
+					player.sendMessage(lang.tr("Click on the shop-chest to add buy items"));
+				} else if (param.equals("sell")) {
+					// /shop sell : give the list of item typeIds that players can sell into the shop
+					String playerName = player.getName();
+					String param2 = (args.length > 1) ? args[1] : "";
+					shopCommand.put(playerName, "/shop " + param + " " + param2);
+					player.sendMessage(lang.tr("Click on the shop-chest to add sell items"));
+				} else if (param.equals("xbuy")) {
+					// /shop xbuy : give the list of item typeIds that players cannot buy into the shop
+					String playerName = player.getName();
+					String param2 = (args.length > 2) ? args[1] : "";
+					shopCommand.put(playerName, "/shop " + param + " " + param2);
+					player.sendMessage(lang.tr("Click on the shop-chest to exclude buy items"));
+				} else if (param.equals("xsell")) {
+					// /shop xsell : give the list of item typeIds that players cannot sell into the shop
+					String playerName = player.getName();
+					String param2 = (args.length > 1) ? args[1] : "";
+					shopCommand.put(playerName, "/shop " + param + " " + param2);
+					player.sendMessage(lang.tr("Click on the shop-chest to exclude sell items"));
+				} else if (player.isOp()) {
+					// OPERATORS ONLY
+					if (param.equals("check")) {
+						// /shop check : display info about RealShop
+						pluginInfos(player);
+					} else if (param.equals("prices")) {
+						// /shop log : show transactions log (summary) of the day
+						pluginInfosPrices(player);
+					} else if (param.equals("simul")) {
+						// /shop simul : simulate new prices using last prices and transactions log
+						marketFile.dailyPricesCalculation(dailyLog, true);
+						player.sendMessage(lang.tr("Daily prices calculation simulation is into the realshop.log file"));
+					} else if (param.equals("daily")) {
+						// /shop daily : calculate and save new prices using last prices and transactions log
+						marketFile.dailyPricesCalculation(dailyLog);
+						player.sendMessage(lang.tr("Real daily prices calculation log is into the realshop.log file"));
+					} else if (param.equals("log")) {
+						// /shop log : log daily movements
+						pluginInfosDailyLog(player);
+						player.sendMessage(lang.tr("Daily log was dumped into the realshop.log file"));
+					} else {
+						//cancelled = false;
+					}
+				} else {
+					//cancelled = false;
+				}
+			} else if (command.equals("/mny") && (config.economyPlugin.equals("RealEconomy"))) {
+				//cancelled = true;
+				// simple /mny commands
+				String param = ((args.length > 0) ? args[0].toLowerCase() : "");
+				String playerName = player.getName();
+				if (param.equals("help")) {
+					// HELP
+					player.sendMessage("RealEconomy help");
+					player.sendMessage("/mny : tell me how many money I have in my pocket");
+					player.sendMessage("/mny give <player> <amount> : give money to another player");
+					player.sendMessage("/mny burn amount : burn your money");
+					if (player.isOp()) {
+						player.sendMessage("RealEconomy operator help");
+						player.sendMessage("/mny tell <player> : tell me how many money the player has");
+						player.sendMessage("/mny set <player> <balance> : sets the balance of a player");
+						player.sendMessage("/mny inc <player> <amount> : increase balance of a player");
+						player.sendMessage("/mny dec <player> <amount> : decrease the balance of a player");
+						//player.sendMessage("/mny top [<count>] : tell the top count players");
+					}
+	 			} else if (param.equals("")) {
+	 				// NO PARAM : BALANCE
+	 				player.sendMessage(
+	 					"You've got "
+	 					+ realEconomy.getBalance(playerName) + realEconomy.getCurrency()
+	 					+ " in your pocket"
+	 				);
+	 			} else if (param.equals("give")) {
+	 				// GIVE MONEY
+	 				String toPlayerName = ((args.length > 1) ? args[1] : "");
+					double amount;
+					try {
+						amount = ((args.length > 2) ? Double.parseDouble(args[2]) : 0);
+					} catch (Exception e) {
+						amount = 0;
+					}
+					if (amount > 0) {
+						if (realEconomy.getBalance(playerName) >= amount) {
+							// transfer money with rollback
+							if (realEconomy.setBalance(
+								playerName, realEconomy.getBalance(playerName) - amount
+							)) {
+								if (!realEconomy.setBalance(
+										toPlayerName, realEconomy.getBalance(toPlayerName) + amount
+								)) {
+									realEconomy.setBalance(
+										playerName, realEconomy.getBalance(playerName) + amount
+									);
+								}
+							}
+							player.sendMessage(
+								"You give " + amount + realEconomy.getCurrency() + " to " + toPlayerName
+							);
+							Player toPlayer = getServer().getPlayer(toPlayerName);
+							if (toPlayer != null) {
+								toPlayer.sendMessage(
+									playerName + " gives you " + amount + realEconomy.getCurrency()
+								);
+							}
+							log.info(
+								playerName + " gives " + amount + realEconomy.getCurrency()
+								+ " to " + toPlayerName
+							);
+						} else {
+							player.sendMessage(
+								"You don't have enough " + realEconomy.getCurrency()
+							);
+						}
+					}
+	 			} else if (param.equals("burn")) {
+	 				double amount;
+	 				try {
+	 					amount = ((args.length > 2) ? Double.parseDouble(args[2]) : 0);
+	 				} catch (Exception e) {
+	 					amount = 0;
+	 				}
+	 				amount = Math.min(realEconomy.getBalance(playerName), amount);
+	 				if (amount > 0) {
+						realEconomy.setBalance(
+							playerName, realEconomy.getBalance(playerName) - amount
+						);
+						player.sendMessage(
+							"You burned " + amount + realEconomy.getCurrency()
+						);
+	 				}
+	 			} else if (player.isOp()) {
+	 				if (param.equals("tell")) {
+	 					String toPlayerName = ((args.length > 1) ? args[1] : "");
+	 					// TELL
+	 					player.sendMessage(
+	 						toPlayerName + " has got "
+	 						+ realEconomy.getBalance(playerName) + realEconomy.getCurrency()
+	 						+ " in his pocket"
+	 					);
+	 				} else if (param.equals("set")) {
+	 					// SET
+	 					String toPlayerName = ((args.length > 1) ? args[1] : "");
+	 					double amount;
+	 					try {
+	 						amount = ((args.length > 2) ? Double.parseDouble(args[2]) : 0);
+	 					} catch (Exception e) {
+	 						amount = 0;
+	 					}
+						realEconomy.setBalance(toPlayerName, amount);
+						player.sendMessage(
+							toPlayerName + " balance set to " + amount + realEconomy.getCurrency()
+						);
+						Player toPlayer = getServer().getPlayer(toPlayerName);
+						if (toPlayer != null) {
+							toPlayer.sendMessage(
+								playerName + " sets your balance to " + amount + realEconomy.getCurrency()
+							);
+						}
+	 				} else if (param.equals("inc")) {
+	 					// INC
+	 					String toPlayerName = ((args.length > 1) ? args[1] : "");
+	 					double amount;
+	 					try {
+	 						amount = ((args.length > 2) ? Double.parseDouble(args[2]) : 0);
+	 					} catch (Exception e) {
+	 						amount = 0;
+	 					}
+	 					realEconomy.setBalance(
+	 						toPlayerName, realEconomy.getBalance(toPlayerName) + amount
+	 					);
+						player.sendMessage(
+							"You increase " + toPlayerName + "'s balance of " 
+							+ amount + realEconomy.getCurrency()
+						);
+						Player toPlayer = getServer().getPlayer(toPlayerName);
+						if (toPlayer != null) {
+							toPlayer.sendMessage(
+								playerName + " increased your balance of "
+								+ amount + realEconomy.getCurrency()
+							);
+						}
+						log.info(
+							playerName + " increases the balance of " + toPlayerName
+							+ " of " + amount + realEconomy.getCurrency()
+						);
+	 				} else if (param.equals("dec")) {
+	 					// DEC
+	 					String toPlayerName = ((args.length > 1) ? args[1] : "");
+	 					double amount;
+	 					try {
+	 						amount = ((args.length > 2) ? Double.parseDouble(args[2]) : 0);
+	 					} catch (Exception e) {
+	 						amount = 0;
+	 					}
+	 					amount = Math.min(realEconomy.getBalance(toPlayerName), amount);
+	 					realEconomy.setBalance(
+	 						toPlayerName, realEconomy.getBalance(toPlayerName) - amount
+	 					);
+						player.sendMessage(
+							"You decrease " + toPlayerName + "'s balance of "
+							+ amount + realEconomy.getCurrency()
+						);
+						Player toPlayer = getServer().getPlayer(toPlayerName);
+						if (toPlayer != null) {
+							toPlayer.sendMessage(
+								playerName + " decreased your balance of "
+								+ amount + realEconomy.getCurrency()
+							);
+						}
+						log.info(
+							playerName + " decreases the balance of " + toPlayerName
+							+ " of " + amount + realEconomy.getCurrency()
+						);
+	 				} else if (param.equals("top")) {
+	 					// TOP
+	 					/*
+	 					int count;
+	 					try {
+	 						count = ((args.length > 1) ? Integer.parseInt(args[1]) : 0);
+	 					} catch (Exception e) {
+	 						count = 0;
+	 					}
+	 					int subCount = 0;
+	 					while ((count == 0) || (subCount < count)) {
+	 						
+	 					}
+	 					*/
+	 				} else {
+	 					//cancelled = false;
+	 				}
+	 			} else {
+	 				//cancelled = false;
+	 			}
+			}
+			return true;
 		}
 	}
 
@@ -428,19 +700,19 @@ log.debug("infiniteSell " + transactionLine.getTypeId() + " " + transactionLine.
 	}
 
 	//------------------------------------------------------------------------------------ shopAddBuy
-	public void shopAddBuy(Player player, Block block, String command)
+	public void shopAddBuy(Player player, Block block, String command, boolean silent)
 	{
 		RealShop shop = shopsFile.shopAt(block);
 		if (player.getName().equals(shop.player)) {
-			shopAddExclBuySell(player, shop.buyOnly, command, "buy");
+			shopAddExclBuySell(player, shop.buyOnly, command, "buy", silent);
 		} else {
-			player.sendMessage(lang.tr("This chest belongs to") + " " + shop.player);
+			if (!silent) player.sendMessage(lang.tr("This chest belongs to") + " " + shop.player);
 		}
 	}
 
 	//---------------------------------------------------------------------------- shopAddExclBuySell
 	private void shopAddExclBuySell(
-		Player player, HashMap<Integer, Boolean> addTo, String command, String what
+		Player player, HashMap<Integer, Boolean> addTo, String command, String what, boolean silent
 	) {
 		command += "+";
 		int index = command.lastIndexOf(' ') + 1;
@@ -472,41 +744,44 @@ log.debug("infiniteSell " + transactionLine.getTypeId() + " " + transactionLine.
 			index ++;
 		}
 		shopsFile.save();
-		player.sendMessage(
-			lang.tr("Now players can " + what) + " " + RealShop.HashMapToCsv(addTo).replaceAll(",", ", ")
-		);
+		if (!silent) {
+			player.sendMessage(
+				lang.tr("Now players can " + what)
+				+ " " + RealShop.HashMapToCsv(addTo).replaceAll(",", ", ")
+			);
+		}
 	}
 
 	//----------------------------------------------------------------------------------- shopAddSell
-	public void shopAddSell(Player player, Block block, String command)
+	public void shopAddSell(Player player, Block block, String command, boolean silent)
 	{
 		RealShop shop = shopsFile.shopAt(block);
 		if (player.getName().equals(shop.player)) {
-			shopAddExclBuySell(player, shop.sellOnly, command, "sell");
+			shopAddExclBuySell(player, shop.sellOnly, command, "sell", silent);
 		} else {
-			player.sendMessage(lang.tr("This chest belongs to") + " " + shop.player);
+			if (!silent) player.sendMessage(lang.tr("This chest belongs to") + " " + shop.player);
 		}
 	}
 
 	//----------------------------------------------------------------------------------- shopExclBuy
-	public void shopExclBuy(Player player, Block block, String command)
+	public void shopExclBuy(Player player, Block block, String command, boolean silent)
 	{
 		RealShop shop = shopsFile.shopAt(block);
 		if (player.getName().equals(shop.player)) {
-			shopAddExclBuySell(player, shop.buyExclude, command, "not buy");
+			shopAddExclBuySell(player, shop.buyExclude, command, "not buy", silent);
 		} else {
-			player.sendMessage(lang.tr("This chest belongs to") + " " + shop.player);
+			if (!silent) player.sendMessage(lang.tr("This chest belongs to") + " " + shop.player);
 		}
 	}
 
 	//---------------------------------------------------------------------------------- shopExclSell
-	public void shopExclSell(Player player, Block block, String command)
+	public void shopExclSell(Player player, Block block, String command, boolean silent)
 	{
 		RealShop shop = shopsFile.shopAt(block);
 		if (player.getName().equals(shop.player)) {
-			shopAddExclBuySell(player, shop.sellExclude, command, "not sell");
+			shopAddExclBuySell(player, shop.sellExclude, command, "not sell", silent);
 		} else {
-			player.sendMessage(lang.tr("This chest belongs to") + " " + shop.player);
+			if (!silent) player.sendMessage(lang.tr("This chest belongs to") + " " + shop.player);
 		}
 	}
 

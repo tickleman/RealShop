@@ -9,6 +9,8 @@ import org.bukkit.event.block.BlockInteractEvent;
 import org.bukkit.event.block.BlockListener;
 import org.bukkit.event.block.BlockPlaceEvent;
 
+import fr.crafter.tickleman.RealPlugin.RealChest;
+
 //########################################################################### RealShopBlockListener
 /**
  * HelloWorld block listener
@@ -36,7 +38,7 @@ public class RealShopBlockListener extends BlockListener
 			Block block = event.getBlock();
 			if (plugin.shopCommand.size() > 0) {
 				String playerName = player.getName();
-				String command = plugin.shopCommand.get(playerName); 
+				String command = plugin.shopCommand.get(playerName);
 				if ((command != null) && command.substring(0, 5).equals("/shop")) {
 					// create / remove shop-chest
 					if (block.getType().equals(Material.CHEST)) {
@@ -45,14 +47,21 @@ public class RealShopBlockListener extends BlockListener
 							plugin.registerBlockAsShop(player, block);
 						} else if (plugin.shopsFile.isShop(block)) {
 							event.setCancelled(true);
+							Block neighbor = RealChest.scanForNeighborChest(
+								block.getWorld(), block.getX(), block.getY(), block.getZ()
+							);
 							if (command.substring(0, 9).equals("/shop buy")) {
-								plugin.shopAddBuy(player, block, command);
+								plugin.shopAddBuy(player, block, command, false);
+								if (neighbor != null) plugin.shopAddBuy(player, block, command, true);
 							} else if (command.substring(0, 10).equals("/shop sell")) {
-								plugin.shopAddSell(player, block, command);
+								plugin.shopAddSell(player, block, command, false);
+								if (neighbor != null) plugin.shopAddSell(player, block, command, true);
 							} else if (command.substring(0, 10).equals("/shop xbuy")) {
-								plugin.shopExclBuy(player, block, command);
+								plugin.shopExclBuy(player, block, command, false);
+								if (neighbor != null) plugin.shopAddSell(player, block, command, true);
 							} else if (command.substring(0, 11).equals("/shop xsell")) {
-								plugin.shopExclSell(player, block, command);
+								plugin.shopExclSell(player, block, command, false);
+								if (neighbor != null) plugin.shopAddSell(player, block, command, true);
 							}
 						}
 					} else {

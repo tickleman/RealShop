@@ -3,6 +3,7 @@ package fr.crafter.tickleman.RealShop;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerEvent;
+import org.bukkit.event.player.PlayerInventoryEvent;
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerMoveEvent;
 
@@ -22,9 +23,20 @@ public class RealShopPlayerListener extends PlayerListener
 	public RealShopPlayerListener(RealShopPlugin instance)
 	{
 		plugin = instance;
+		
 	}
 
+	//------------------------------------------------------------------------------- onInventoryOpen
+	@Override
+	public void onInventoryOpen(PlayerInventoryEvent event)
+	{
+		if (plugin.playersInChestCounter > 0) {
+			plugin.exitChest(event.getPlayer());
+		}
+	}
+	
 	//------------------------------------------------------------------------------ onPlayerDropItem
+	@Override
 	public void onPlayerDropItem(PlayerDropItemEvent event)
 	{
 		if (plugin.playersInChestCounter > 0) {
@@ -33,6 +45,7 @@ public class RealShopPlayerListener extends PlayerListener
 	}
 
 	//---------------------------------------------------------------------------------- onPlayerMove
+	@Override
 	public void onPlayerMove(PlayerMoveEvent event)
 	{
 		if (plugin.playersInChestCounter > 0) {
@@ -58,6 +71,7 @@ public class RealShopPlayerListener extends PlayerListener
 	}
 
 	//---------------------------------------------------------------------------------- onPlayerQuit
+	@Override
 	public void onPlayerQuit(PlayerEvent event)
 	{
 		if (plugin.playersInChestCounter > 0) {

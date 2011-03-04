@@ -59,10 +59,10 @@ public class RealShopBlockListener extends BlockListener
 								if (neighbor != null) plugin.shopAddSell(player, neighbor, command, true);
 							} else if (command.substring(0, 10).equals("/shop xbuy")) {
 								plugin.shopExclBuy(player, block, command, false);
-								if (neighbor != null) plugin.shopAddSell(player, neighbor, command, true);
+								if (neighbor != null) plugin.shopExclBuy(player, neighbor, command, true);
 							} else if (command.substring(0, 11).equals("/shop xsell")) {
 								plugin.shopExclSell(player, block, command, false);
-								if (neighbor != null) plugin.shopAddSell(player, neighbor, command, true);
+								if (neighbor != null) plugin.shopExclSell(player, neighbor, command, true);
 							}
 						}
 					} else {

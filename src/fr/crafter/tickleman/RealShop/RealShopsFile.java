@@ -6,7 +6,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.StringTokenizer;
 
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -60,24 +59,33 @@ public class RealShopsFile
 				new FileReader("plugins/" + plugin.name + "/" + fileName + ".cfg")
 			);
 			String buffer;
-			StringTokenizer line;
 			while ((buffer = reader.readLine()) != null) {
-				line = new StringTokenizer(buffer, ";");
-				if (line.countTokens() >= 5) {
+				String[] line = buffer.split(";");
+				if (line.length > 4) {
 					try {
-						String world = line.nextToken().trim();
-						Integer posX = Integer.parseInt(line.nextToken().trim());
-						Integer posY = Integer.parseInt(line.nextToken().trim());
-						Integer posZ = Integer.parseInt(line.nextToken().trim());
-						String player = line.nextToken().trim();
+						String world = line[0].trim();
+						Integer posX = Integer.parseInt(line[1].trim());
+						Integer posY = Integer.parseInt(line[2].trim());
+						Integer posZ = Integer.parseInt(line[3].trim());
+						String player = line[4].trim();
 						String key = world + ";" + posX + ";" + posY + ";" + posZ;
+						System.out.println("----- shop " + key);
 						RealShop shop = new RealShop(world, posX, posY, posZ, player);
-						try {
-							shop.buyOnly = RealShop.csvToHashMap(line.nextToken().trim());
-							shop.sellOnly = RealShop.csvToHashMap(line.nextToken().trim());
-							shop.buyExclude = RealShop.csvToHashMap(line.nextToken().trim());
-							shop.sellExclude = RealShop.csvToHashMap(line.nextToken().trim());
-						} catch (Exception e) {
+						if (line.length > 5) {
+							System.out.println("load buyOnly");
+							shop.buyOnly = RealShop.csvToHashMap(line[5].trim());
+						}
+						if (line.length > 6) {
+							System.out.println("load sellOnly");
+							shop.sellOnly = RealShop.csvToHashMap(line[6].trim());
+						}
+						if (line.length > 7) {
+							System.out.println("load buyExclude");
+							shop.buyExclude = RealShop.csvToHashMap(line[7].trim());
+						}
+						if (line.length > 8) {
+							System.out.println("load sellExclude");
+							shop.sellExclude = RealShop.csvToHashMap(line[8].trim());
 						}
 						shops.put(key, shop);
 					} catch (Exception e) {

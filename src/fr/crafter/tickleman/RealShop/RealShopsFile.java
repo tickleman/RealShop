@@ -69,22 +69,17 @@ public class RealShopsFile
 						Integer posZ = Integer.parseInt(line[3].trim());
 						String player = line[4].trim();
 						String key = world + ";" + posX + ";" + posY + ";" + posZ;
-						System.out.println("----- shop " + key);
 						RealShop shop = new RealShop(world, posX, posY, posZ, player);
 						if (line.length > 5) {
-							System.out.println("load buyOnly");
 							shop.buyOnly = RealShop.csvToHashMap(line[5].trim());
 						}
 						if (line.length > 6) {
-							System.out.println("load sellOnly");
 							shop.sellOnly = RealShop.csvToHashMap(line[6].trim());
 						}
 						if (line.length > 7) {
-							System.out.println("load buyExclude");
 							shop.buyExclude = RealShop.csvToHashMap(line[7].trim());
 						}
 						if (line.length > 8) {
-							System.out.println("load sellExclude");
 							shop.sellExclude = RealShop.csvToHashMap(line[8].trim());
 						}
 						shops.put(key, shop);

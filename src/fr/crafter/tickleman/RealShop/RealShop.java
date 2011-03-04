@@ -42,7 +42,6 @@ public class RealShop
 	 */
 	public static HashMap<Integer, Boolean> csvToHashMap(String buffer)
 	{
-System.out.println("csvToHashMap " + buffer);
 		HashMap<Integer, Boolean> hashMap = new HashMap<Integer, Boolean>();
 		String[] typeIds = buffer.split(",");
 		for (int i = 0; i < typeIds.length; i++) {
@@ -68,7 +67,6 @@ System.out.println("csvToHashMap " + buffer);
 		while (iterator.hasNext()) {
 			csv += "," + iterator.next().toString();
 		}
-System.out.println("hashMapToCsv " + csv);
 		return csv;
 	}
 

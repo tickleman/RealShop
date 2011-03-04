@@ -50,18 +50,19 @@ public class RealShopBlockListener extends BlockListener
 							Block neighbor = RealChest.scanForNeighborChest(
 								block.getWorld(), block.getX(), block.getY(), block.getZ()
 							);
+							if (neighbor != null) plugin.log.debug("neighbor found");
 							if (command.substring(0, 9).equals("/shop buy")) {
 								plugin.shopAddBuy(player, block, command, false);
-								if (neighbor != null) plugin.shopAddBuy(player, block, command, true);
+								if (neighbor != null) plugin.shopAddBuy(player, neighbor, command, true);
 							} else if (command.substring(0, 10).equals("/shop sell")) {
 								plugin.shopAddSell(player, block, command, false);
-								if (neighbor != null) plugin.shopAddSell(player, block, command, true);
+								if (neighbor != null) plugin.shopAddSell(player, neighbor, command, true);
 							} else if (command.substring(0, 10).equals("/shop xbuy")) {
 								plugin.shopExclBuy(player, block, command, false);
-								if (neighbor != null) plugin.shopAddSell(player, block, command, true);
+								if (neighbor != null) plugin.shopAddSell(player, neighbor, command, true);
 							} else if (command.substring(0, 11).equals("/shop xsell")) {
 								plugin.shopExclSell(player, block, command, false);
-								if (neighbor != null) plugin.shopAddSell(player, block, command, true);
+								if (neighbor != null) plugin.shopAddSell(player, neighbor, command, true);
 							}
 						}
 					} else {

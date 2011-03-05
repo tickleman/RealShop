@@ -68,7 +68,10 @@ public class RealShopPlugin extends RealPlugin
 	//-------------------------------------------------------------------------------- RealShopPlugin
 	public RealShopPlugin()
 	{
-		super("Tickleman", "RealShop", "0.37");
+		super();
+		author = "tickleman";
+		name = "RealShop";
+		version = "0.371";
 	}
 
 	//------------------------------------------------------------------------------------- onDisable
@@ -314,10 +317,9 @@ public class RealShopPlugin extends RealPlugin
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args)
 	{
-		if (!(sender instanceof Player)) {
-			return false;
-		} else {
+		if (sender instanceof Player) {
 			//boolean cancelled = false;
+System.out.println("player");
 			Player player = (Player)sender;
 			String command = cmd.getName().toLowerCase();
 			for (int i = 0; i < args.length; i++) {
@@ -390,7 +392,7 @@ public class RealShopPlugin extends RealPlugin
 				} else {
 					//cancelled = false;
 				}
-			} else if (command.equals("/mny") && (config.economyPlugin.equals("RealEconomy"))) {
+			} else if (command.equals("mny") && (config.economyPlugin.equals("RealEconomy"))) {
 				//cancelled = true;
 				// simple /mny commands
 				String param = ((args.length > 0) ? args[0].toLowerCase() : "");
@@ -579,6 +581,8 @@ public class RealShopPlugin extends RealPlugin
 	 			}
 			}
 			return true;
+		} else {
+			return false;
 		}
 	}
 

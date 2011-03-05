@@ -1,5 +1,6 @@
 package fr.crafter.tickleman.RealPlugin;
 
+import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
 //###################################################################################### RealPlugin
@@ -7,9 +8,9 @@ public class RealPlugin extends JavaPlugin
 {
 
 	/** Plugin identification (use it for your logs !) */
-	public String author;
-	public String name;
-	public String version;
+	public String author = "tickleman";
+	public String name = "RealPlugin";
+	public String version = "0.01";
 
 	/** Translation links */
 	public RealTranslationFile lang;
@@ -19,12 +20,9 @@ public class RealPlugin extends JavaPlugin
 	public RealLog log;
 
 	//------------------------------------------------------------------------------------ RealPlugin
-	public RealPlugin(String author, String name, String version)
+	public RealPlugin()
 	{
 		super();
-		this.author = author;
-		this.name = name;
-		this.version = version;
 		log = new RealLog(this);
 	}
 
@@ -42,6 +40,11 @@ public class RealPlugin extends JavaPlugin
 	@Override
 	public void onEnable()
 	{
+		// plugin information
+		PluginDescriptionFile pdfFile = getDescription();
+		author = pdfFile.getAuthors().get(0);
+		name = pdfFile.getName();
+		version = pdfFile.getVersion();
 		// read language file
 		lang = new RealTranslationFile(this, language);
 		lang.load();

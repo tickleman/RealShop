@@ -68,10 +68,7 @@ public class RealShopPlugin extends RealPlugin
 	//-------------------------------------------------------------------------------- RealShopPlugin
 	public RealShopPlugin()
 	{
-		super();
-		author = "tickleman";
-		name = "RealShop";
-		version = "0.371";
+		super("tickleman", "RealShop", "0.38");
 	}
 
 	//------------------------------------------------------------------------------------- onDisable
@@ -318,8 +315,6 @@ public class RealShopPlugin extends RealPlugin
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args)
 	{
 		if (sender instanceof Player) {
-			//boolean cancelled = false;
-System.out.println("player");
 			Player player = (Player)sender;
 			String command = cmd.getName().toLowerCase();
 			for (int i = 0; i < args.length; i++) {
@@ -327,7 +322,6 @@ System.out.println("player");
 			}
 			// SHOP
 			if (command.equals("shop") && (player.isOp() || config.shopOpOnly.equals("false"))) {
-				//cancelled = true;
 				// /shop
 				String param = ((args.length > 0) ? args[0] : "");
 				// ALL PLAYERS
@@ -387,13 +381,12 @@ System.out.println("player");
 						pluginInfosDailyLog(player);
 						player.sendMessage(lang.tr("Daily log was dumped into the realshop.log file"));
 					} else {
-						//cancelled = false;
+						return false;
 					}
 				} else {
-					//cancelled = false;
+					return false;
 				}
 			} else if (command.equals("mny") && (config.economyPlugin.equals("RealEconomy"))) {
-				//cancelled = true;
 				// simple /mny commands
 				String param = ((args.length > 0) ? args[0].toLowerCase() : "");
 				String playerName = player.getName();
@@ -574,11 +567,13 @@ System.out.println("player");
 	 					}
 	 					*/
 	 				} else {
-	 					//cancelled = false;
+	 					//return false;
 	 				}
 	 			} else {
-	 				//cancelled = false;
+	 				return false;
 	 			}
+			} else {
+				return false;
 			}
 			return true;
 		} else {

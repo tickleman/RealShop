@@ -33,6 +33,12 @@ public class RealShopConfig extends RealConfig
 		if (key.equals("shopInfiniteSell")) { shopInfiniteSell = value; return true; }
 		if (key.equals("shopMarketItemsOnly")) { shopMarketItemsOnly = value; return true; }
 		if (key.equals("shopOpOnly")) { shopOpOnly = value; return true; }
+		if (!economyPlugin.equals("RealEconomy") && !economyPlugin.equals("iConomy")) {
+			plugin.log.warning(
+				"unknown economyPlugin " + economyPlugin + " was set to RealEconomy instead", true
+			);
+			economyPlugin = "RealEconomy";
+		}
 		return false;
 	}
 

@@ -25,7 +25,7 @@ public class RealEconomy
 	//------------------------------------------------------------------------------------ getBalance
 	public double getBalance(String playerName)
 	{
-		if (economyPlugin.equals("iConomy")) {
+		if (iConomyLink.initialized && economyPlugin.equals("iConomy")) {
 			return iConomyLink.getBalance(playerName);
 		} else {
 			Double balance = accountsFile.accounts.get(playerName);
@@ -44,7 +44,7 @@ public class RealEconomy
 	//----------------------------------------------------------------------------------- getCurrency
 	public String getCurrency()
 	{
-		if (economyPlugin.equals("iConomy")) {
+		if (iConomyLink.initialized && economyPlugin.equals("iConomy")) {
 			return iConomyLink.getCurrency(); 
 		} else {
 			return config.currency;
@@ -54,7 +54,7 @@ public class RealEconomy
 	//------------------------------------------------------------------------------------ setBalance
 	public boolean setBalance(String playerName, double balance)
 	{
-		if (economyPlugin.equals("iConomy")) {
+		if (iConomyLink.initialized && economyPlugin.equals("iConomy")) {
 			return iConomyLink.setBalance(playerName, balance);
 		} else {
 			try {

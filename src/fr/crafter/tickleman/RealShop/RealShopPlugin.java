@@ -13,7 +13,6 @@ import org.bukkit.event.Event;
 import org.bukkit.plugin.PluginManager;
 
 import fr.crafter.tickleman.RealEconomy.RealEconomy;
-import fr.crafter.tickleman.RealEconomy.iConomyLink;
 import fr.crafter.tickleman.RealPlugin.RealChest;
 import fr.crafter.tickleman.RealPlugin.RealDataValuesFile;
 import fr.crafter.tickleman.RealPlugin.RealInventory;
@@ -62,13 +61,16 @@ public class RealShopPlugin extends RealPlugin
 	/** Player events Listener */
 	private final RealShopPlayerListener playerListener = new RealShopPlayerListener(this);
 
+	/** Plugin events Listener */
+	private final RealShopPluginListener pluginListener = new RealShopPluginListener(this);
+
 	/** RealEconomy */
 	public final RealEconomy realEconomy = new RealEconomy(this);
 
 	//-------------------------------------------------------------------------------- RealShopPlugin
 	public RealShopPlugin()
 	{
-		super("tickleman", "RealShop", "0.38");
+		super("tickleman", "RealShop", "0.381");
 	}
 
 	//------------------------------------------------------------------------------------- onDisable
@@ -96,6 +98,7 @@ public class RealShopPlugin extends RealPlugin
 		pm.registerEvent(Event.Type.INVENTORY_OPEN, playerListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_MOVE, playerListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_QUIT, playerListener, Priority.Normal, this);
+		pm.registerEvent(Event.Type.PLUGIN_ENABLE, pluginListener, Priority.Normal, this);
 		// read configuration file
 		config = new RealShopConfig(this);
 		config.load();
@@ -113,17 +116,10 @@ public class RealShopPlugin extends RealPlugin
 		shopsFile = new RealShopsFile(this);
 		shopsFile.load();
 		// Economy plugin link
-		realEconomy.economyPlugin = "RealEconomy";
-		if (config.economyPlugin.equals("iConomy")) {
-			if (iConomyLink.init(this)) {
-				log.info("Uses iConomy plugin (/money commands) as economy system", true);
-				realEconomy.economyPlugin = "iConomy";
-			} else {
-				log.severe("Uses RealEconomy instead of iConomy !");
-			}
-		} else {
+		if (config.economyPlugin.equals("RealEconomy")) {
 			log.info("Uses built-in RealEconomy (/mny commands) as economy system", true);
 		}
+		pluginListener.onPluginEnabled(null);
 		// enable
 		super.onEnable();
 	}
@@ -386,191 +382,195 @@ public class RealShopPlugin extends RealPlugin
 				} else {
 					return false;
 				}
-			} else if (command.equals("mny") && (config.economyPlugin.equals("RealEconomy"))) {
-				// simple /mny commands
-				String param = ((args.length > 0) ? args[0].toLowerCase() : "");
-				String playerName = player.getName();
-				if (param.equals("help")) {
-					// HELP
-					player.sendMessage("RealEconomy help");
-					player.sendMessage("/mny : tell me how many money I have in my pocket");
-					player.sendMessage("/mny give <player> <amount> : give money to another player");
-					player.sendMessage("/mny burn amount : burn your money");
-					if (player.isOp()) {
-						player.sendMessage("RealEconomy operator help");
-						player.sendMessage("/mny tell <player> : tell me how many money the player has");
-						player.sendMessage("/mny set <player> <balance> : sets the balance of a player");
-						player.sendMessage("/mny inc <player> <amount> : increase balance of a player");
-						player.sendMessage("/mny dec <player> <amount> : decrease the balance of a player");
-						//player.sendMessage("/mny top [<count>] : tell the top count players");
-					}
-	 			} else if (param.equals("")) {
-	 				// NO PARAM : BALANCE
-	 				player.sendMessage(
-	 					"You've got "
-	 					+ realEconomy.getBalance(playerName) + realEconomy.getCurrency()
-	 					+ " in your pocket"
-	 				);
-	 			} else if (param.equals("give")) {
-	 				// GIVE MONEY
-	 				String toPlayerName = ((args.length > 1) ? args[1] : "");
-					double amount;
-					try {
-						amount = ((args.length > 2) ? Double.parseDouble(args[2]) : 0);
-					} catch (Exception e) {
-						amount = 0;
-					}
-					if (amount > 0) {
-						if (realEconomy.getBalance(playerName) >= amount) {
-							// transfer money with rollback
-							if (realEconomy.setBalance(
-								playerName, realEconomy.getBalance(playerName) - amount
-							)) {
-								if (!realEconomy.setBalance(
-										toPlayerName, realEconomy.getBalance(toPlayerName) + amount
+			} else if (command.equals("mny")) {
+				if (config.economyPlugin.equals("RealEconomy")) {
+					// simple /mny commands
+					String param = ((args.length > 0) ? args[0].toLowerCase() : "");
+					String playerName = player.getName();
+					if (param.equals("help")) {
+						// HELP
+						player.sendMessage("RealEconomy help");
+						player.sendMessage("/mny : tell me how many money I have in my pocket");
+						player.sendMessage("/mny give <player> <amount> : give money to another player");
+						player.sendMessage("/mny burn amount : burn your money");
+						if (player.isOp()) {
+							player.sendMessage("RealEconomy operator help");
+							player.sendMessage("/mny tell <player> : tell me how many money the player has");
+							player.sendMessage("/mny set <player> <balance> : sets the balance of a player");
+							player.sendMessage("/mny inc <player> <amount> : increase balance of a player");
+							player.sendMessage("/mny dec <player> <amount> : decrease the balance of a player");
+							//player.sendMessage("/mny top [<count>] : tell the top count players");
+						}
+		 			} else if (param.equals("")) {
+		 				// NO PARAM : BALANCE
+		 				player.sendMessage(
+		 					"You've got "
+		 					+ realEconomy.getBalance(playerName) + realEconomy.getCurrency()
+		 					+ " in your pocket"
+		 				);
+		 			} else if (param.equals("give")) {
+		 				// GIVE MONEY
+		 				String toPlayerName = ((args.length > 1) ? args[1] : "");
+						double amount;
+						try {
+							amount = ((args.length > 2) ? Double.parseDouble(args[2]) : 0);
+						} catch (Exception e) {
+							amount = 0;
+						}
+						if (amount > 0) {
+							if (realEconomy.getBalance(playerName) >= amount) {
+								// transfer money with rollback
+								if (realEconomy.setBalance(
+									playerName, realEconomy.getBalance(playerName) - amount
 								)) {
-									realEconomy.setBalance(
-										playerName, realEconomy.getBalance(playerName) + amount
+									if (!realEconomy.setBalance(
+											toPlayerName, realEconomy.getBalance(toPlayerName) + amount
+									)) {
+										realEconomy.setBalance(
+											playerName, realEconomy.getBalance(playerName) + amount
+										);
+									}
+								}
+								player.sendMessage(
+									"You give " + amount + realEconomy.getCurrency() + " to " + toPlayerName
+								);
+								Player toPlayer = getServer().getPlayer(toPlayerName);
+								if (toPlayer != null) {
+									toPlayer.sendMessage(
+										playerName + " gives you " + amount + realEconomy.getCurrency()
 									);
 								}
+								log.info(
+									playerName + " gives " + amount + realEconomy.getCurrency()
+									+ " to " + toPlayerName
+								);
+							} else {
+								player.sendMessage(
+									"You don't have enough " + realEconomy.getCurrency()
+								);
 							}
+						}
+		 			} else if (param.equals("burn")) {
+		 				double amount;
+		 				try {
+		 					amount = ((args.length > 2) ? Double.parseDouble(args[2]) : 0);
+		 				} catch (Exception e) {
+		 					amount = 0;
+		 				}
+		 				amount = Math.min(realEconomy.getBalance(playerName), amount);
+		 				if (amount > 0) {
+							realEconomy.setBalance(
+								playerName, realEconomy.getBalance(playerName) - amount
+							);
 							player.sendMessage(
-								"You give " + amount + realEconomy.getCurrency() + " to " + toPlayerName
+								"You burned " + amount + realEconomy.getCurrency()
+							);
+		 				}
+		 			} else if (player.isOp()) {
+		 				if (param.equals("tell")) {
+		 					String toPlayerName = ((args.length > 1) ? args[1] : "");
+		 					// TELL
+		 					player.sendMessage(
+		 						toPlayerName + " has got "
+		 						+ realEconomy.getBalance(playerName) + realEconomy.getCurrency()
+		 						+ " in his pocket"
+		 					);
+		 				} else if (param.equals("set")) {
+		 					// SET
+		 					String toPlayerName = ((args.length > 1) ? args[1] : "");
+		 					double amount;
+		 					try {
+		 						amount = ((args.length > 2) ? Double.parseDouble(args[2]) : 0);
+		 					} catch (Exception e) {
+		 						amount = 0;
+		 					}
+							realEconomy.setBalance(toPlayerName, amount);
+							player.sendMessage(
+								toPlayerName + " balance set to " + amount + realEconomy.getCurrency()
 							);
 							Player toPlayer = getServer().getPlayer(toPlayerName);
 							if (toPlayer != null) {
 								toPlayer.sendMessage(
-									playerName + " gives you " + amount + realEconomy.getCurrency()
+									playerName + " sets your balance to " + amount + realEconomy.getCurrency()
+								);
+							}
+		 				} else if (param.equals("inc")) {
+		 					// INC
+		 					String toPlayerName = ((args.length > 1) ? args[1] : "");
+		 					double amount;
+		 					try {
+		 						amount = ((args.length > 2) ? Double.parseDouble(args[2]) : 0);
+		 					} catch (Exception e) {
+		 						amount = 0;
+		 					}
+		 					realEconomy.setBalance(
+		 						toPlayerName, realEconomy.getBalance(toPlayerName) + amount
+		 					);
+							player.sendMessage(
+								"You increase " + toPlayerName + "'s balance of " 
+								+ amount + realEconomy.getCurrency()
+							);
+							Player toPlayer = getServer().getPlayer(toPlayerName);
+							if (toPlayer != null) {
+								toPlayer.sendMessage(
+									playerName + " increased your balance of "
+									+ amount + realEconomy.getCurrency()
 								);
 							}
 							log.info(
-								playerName + " gives " + amount + realEconomy.getCurrency()
-								+ " to " + toPlayerName
+								playerName + " increases the balance of " + toPlayerName
+								+ " of " + amount + realEconomy.getCurrency()
 							);
-						} else {
+		 				} else if (param.equals("dec")) {
+		 					// DEC
+		 					String toPlayerName = ((args.length > 1) ? args[1] : "");
+		 					double amount;
+		 					try {
+		 						amount = ((args.length > 2) ? Double.parseDouble(args[2]) : 0);
+		 					} catch (Exception e) {
+		 						amount = 0;
+		 					}
+		 					amount = Math.min(realEconomy.getBalance(toPlayerName), amount);
+		 					realEconomy.setBalance(
+		 						toPlayerName, realEconomy.getBalance(toPlayerName) - amount
+		 					);
 							player.sendMessage(
-								"You don't have enough " + realEconomy.getCurrency()
-							);
-						}
-					}
-	 			} else if (param.equals("burn")) {
-	 				double amount;
-	 				try {
-	 					amount = ((args.length > 2) ? Double.parseDouble(args[2]) : 0);
-	 				} catch (Exception e) {
-	 					amount = 0;
-	 				}
-	 				amount = Math.min(realEconomy.getBalance(playerName), amount);
-	 				if (amount > 0) {
-						realEconomy.setBalance(
-							playerName, realEconomy.getBalance(playerName) - amount
-						);
-						player.sendMessage(
-							"You burned " + amount + realEconomy.getCurrency()
-						);
-	 				}
-	 			} else if (player.isOp()) {
-	 				if (param.equals("tell")) {
-	 					String toPlayerName = ((args.length > 1) ? args[1] : "");
-	 					// TELL
-	 					player.sendMessage(
-	 						toPlayerName + " has got "
-	 						+ realEconomy.getBalance(playerName) + realEconomy.getCurrency()
-	 						+ " in his pocket"
-	 					);
-	 				} else if (param.equals("set")) {
-	 					// SET
-	 					String toPlayerName = ((args.length > 1) ? args[1] : "");
-	 					double amount;
-	 					try {
-	 						amount = ((args.length > 2) ? Double.parseDouble(args[2]) : 0);
-	 					} catch (Exception e) {
-	 						amount = 0;
-	 					}
-						realEconomy.setBalance(toPlayerName, amount);
-						player.sendMessage(
-							toPlayerName + " balance set to " + amount + realEconomy.getCurrency()
-						);
-						Player toPlayer = getServer().getPlayer(toPlayerName);
-						if (toPlayer != null) {
-							toPlayer.sendMessage(
-								playerName + " sets your balance to " + amount + realEconomy.getCurrency()
-							);
-						}
-	 				} else if (param.equals("inc")) {
-	 					// INC
-	 					String toPlayerName = ((args.length > 1) ? args[1] : "");
-	 					double amount;
-	 					try {
-	 						amount = ((args.length > 2) ? Double.parseDouble(args[2]) : 0);
-	 					} catch (Exception e) {
-	 						amount = 0;
-	 					}
-	 					realEconomy.setBalance(
-	 						toPlayerName, realEconomy.getBalance(toPlayerName) + amount
-	 					);
-						player.sendMessage(
-							"You increase " + toPlayerName + "'s balance of " 
-							+ amount + realEconomy.getCurrency()
-						);
-						Player toPlayer = getServer().getPlayer(toPlayerName);
-						if (toPlayer != null) {
-							toPlayer.sendMessage(
-								playerName + " increased your balance of "
+								"You decrease " + toPlayerName + "'s balance of "
 								+ amount + realEconomy.getCurrency()
 							);
-						}
-						log.info(
-							playerName + " increases the balance of " + toPlayerName
-							+ " of " + amount + realEconomy.getCurrency()
-						);
-	 				} else if (param.equals("dec")) {
-	 					// DEC
-	 					String toPlayerName = ((args.length > 1) ? args[1] : "");
-	 					double amount;
-	 					try {
-	 						amount = ((args.length > 2) ? Double.parseDouble(args[2]) : 0);
-	 					} catch (Exception e) {
-	 						amount = 0;
-	 					}
-	 					amount = Math.min(realEconomy.getBalance(toPlayerName), amount);
-	 					realEconomy.setBalance(
-	 						toPlayerName, realEconomy.getBalance(toPlayerName) - amount
-	 					);
-						player.sendMessage(
-							"You decrease " + toPlayerName + "'s balance of "
-							+ amount + realEconomy.getCurrency()
-						);
-						Player toPlayer = getServer().getPlayer(toPlayerName);
-						if (toPlayer != null) {
-							toPlayer.sendMessage(
-								playerName + " decreased your balance of "
-								+ amount + realEconomy.getCurrency()
+							Player toPlayer = getServer().getPlayer(toPlayerName);
+							if (toPlayer != null) {
+								toPlayer.sendMessage(
+									playerName + " decreased your balance of "
+									+ amount + realEconomy.getCurrency()
+								);
+							}
+							log.info(
+								playerName + " decreases the balance of " + toPlayerName
+								+ " of " + amount + realEconomy.getCurrency()
 							);
-						}
-						log.info(
-							playerName + " decreases the balance of " + toPlayerName
-							+ " of " + amount + realEconomy.getCurrency()
-						);
-	 				} else if (param.equals("top")) {
-	 					// TOP
-	 					/*
-	 					int count;
-	 					try {
-	 						count = ((args.length > 1) ? Integer.parseInt(args[1]) : 0);
-	 					} catch (Exception e) {
-	 						count = 0;
-	 					}
-	 					int subCount = 0;
-	 					while ((count == 0) || (subCount < count)) {
-	 						
-	 					}
-	 					*/
+		 				} else if (param.equals("top")) {
+		 					// TOP
+		 					/*
+		 					int count;
+		 					try {
+		 						count = ((args.length > 1) ? Integer.parseInt(args[1]) : 0);
+		 					} catch (Exception e) {
+		 						count = 0;
+		 					}
+		 					int subCount = 0;
+		 					while ((count == 0) || (subCount < count)) {
+		 						
+		 					}
+		 					*/
+		 				} else {
+		 					return false;
+		 				}
 	 				} else {
-	 					//return false;
+	 					return true;
 	 				}
 	 			} else {
-	 				return false;
+	 				return true;
 	 			}
 			} else {
 				return false;

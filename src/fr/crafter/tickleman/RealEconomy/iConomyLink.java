@@ -15,6 +15,7 @@ public abstract class iConomyLink
 
 	private static RealPlugin plugin;
 	private static String iConomyVersion = "4.x";
+	public static boolean initialized = false;
 
 	//----------------------------------------------------------------------------------- isInstalled
 	public static boolean init(RealPlugin plugin)
@@ -29,6 +30,7 @@ public abstract class iConomyLink
 			}
 			if (ok) {
 				plugin.log.info("load dependency : iConomy " + iConomyVersion + " ok", true);
+				initialized = true;
 			} else {
 				plugin.log.severe(
 					"load dependency : iConomy was found but was not version " + iConomyVersion, true

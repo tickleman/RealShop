@@ -94,7 +94,6 @@ public class RealShopPlugin extends RealPlugin
 		pm.registerEvent(Event.Type.BLOCK_DAMAGED, blockListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.BLOCK_INTERACT, blockListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.BLOCK_PLACED, blockListener, Priority.Normal, this);
-		pm.registerEvent(Event.Type.PLAYER_DROP_ITEM, playerListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.INVENTORY_OPEN, playerListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_MOVE, playerListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_QUIT, playerListener, Priority.Normal, this);
@@ -321,62 +320,71 @@ public class RealShopPlugin extends RealPlugin
 				(command.equals("rs") || command.equals("rshop"))
 				&& (player.isOp() || config.shopOpOnly.equals("false"))
 			) {
-				// /shop
+				// /rshop
 				String param = ((args.length > 0) ? args[0] : "");
 				// ALL PLAYERS
 				if (param.equals("")) {
-					// /shop without parameter : simply create/remove a shop
+					// /rshop without parameter : simply create/remove a shop
 					String playerName = player.getName();
 					if (shopCommand.get(playerName) == null) {
 						log.info("[PLAYER_COMMAND] " + playerName + ": /" + command);
 						shopCommand.put(playerName, "/shop");
-						player.sendMessage(lang.tr("Click on the shop-chest to activate/desactivate"));
+						player.sendMessage(lang.tr("Click on the chest-shop to activate/desactivate"));
 					} else {
 						shopCommand.remove(playerName);
-						player.sendMessage(lang.tr("Shop-chest activation/desactivation cancelled"));
+						player.sendMessage(lang.tr("Chest-shop activation/desactivation cancelled"));
 					}
 				} else if (param.equals("buy") || param.equals("b")) {
-					// /shop buy : give the list of item typeIds that players can buy into the shop
+					// /rshop buy : give the list of item typeIds that players can buy into the shop
 					String playerName = player.getName();
 					String param2 = (args.length > 1) ? args[1] : "";
-					shopCommand.put(playerName, "/shop " + param + " " + param2);
-					player.sendMessage(lang.tr("Click on the shop-chest to add buy items"));
+					shopCommand.put(playerName, "/shop buy " + param2);
+					player.sendMessage(lang.tr("Click on the chest-shop to add buy items"));
 				} else if (param.equals("sell") || param.equals("s")) {
-					// /shop sell : give the list of item typeIds that players can sell into the shop
+					// /rshop sell : give the list of item typeIds that players can sell into the shop
 					String playerName = player.getName();
 					String param2 = (args.length > 1) ? args[1] : "";
-					shopCommand.put(playerName, "/shop " + param + " " + param2);
-					player.sendMessage(lang.tr("Click on the shop-chest to add sell items"));
+					shopCommand.put(playerName, "/shop sell " + param2);
+					player.sendMessage(lang.tr("Click on the chest-shop to add sell items"));
 				} else if (param.equals("xbuy") || param.equals("xb")) {
-					// /shop xbuy : give the list of item typeIds that players cannot buy into the shop
-					String playerName = player.getName();
-					String param2 = (args.length > 2) ? args[1] : "";
-					shopCommand.put(playerName, "/shop " + param + " " + param2);
-					player.sendMessage(lang.tr("Click on the shop-chest to exclude buy items"));
-				} else if (param.equals("xsell") || param.equals("xs")) {
-					// /shop xsell : give the list of item typeIds that players cannot sell into the shop
+					// /rshop xbuy : give the list of item typeIds that players cannot buy into the shop
 					String playerName = player.getName();
 					String param2 = (args.length > 1) ? args[1] : "";
-					shopCommand.put(playerName, "/shop " + param + " " + param2);
-					player.sendMessage(lang.tr("Click on the shop-chest to exclude sell items"));
+					shopCommand.put(playerName, "/shop xbuy " + param2);
+					player.sendMessage(lang.tr("Click on the chest-shop to exclude buy items"));
+				} else if (param.equals("xsell") || param.equals("xs")) {
+					// /rshop xsell : give the list of item typeIds that players cannot sell into the shop
+					String playerName = player.getName();
+					String param2 = (args.length > 1) ? args[1] : "";
+					shopCommand.put(playerName, "/shop xsell " + param2);
+					player.sendMessage(lang.tr("Click on the chest-shop to exclude sell items"));
+				} else if (param.equals("give") || param.equals("g")) {
+					String playerName = player.getName();
+					String param2 = (args.length > 1) ? args[1] : "";
+					if (!param2.equals("")) {
+						shopCommand.put(playerName, "/shop give " + param2);
+						player.sendMessage(lang.tr("Click on the chest-shop you want to give to " + param2));
+					} else {
+						player.sendMessage(lang.tr("Usage") + " : /rshop give <playername>");
+					}
 				} else if (player.isOp()) {
 					// OPERATORS ONLY
 					if (param.equals("check") || param.equals("c")) {
-						// /shop check : display info about RealShop
+						// /rshop check : display info about RealShop
 						pluginInfos(player);
 					} else if (param.equals("prices") || param.equals("p")) {
-						// /shop log : show transactions log (summary) of the day
+						// /rshop log : show transactions log (summary) of the day
 						pluginInfosPrices(player);
 					} else if (param.equals("simul") || param.equals("s")) {
-						// /shop simul : simulate new prices using last prices and transactions log
+						// /rshop simul : simulate new prices using last prices and transactions log
 						marketFile.dailyPricesCalculation(dailyLog, true);
 						player.sendMessage(lang.tr("Daily prices calculation simulation is into the realshop.log file"));
 					} else if (param.equals("daily") || param.equals("d")) {
-						// /shop daily : calculate and save new prices using last prices and transactions log
+						// /rshop daily : calculate and save new prices using last prices and transactions log
 						marketFile.dailyPricesCalculation(dailyLog);
 						player.sendMessage(lang.tr("Real daily prices calculation log is into the realshop.log file"));
 					} else if (param.equals("log") || param.equals("l")) {
-						// /shop log : log daily movements
+						// /rshop log : log daily movements
 						pluginInfosDailyLog(player);
 						player.sendMessage(lang.tr("Daily log was dumped into the realshop.log file"));
 					} else {
@@ -783,6 +791,20 @@ public class RealShopPlugin extends RealPlugin
 		RealShop shop = shopsFile.shopAt(block);
 		if (player.getName().equals(shop.player)) {
 			shopAddExclBuySell(player, shop.sellExclude, command, "not sell", silent);
+		} else {
+			if (!silent) player.sendMessage(lang.tr("This chest belongs to") + " " + shop.player);
+		}
+	}
+
+	//-------------------------------------------------------------------------------------- shopGive
+	public void shopGive(Player player, Block block, String command, boolean silent)
+	{
+		RealShop shop = shopsFile.shopAt(block);
+		String toPlayer = command.split(" ")[2].trim();
+		if (player.getName().equals(shop.player)) {
+			shop.player = toPlayer;
+			shopsFile.save();
+			if (!silent) player.sendMessage(lang.tr("This shop was given to") + " " + toPlayer);
 		} else {
 			if (!silent) player.sendMessage(lang.tr("This chest belongs to") + " " + shop.player);
 		}

@@ -1,7 +1,6 @@
 package fr.crafter.tickleman.RealShop;
 
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerInventoryEvent;
 import org.bukkit.event.player.PlayerListener;
@@ -29,15 +28,6 @@ public class RealShopPlayerListener extends PlayerListener
 	//------------------------------------------------------------------------------- onInventoryOpen
 	@Override
 	public void onInventoryOpen(PlayerInventoryEvent event)
-	{
-		if (plugin.playersInChestCounter > 0) {
-			plugin.exitChest(event.getPlayer());
-		}
-	}
-	
-	//------------------------------------------------------------------------------ onPlayerDropItem
-	@Override
-	public void onPlayerDropItem(PlayerDropItemEvent event)
 	{
 		if (plugin.playersInChestCounter > 0) {
 			plugin.exitChest(event.getPlayer());

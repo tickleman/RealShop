@@ -40,7 +40,7 @@ public class RealShopBlockListener extends BlockListener
 				String playerName = player.getName();
 				String command = plugin.shopCommand.get(playerName);
 				if ((command != null) && command.substring(0, 5).equals("/shop")) {
-					// create / remove shop-chest
+					// create / remove chest-shop
 					if (block.getType().equals(Material.CHEST)) {
 						if (command.equals("/shop")) {
 							event.setCancelled(true);
@@ -63,6 +63,9 @@ public class RealShopBlockListener extends BlockListener
 							} else if (command.substring(0, 11).equals("/shop xsell")) {
 								plugin.shopExclSell(player, block, command, false);
 								if (neighbor != null) plugin.shopExclSell(player, neighbor, command, true);
+							} else if (command.substring(0, 10).equals("/shop give")) {
+								plugin.shopGive(player, block, command, false);
+								if (neighbor != null) plugin.shopGive(player, neighbor, command, true);
 							}
 						}
 					} else {

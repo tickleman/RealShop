@@ -1,12 +1,15 @@
 name: RealShop
 main: fr.crafter.tickleman.RealShop.RealShopPlugin
-version: 0.381
+version: 0.39
 authors:
     - tickleman1
 commands:
     mny:
         description: RealEconomy money commands
         usage: /<command> help
-    shop:
+    rs:
+        description: RealShop chest-shop commands
+        usage: /<command> help
+    rshop:
         description: RealShop chest-shop commands
         usage: /<command> help

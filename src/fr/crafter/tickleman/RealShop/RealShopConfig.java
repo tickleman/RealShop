@@ -17,15 +17,31 @@ public class RealShopConfig extends RealConfig
 	public String shopMarketItemsOnly = "false";
 	public String shopOpOnly = "false";
 
-	//------------------------------------------------------------------------------ RealShopConfig
+	//-------------------------------------------------------------------------------- RealShopConfig
 	public RealShopConfig(final RealShopPlugin plugin)
 	{
 		super(plugin);
 	}
 
+	//------------------------------------------------------------------------------------------ load
+	@Override
+	public void load()
+	{
+		super.load();
+		if (!economyPlugin.equals("RealEconomy") && !economyPlugin.equals("iConomy")) {
+			plugin.log.warning(
+				"unknown economyPlugin " + economyPlugin + " was set to RealEconomy instead", true
+			);
+			economyPlugin = "RealEconomy";
+		}
+	}
+
 	//------------------------------------------------------------------------------------- loadValue
 	protected boolean loadValue(String key, String value)
 	{
+		if (super.loadValue(key, value)) {
+			return true;
+		}
 		if (key.equals("dailyPricesCalculation")) { dailyPricesCalculation = value; return true; }
 		if (key.equals("economyPlugin")) { economyPlugin = value; return true; }
 		if (key.equals("shopDamagedItems")) { shopDamagedItems = value; return true; }
@@ -33,16 +49,10 @@ public class RealShopConfig extends RealConfig
 		if (key.equals("shopInfiniteSell")) { shopInfiniteSell = value; return true; }
 		if (key.equals("shopMarketItemsOnly")) { shopMarketItemsOnly = value; return true; }
 		if (key.equals("shopOpOnly")) { shopOpOnly = value; return true; }
-		if (!economyPlugin.equals("RealEconomy") && !economyPlugin.equals("iConomy")) {
-			plugin.log.warning(
-				"unknown economyPlugin " + economyPlugin + " was set to RealEconomy instead", true
-			);
-			economyPlugin = "RealEconomy";
-		}
 		return false;
 	}
 
-	//---------------------------------------------------------------------------------------- save
+	//------------------------------------------------------------------------------------------ save
 	/*
 	 * Save values. Override original to add my own configuration values.
 	 */

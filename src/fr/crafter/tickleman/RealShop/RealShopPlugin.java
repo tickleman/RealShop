@@ -70,7 +70,7 @@ public class RealShopPlugin extends RealPlugin
 	//-------------------------------------------------------------------------------- RealShopPlugin
 	public RealShopPlugin()
 	{
-		super("tickleman", "RealShop", "0.381");
+		super("tickleman", "RealShop", "0.39");
 	}
 
 	//------------------------------------------------------------------------------------- onDisable
@@ -317,7 +317,10 @@ public class RealShopPlugin extends RealPlugin
 				args[i] = args[i].toLowerCase();
 			}
 			// SHOP
-			if (command.equals("shop") && (player.isOp() || config.shopOpOnly.equals("false"))) {
+			if (
+				(command.equals("rs") || command.equals("rshop"))
+				&& (player.isOp() || config.shopOpOnly.equals("false"))
+			) {
 				// /shop
 				String param = ((args.length > 0) ? args[0] : "");
 				// ALL PLAYERS
@@ -325,32 +328,32 @@ public class RealShopPlugin extends RealPlugin
 					// /shop without parameter : simply create/remove a shop
 					String playerName = player.getName();
 					if (shopCommand.get(playerName) == null) {
-						log.info("[PLAYER_COMMAND] " + playerName + ": /shop");
+						log.info("[PLAYER_COMMAND] " + playerName + ": /" + command);
 						shopCommand.put(playerName, "/shop");
 						player.sendMessage(lang.tr("Click on the shop-chest to activate/desactivate"));
 					} else {
 						shopCommand.remove(playerName);
 						player.sendMessage(lang.tr("Shop-chest activation/desactivation cancelled"));
 					}
-				} else if (param.equals("buy")) {
+				} else if (param.equals("buy") || param.equals("b")) {
 					// /shop buy : give the list of item typeIds that players can buy into the shop
 					String playerName = player.getName();
 					String param2 = (args.length > 1) ? args[1] : "";
 					shopCommand.put(playerName, "/shop " + param + " " + param2);
 					player.sendMessage(lang.tr("Click on the shop-chest to add buy items"));
-				} else if (param.equals("sell")) {
+				} else if (param.equals("sell") || param.equals("s")) {
 					// /shop sell : give the list of item typeIds that players can sell into the shop
 					String playerName = player.getName();
 					String param2 = (args.length > 1) ? args[1] : "";
 					shopCommand.put(playerName, "/shop " + param + " " + param2);
 					player.sendMessage(lang.tr("Click on the shop-chest to add sell items"));
-				} else if (param.equals("xbuy")) {
+				} else if (param.equals("xbuy") || param.equals("xb")) {
 					// /shop xbuy : give the list of item typeIds that players cannot buy into the shop
 					String playerName = player.getName();
 					String param2 = (args.length > 2) ? args[1] : "";
 					shopCommand.put(playerName, "/shop " + param + " " + param2);
 					player.sendMessage(lang.tr("Click on the shop-chest to exclude buy items"));
-				} else if (param.equals("xsell")) {
+				} else if (param.equals("xsell") || param.equals("xs")) {
 					// /shop xsell : give the list of item typeIds that players cannot sell into the shop
 					String playerName = player.getName();
 					String param2 = (args.length > 1) ? args[1] : "";
@@ -358,21 +361,21 @@ public class RealShopPlugin extends RealPlugin
 					player.sendMessage(lang.tr("Click on the shop-chest to exclude sell items"));
 				} else if (player.isOp()) {
 					// OPERATORS ONLY
-					if (param.equals("check")) {
+					if (param.equals("check") || param.equals("c")) {
 						// /shop check : display info about RealShop
 						pluginInfos(player);
-					} else if (param.equals("prices")) {
+					} else if (param.equals("prices") || param.equals("p")) {
 						// /shop log : show transactions log (summary) of the day
 						pluginInfosPrices(player);
-					} else if (param.equals("simul")) {
+					} else if (param.equals("simul") || param.equals("s")) {
 						// /shop simul : simulate new prices using last prices and transactions log
 						marketFile.dailyPricesCalculation(dailyLog, true);
 						player.sendMessage(lang.tr("Daily prices calculation simulation is into the realshop.log file"));
-					} else if (param.equals("daily")) {
+					} else if (param.equals("daily") || param.equals("d")) {
 						// /shop daily : calculate and save new prices using last prices and transactions log
 						marketFile.dailyPricesCalculation(dailyLog);
 						player.sendMessage(lang.tr("Real daily prices calculation log is into the realshop.log file"));
-					} else if (param.equals("log")) {
+					} else if (param.equals("log") || param.equals("l")) {
 						// /shop log : log daily movements
 						pluginInfosDailyLog(player);
 						player.sendMessage(lang.tr("Daily log was dumped into the realshop.log file"));
@@ -387,7 +390,7 @@ public class RealShopPlugin extends RealPlugin
 					// simple /mny commands
 					String param = ((args.length > 0) ? args[0].toLowerCase() : "");
 					String playerName = player.getName();
-					if (param.equals("help")) {
+					if (param.equals("help") || param.equals("h")) {
 						// HELP
 						player.sendMessage("RealEconomy help");
 						player.sendMessage("/mny : tell me how many money I have in my pocket");
@@ -408,7 +411,7 @@ public class RealShopPlugin extends RealPlugin
 		 					+ realEconomy.getBalance(playerName) + realEconomy.getCurrency()
 		 					+ " in your pocket"
 		 				);
-		 			} else if (param.equals("give")) {
+		 			} else if (param.equals("give") || param.equals("g")) {
 		 				// GIVE MONEY
 		 				String toPlayerName = ((args.length > 1) ? args[1] : "");
 						double amount;
@@ -450,7 +453,7 @@ public class RealShopPlugin extends RealPlugin
 								);
 							}
 						}
-		 			} else if (param.equals("burn")) {
+		 			} else if (param.equals("burn") || param.equals("b")) {
 		 				double amount;
 		 				try {
 		 					amount = ((args.length > 2) ? Double.parseDouble(args[2]) : 0);
@@ -467,7 +470,7 @@ public class RealShopPlugin extends RealPlugin
 							);
 		 				}
 		 			} else if (player.isOp()) {
-		 				if (param.equals("tell")) {
+		 				if (param.equals("tell") || param.equals("t")) {
 		 					String toPlayerName = ((args.length > 1) ? args[1] : "");
 		 					// TELL
 		 					player.sendMessage(
@@ -475,7 +478,7 @@ public class RealShopPlugin extends RealPlugin
 		 						+ realEconomy.getBalance(playerName) + realEconomy.getCurrency()
 		 						+ " in his pocket"
 		 					);
-		 				} else if (param.equals("set")) {
+		 				} else if (param.equals("set") || param.equals("s")) {
 		 					// SET
 		 					String toPlayerName = ((args.length > 1) ? args[1] : "");
 		 					double amount;
@@ -494,7 +497,7 @@ public class RealShopPlugin extends RealPlugin
 									playerName + " sets your balance to " + amount + realEconomy.getCurrency()
 								);
 							}
-		 				} else if (param.equals("inc")) {
+		 				} else if (param.equals("inc") || param.equals("i")) {
 		 					// INC
 		 					String toPlayerName = ((args.length > 1) ? args[1] : "");
 		 					double amount;
@@ -521,7 +524,7 @@ public class RealShopPlugin extends RealPlugin
 								playerName + " increases the balance of " + toPlayerName
 								+ " of " + amount + realEconomy.getCurrency()
 							);
-		 				} else if (param.equals("dec")) {
+		 				} else if (param.equals("dec") || param.equals("d")) {
 		 					// DEC
 		 					String toPlayerName = ((args.length > 1) ? args[1] : "");
 		 					double amount;

@@ -6,8 +6,8 @@ import fr.crafter.tickleman.RealPlugin.RealPlugin;
 public class RealEconomy
 {
 
-	private RealAccountsFile accountsFile;
-	private RealEconomyConfig config;
+	public RealAccountsFile accountsFile;
+	public RealEconomyConfig config;
 	private RealPlugin plugin;
 
 	public String economyPlugin;

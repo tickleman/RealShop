@@ -10,6 +10,7 @@ import org.bukkit.event.block.BlockListener;
 import org.bukkit.event.block.BlockPlaceEvent;
 
 import fr.crafter.tickleman.RealPlugin.RealChest;
+import fr.crafter.tickleman.RealPlugin.RealColor;
 
 //########################################################################### RealShopBlockListener
 /**
@@ -69,7 +70,7 @@ public class RealShopBlockListener extends BlockListener
 							}
 						}
 					} else {
-						player.sendMessage(plugin.lang.tr("Shop-chest command cancelled"));
+						player.sendMessage(RealColor.cancel + plugin.lang.tr("Shop-chest command cancelled"));
 					}
 					plugin.shopCommand.remove(playerName);
 				} else if (

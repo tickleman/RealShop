@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 
+import fr.crafter.tickleman.RealPlugin.RealTools;
+
 //###################################################################################### PricesFile
 public class RealPricesFile
 {
@@ -92,7 +94,7 @@ public class RealPricesFile
 			}
 		}
 		if (!simulation) {
-			plugin.log.info("SAVE new prices into " + fileName + ".cfg");
+			plugin.log.info("SAVE new prices into " + fileName + ".txt");
 			save();
 		}
 	}
@@ -180,10 +182,17 @@ public class RealPricesFile
 	//------------------------------------------------------------------------------------------ load
 	public void load()
 	{
+		RealTools.renameFile(
+			"plugins/" + plugin.name + "/" + fileName + ".cfg",
+			"plugins/" + plugin.name + "/" + fileName + ".txt"
+		);
+		if (!RealTools.fileExists("plugins/" + plugin.name + "/" + fileName + ".txt")) {
+			RealTools.extractDefaultFile(plugin, fileName + ".txt");
+		}
 		try {
 			prices.clear();
 			BufferedReader reader = new BufferedReader(
-					new FileReader("plugins/" + plugin.name + "/" + fileName + ".cfg")
+					new FileReader("plugins/" + plugin.name + "/" + fileName + ".txt")
 			);
 			String buffer;
 			StringTokenizer line;
@@ -207,7 +216,7 @@ public class RealPricesFile
 			}
 			reader.close();
 		} catch (Exception e) {
-			plugin.log.severe("Needs plugins/" + plugin.name + "/" + fileName + ".cfg file");
+			plugin.log.severe("Needs plugins/" + plugin.name + "/" + fileName + ".txt file");
 		}
 	}
 
@@ -216,7 +225,7 @@ public class RealPricesFile
 	{
 		try {
 			BufferedWriter writer = new BufferedWriter(
-				new FileWriter("plugins/" + plugin.name + "/" + fileName + ".cfg")
+				new FileWriter("plugins/" + plugin.name + "/" + fileName + ".txt")
 			);
 			writer.write("item;buy;sell;name\n");
 			Iterator<Integer> iterator = prices.keySet().iterator();
@@ -234,7 +243,7 @@ public class RealPricesFile
 			writer.flush();
 			writer.close();
 		} catch (Exception e) {
-			plugin.log.severe("Could not save plugins/" + plugin.name + "/" + fileName + ".cfg file");
+			plugin.log.severe("Could not save plugins/" + plugin.name + "/" + fileName + ".txt file");
 		}
 	}
 

@@ -10,6 +10,8 @@ import java.util.Iterator;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 
+import fr.crafter.tickleman.RealPlugin.RealTools;
+
 //################################################################################### RealShopsFile
 public class RealShopsFile
 {
@@ -54,9 +56,13 @@ public class RealShopsFile
 	//------------------------------------------------------------------------------------------ load
 	public void load()
 	{
+		RealTools.renameFile(
+			"plugins/" + plugin.name + "/" + fileName + ".cfg",
+			"plugins/" + plugin.name + "/" + fileName + ".txt"
+		);
 		try {
 			BufferedReader reader = new BufferedReader(
-				new FileReader("plugins/" + plugin.name + "/" + fileName + ".cfg")
+				new FileReader("plugins/" + plugin.name + "/" + fileName + ".txt")
 			);
 			String buffer;
 			while ((buffer = reader.readLine()) != null) {
@@ -91,7 +97,7 @@ public class RealShopsFile
 			reader.close();
 		} catch (Exception e) {
 			plugin.log.warning(
-				"Needs plugins/" + plugin.name + "/" + fileName + ".cfg file (will auto-create)"
+				"Needs plugins/" + plugin.name + "/" + fileName + ".txt file (will auto-create)"
 			);
 		}
 	}
@@ -101,7 +107,7 @@ public class RealShopsFile
 	{
 		try {
 			BufferedWriter writer = new BufferedWriter(
-				new FileWriter("plugins/" + plugin.name + "/" + fileName + ".cfg")
+				new FileWriter("plugins/" + plugin.name + "/" + fileName + ".txt")
 			);
 			Iterator<RealShop> iterator = shops.values().iterator();
 			while (iterator.hasNext()) {
@@ -122,7 +128,7 @@ public class RealShopsFile
 			writer.flush();
 			writer.close();
 		} catch (Exception e) {
-			plugin.log.severe("Could not save plugins/" + plugin.name + "/" + fileName + ".cfg file");
+			plugin.log.severe("Could not save plugins/" + plugin.name + "/" + fileName + ".txt file");
 		}
 	}
 

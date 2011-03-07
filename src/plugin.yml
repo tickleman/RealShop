@@ -1,6 +1,6 @@
 name: RealShop
 main: fr.crafter.tickleman.RealShop.RealShopPlugin
-version: 0.39
+version: 0.40
 authors:
     - tickleman1
 commands:

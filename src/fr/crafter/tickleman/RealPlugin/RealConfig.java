@@ -31,9 +31,13 @@ public class RealConfig
 	//---------------------------------------------------------------------------------------- load
 	public void load()
 	{
+		RealTools.renameFile(
+			"plugins/" + plugin.name + "/" + fileName + ".cfg",
+			"plugins/" + plugin.name + "/" + fileName + ".txt"
+		);
 		try {
 			BufferedReader reader = new BufferedReader(
-				new FileReader("plugins/" + plugin.name + "/" + fileName + ".cfg")
+				new FileReader("plugins/" + plugin.name + "/" + fileName + ".txt")
 			);
 			String buffer;
 			StringTokenizer line;
@@ -59,7 +63,7 @@ public class RealConfig
 		} catch (Exception e) {
 			plugin.log.warning(
 				"[" + plugin.name + "] Needs plugins/" + plugin.name + "/"
-				+ fileName + ".cfg file (will auto-create)"
+				+ fileName + ".txt file (will auto-create)"
 			);
 			save();
 		}
@@ -78,7 +82,7 @@ public class RealConfig
 	{
 		try {
 			BufferedWriter writer = new BufferedWriter(
-				new FileWriter("plugins/" + plugin.name + "/" + fileName + ".cfg")
+				new FileWriter("plugins/" + plugin.name + "/" + fileName + ".txt")
 			);
 			this.saveValues(writer);
 			writer.flush();
@@ -86,7 +90,7 @@ public class RealConfig
 		} catch (Exception e) {
 			plugin.log.severe(
 				"[" + plugin.name + "]"
-				+ " Could not save plugins/" + plugin.name + "/" + fileName + ".cfg file"
+				+ " Could not save plugins/" + plugin.name + "/" + fileName + ".txt file"
 			);
 		}
 	}
@@ -99,7 +103,7 @@ public class RealConfig
 		} catch (Exception e) {
 			plugin.log.severe(
 				"[" + plugin.name + "] config field " + field + " does not exist,"
-				+ " could not save value into " + fileName + ".cfg file"
+				+ " could not save value into " + fileName + ".txt file"
 			);
 		}
 	}

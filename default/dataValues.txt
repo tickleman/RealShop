@@ -1,0 +1,183 @@
+id;name;build
+0;Air
+1;Stone;4+263/8
+2;Grass;3
+3;Dirt
+4;Cobblestone
+5;Wooden Plank;17=4
+6;Sapling;18/10
+7;Bedrock
+8;Water
+9;Stationary water
+10;Lava
+11;Stationary lava
+12;Sand
+13;Gravel
+14;Gold ore
+15;Iron ore
+16;Coal ore
+17;Wood
+18;Leaves
+19;Sponge
+20;Glass;12+263/8
+21;Lapis Lazuli Ore
+22;Lapis Lazuli Block;351*9
+23;Dispenser;261+331+4*7
+24;Sandstone;12*4
+25;Note Block;331+5*8
+35;Gray Cloth / Wool;String*9
+37;Yellow flower
+38;Red rose
+39;Brown Mushroom
+40;Red Mushroom
+41;Gold Block;266*9
+42;Iron Block;265*9
+43;Double Stone Slab;44*2
+44;Stone Slab;4*3=3
+45;Brick;336*4
+46;TNT;289*5+12*4
+47;Bookshelf;5*6+340*3
+48;Moss Stone
+49;Obsidian
+50;Torch;280+16=4
+51;Fire
+52;Monster Spawner
+53;Wooden Stairs;5*6=4
+54;Chest;5*8
+55;Redstone Wire
+56;Diamond Ore
+57;Diamond Block;264*9
+58;Workbench;5*4
+59;Crops
+60;Soil
+61;Furnace;4*8
+62;Burning Furnace
+63;Sign Post;280+5*6
+64;Wooden Door;5*6
+65;Ladder;280*7
+66;Rail;265*6+280=16
+67;Cobblestone Stairs;4*6=24
+68;Wall Sign
+69;Lever;280+4
+70;Stone Pressure Plate;1*3
+71;Iron Door;265*6
+72;Wooden Pressure Plate;5*3
+73;Redstone Ore
+74;Glowing Redstone Ore
+75;Redstone torch;280+331
+77;Stone Button;1*2
+78;Snow
+79;Ice
+80;Snow Block;332*4
+81;Cactus
+82;Clay Block;337*4
+83;Reed
+84;Jukebox;264+5*8
+85;Fence;280*6=2
+86;Pumpkin
+87;Netherrack
+88;Soul Sand
+89;Glowstone;348*9
+90;Portal
+91;Jack-O-Lantern;86+50
+256;Iron Shovel;280*2+265
+257;Iron Pickaxe;280*2+265*3
+258;Iron Axe;280+265*3
+259;Flint and Steel;265+318
+260;Apple
+261;Bow;280*3+287*3
+262;Arrow;288+280+318
+263;Coal
+264;Diamond
+265;Iron Ingot;15+263/8
+266;Gold Ingot;14+263/8
+267;Iron Sword;280+265*2
+268;Wooden Sword;280+5*2
+269;Wooden Shovel;280*2+5
+270;Wooden Pickaxe;280*2+5*3
+271;Wooden Axe;280*2+5*3
+272;Stone Sword;280+4*2
+273;Stone Shovel;280*2+4
+274;Stone Pickaxe;280+4*3
+275;Stone Axe;280*2+4*3
+276;Diamond Sword;280+264*2
+277;Diamond Shovel;280*2+264
+278;Diamond Pickaxe;280*2+264*3
+279;Diamond Axe;280*2+264*3
+280;Stick;5*2=4
+281;Bowl;5*3=4
+282;Mushroom Soup=281+39+40
+283;Gold Sword;280+266*2
+284;Gold Shovel;280*2+266
+285;Gold Pickaxe;280*2+266*3
+286;Gold Axe;280*2+266*3
+287;String
+288;Feather
+289;Sulphur
+290;Wooden Hoe;280*2+5*2
+291;Stone Hoe;280*2+4*2
+292;Iron Hoe;280*2+265*2
+293;Diamond Hoe;280*2+264*2
+294;Gold Hoe;280*2+266*2
+295;Seeds
+296;Wheat
+297;Bread;296*3
+298;Leather Helmet;334*5
+299;Leather Chestplate;334*8
+300;Leather Leggings;334*7
+301;Leather Boots;334*4
+302;Chainmail Helmet
+303;Chainmail Chestplate
+304;Chainmail Leggings
+305;Chainmail Boots
+306;Iron Helmet;265*5
+307;Iron Chestplate;265*8
+308;Iron Leggings;265*7
+309;Iron Boots;265*4
+310;Diamond Helmet;264*5
+311;Diamond Chestplate;264*8
+312;Diamond Leggings;264*7
+313;Diamond Boots;264*4
+314;Gold Helmet;266*5
+315;Gold Chestplate;266*8
+316;Gold Leggings;266*7
+317;Gold Boots;266*4
+318;Flint
+319;Raw Porkchop
+320;Cooked Porkchop;319+263/8
+321;Paintings;280*8+35
+322;Golden apple;260+41*8
+323;Sign
+324;Wooden door
+325;Bucket;265*3
+326;Water bucket;265*3+9
+327;Lava bucket;265*3+11
+328;Minecart;265*5
+329;Saddle
+330;Iron door
+331;Redstone
+332;Snowball
+333;Boat;5*5
+334;Leather
+335;Milk
+336;Clay Brick
+337;Clay Balls
+338;Sugar Cane
+339;Paper;338*3=3
+340;Book;339*3
+341;Slimeball
+342;Storage Minecart;328+54
+343;Powered Minecart;328+61
+344;Egg
+345;Compass
+346;Fishing Rod
+347;Clock
+348;Glowstone Dust
+349;Raw Fish
+350;Cooked Fish
+351;Lapis Lazuli/Inc Bag/Dye
+352;Bone
+353;Sugar;338
+354;Cake;296*3+335*3+353*2+344
+2256;Gold Music Disc
+2257;Green Music Disc

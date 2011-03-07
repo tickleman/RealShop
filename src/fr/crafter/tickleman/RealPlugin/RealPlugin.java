@@ -25,6 +25,7 @@ public class RealPlugin extends JavaPlugin
 		this.author = author;
 		this.name = name;
 		this.version = version;
+		RealTools.mkDir("plugins/" + name);
 		log = new RealLog(this);
 	}
 

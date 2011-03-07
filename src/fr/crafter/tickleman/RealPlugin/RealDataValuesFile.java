@@ -28,11 +28,18 @@ public class RealDataValuesFile
 	 */
 	public void load()
 	{
+		RealTools.renameFile(
+			"plugins/" + plugin.name + "/" + fileName + ".cfg",
+			"plugins/" + plugin.name + "/" + fileName + ".txt"
+		);
+		if (!RealTools.fileExists("plugins/" + plugin.name + "/" + fileName + ".txt")) {
+			RealTools.extractDefaultFile(plugin, fileName + ".txt");
+		}
 		try {
 			names.clear();
 			recipes.clear();
 			BufferedReader reader = new BufferedReader(
-					new FileReader("plugins/" + plugin.name + "/" + fileName + ".cfg")
+					new FileReader("plugins/" + plugin.name + "/" + fileName + ".txt")
 			);
 			String buffer;
 			StringTokenizer line;
@@ -57,7 +64,7 @@ public class RealDataValuesFile
 			}
 			reader.close();
 		} catch (Exception e) {
-			plugin.log.severe("Needs plugins/" + plugin.name + "/" + fileName + ".cfg file");
+			plugin.log.severe("Needs plugins/" + plugin.name + "/" + fileName + ".txt file");
 		}
 	}
 

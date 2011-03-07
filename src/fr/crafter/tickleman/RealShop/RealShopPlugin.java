@@ -46,7 +46,7 @@ public class RealShopPlugin extends RealPlugin
 	/** Data values files : complete list of Minecraft blocks and items */
 	public RealDataValuesFile dataValuesFile;
 
-	/** Market prices file (market.cfg) : global market price for each item */
+	/** Market prices file (market.txt) : global market price for each item */
 	public RealPricesFile marketFile;
 
 	/** Shops list and file link */
@@ -65,12 +65,13 @@ public class RealShopPlugin extends RealPlugin
 	private final RealShopPluginListener pluginListener = new RealShopPluginListener(this);
 
 	/** RealEconomy */
-	public final RealEconomy realEconomy = new RealEconomy(this);
+	public final RealEconomy realEconomy;
 
 	//-------------------------------------------------------------------------------- RealShopPlugin
 	public RealShopPlugin()
 	{
-		super("tickleman", "RealShop", "0.39");
+		super("tickleman", "RealShop", "0.40");
+		realEconomy = new RealEconomy(this);
 	}
 
 	//------------------------------------------------------------------------------------- onDisable
@@ -329,10 +330,10 @@ public class RealShopPlugin extends RealPlugin
 					if (shopCommand.get(playerName) == null) {
 						log.info("[PLAYER_COMMAND] " + playerName + ": /" + command);
 						shopCommand.put(playerName, "/shop");
-						player.sendMessage(lang.tr("Click on the chest-shop to activate/desactivate"));
+						player.sendMessage(lang.tr("Click on the chest-shop to activate/deactivate"));
 					} else {
 						shopCommand.remove(playerName);
-						player.sendMessage(lang.tr("Chest-shop activation/desactivation cancelled"));
+						player.sendMessage(lang.tr("Chest-shop activation/deactivation cancelled"));
 					}
 				} else if (param.equals("buy") || param.equals("b")) {
 					// /rshop buy : give the list of item typeIds that players can buy into the shop

@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.StringTokenizer;
 
 import fr.crafter.tickleman.RealPlugin.RealPlugin;
+import fr.crafter.tickleman.RealPlugin.RealTools;
 
 //################################################################################### RealShopsFile
 public class RealAccountsFile
@@ -30,9 +31,13 @@ public class RealAccountsFile
 	//------------------------------------------------------------------------------------------ load
 	public void load()
 	{
+		RealTools.renameFile(
+			"plugins/" + plugin.name + "/" + fileName + ".cfg",
+			"plugins/" + plugin.name + "/" + fileName + ".txt"
+		);
 		try {
 			BufferedReader reader = new BufferedReader(
-				new FileReader("plugins/" + plugin.name + "/" + fileName + ".cfg")
+				new FileReader("plugins/" + plugin.name + "/" + fileName + ".txt")
 			);
 			String buffer;
 			StringTokenizer line;
@@ -51,7 +56,7 @@ public class RealAccountsFile
 			reader.close();
 		} catch (Exception e) {
 			plugin.log.warning(
-				"Needs plugins/" + plugin.name + "/" + fileName + ".cfg file (will auto-create)"
+				"Needs plugins/" + plugin.name + "/" + fileName + ".txt file (will auto-create)"
 			);
 			save();
 		}
@@ -62,7 +67,7 @@ public class RealAccountsFile
 	{
 		try {
 			BufferedWriter writer = new BufferedWriter(
-				new FileWriter("plugins/" + plugin.name + "/" + fileName + ".cfg")
+				new FileWriter("plugins/" + plugin.name + "/" + fileName + ".txt")
 			);
 			Iterator<String> iterator = accounts.keySet().iterator();
 			while (iterator.hasNext()) {
@@ -75,7 +80,7 @@ public class RealAccountsFile
 			writer.flush();
 			writer.close();
 		} catch (Exception e) {
-			plugin.log.severe("Could not save plugins/" + plugin.name + "/" + fileName + ".cfg file");
+			plugin.log.severe("Could not save plugins/" + plugin.name + "/" + fileName + ".txt file");
 		}
 	}
 

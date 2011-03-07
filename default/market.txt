@@ -1,0 +1,48 @@
+item;buy;sell;name
+1;5.0;4.0;Stone
+2;100.0;0.0;Grass
+3;1.04;1.15;Dirt
+4;1.0;1.0;Cobblestone
+338;5.0;2.0;Sugar Cane
+5;3.0;2.0;Wooden Plank
+337;150.0;135.0;Clay Balls
+6;5.0;4.0;Sapling
+7;999.0;0.0;Bedrock
+351;5.0;2.0;Lapis Lazuli/Inc Bag/Dye
+9;1.0;1.0;Stationary water
+349;5.0;2.0;Raw Fish
+11;5.0;5.0;Stationary lava
+79;5.0;1.0;Ice
+348;50.0;45.0;Glowstone Dust
+12;1.0;1.0;Sand
+287;2.0;1.0;String
+2256;100.0;90.0;Gold Music Disc
+13;1.0;1.0;Gravel
+2257;100.0;90.0;Green Music Disc
+14;300.19;333.54;Gold ore
+15;50.0;45.0;Iron ore
+17;2.0;1.0;Wood
+326;5.0;1.0;Water bucket
+327;50.0;10.0;Lava bucket
+86;10.0;9.0;Pumpkin
+18;30.0;0.0;Leaves
+81;5.0;1.0;Cactus
+21;550.0;495.0;Lapis Lazuli Ore
+263;15.0;14.0;Coal
+335;5.0;1.0;Milk
+332;1.0;1.0;Snowball
+264;500.0;450.0;Diamond
+331;10.0;9.0;Redstone
+35;10.0;11.11;Gray Cloth / Wool
+38;5.0;4.0;Red rose
+39;10.0;9.0;Brown Mushroom
+37;5.0;4.0;Yellow flower
+40;10.0;9.0;Red Mushroom
+318;5.0;1.0;Flint
+288;5.0;1.0;Feather
+289;5.0;1.0;Sulphur
+49;150.0;135.0;Obsidian
+48;50.0;45.0;Moss Stone
+352;10.0;9.0;Bone
+295;3.0;1.0;Seeds
+296;5.0;3.0;Wheat

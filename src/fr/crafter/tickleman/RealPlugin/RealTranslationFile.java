@@ -31,9 +31,16 @@ public class RealTranslationFile
 	public void load()
 	{
 		translations.clear();
+		RealTools.renameFile(
+			"plugins/" + plugin.name + "/" + fileName + ".lang",
+			"plugins/" + plugin.name + "/" + fileName + ".lang.txt"
+		);
+		if (!RealTools.fileExists("plugins/" + plugin.name + "/" + fileName + ".lang.txt")) {
+			RealTools.extractDefaultFile(plugin, fileName + ".lang.txt");
+		}
 		try {
 			BufferedReader reader = new BufferedReader(
-				new FileReader("plugins/" + plugin.name + "/" + fileName + ".lang")
+				new FileReader("plugins/" + plugin.name + "/" + fileName + ".lang.txt")
 			);
 			String buffer;
 			StringTokenizer line;

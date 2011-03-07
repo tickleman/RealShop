@@ -12,8 +12,8 @@ public class RealDataValuesFile
 
 	private final RealPlugin plugin;
 	private final String fileName;
-	private HashMap<Integer, String> names = new HashMap<Integer, String>();
-	private HashMap<Integer, String> recipes = new HashMap<Integer, String>();
+	private HashMap<String, String> names = new HashMap<String, String>();
+	private HashMap<String, String> recipes = new HashMap<String, String>();
 
 	//-------------------------------------------------------------------------------- DataValuesFile
 	public RealDataValuesFile(final RealPlugin plugin, final String fileName)
@@ -43,19 +43,19 @@ public class RealDataValuesFile
 			);
 			String buffer;
 			StringTokenizer line;
-			int typeId;
+			String typeIdDamage;
 			String typeName;
 			String recipe;
 			while ((buffer = reader.readLine()) != null) {
 				line = new StringTokenizer(buffer, ";");
 				if (line.countTokens() >= 2) {
 					try {
-						typeId = Integer.parseInt(line.nextToken().trim());
+						typeIdDamage = line.nextToken().trim();
 						typeName = line.nextToken().trim();
 						recipe = line.hasMoreTokens() ? line.nextToken().trim() : "";  
-						names.put(typeId, typeName);
-						if (recipe != "") {
-							recipes.put(typeId, recipe);
+						names.put(typeIdDamage, typeName);
+						if (!recipe.equals("")) {
+							recipes.put(typeIdDamage, recipe);
 						}
 					} catch (Exception e) {
 						// when some typeId are not number, then ignore
@@ -72,11 +72,11 @@ public class RealDataValuesFile
 	/**
 	 * Get full id list into an integer array
 	 */
-	public int[] getIds()
+	public String[] getIds()
 	{
-		int[] ids = new int[names.size()];
+		String[] ids = new String[names.size()];
 		int i = 0;
-		Iterator<Integer> iterator = names.keySet().iterator();
+		Iterator<String> iterator = names.keySet().iterator();
 		while (iterator.hasNext()) {
 			ids[i++] = iterator.next();
 		}
@@ -84,7 +84,7 @@ public class RealDataValuesFile
 	}
 
 	//---------------------------------------------------------------------------------- getIdIerator
-	public Iterator<Integer> getIdsIterator()
+	public Iterator<String> getIdsIterator()
 	{
 		return names.keySet().iterator();
 	}
@@ -94,11 +94,11 @@ public class RealDataValuesFile
 	 * Get name for given item type id
 	 * Returns "#typeId" if no name known
 	 */
-	public String getName(Integer typeId)
+	public String getName(String typeIdDamage)
 	{
-		String result = names.get(typeId);
+		String result = names.get(typeIdDamage);
 		if (result == null) {
-			result = "#" + typeId.toString();
+			result = "#" + typeIdDamage;
 		}
 		return result;
 	}
@@ -108,9 +108,9 @@ public class RealDataValuesFile
 	 * Get main recipe for given item type id
 	 * Returns empty string if no recipe known 
 	 */
-	public String getRecipe(Integer typeId)
+	public String getRecipe(String typeIdDamage)
 	{
-		String result = recipes.get(typeId);
+		String result = recipes.get(typeIdDamage);
 		if (result == null) {
 			result = "";
 		}

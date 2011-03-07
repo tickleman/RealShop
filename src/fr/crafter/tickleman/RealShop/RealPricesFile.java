@@ -35,8 +35,8 @@ public class RealPricesFile
 	/** stored file name */
 	private final String fileName;
 	
-	/** prices list : typeId => RealPrice(buy, sell) */
-	public HashMap<Integer, RealPrice> prices = new HashMap<Integer, RealPrice>();
+	/** prices list : typeId[:damageId] => RealPrice(buy, sell) */
+	public HashMap<String, RealPrice> prices = new HashMap<String, RealPrice>();
 
 	/** anti-recurse security flag for recipes */
 	private int recurseSecurity = 0;
@@ -65,20 +65,20 @@ public class RealPricesFile
 	{
 		plugin.log.info("dailyPricesCalculation" + (simulation ? " SIMULATION" : " REAL"));
 		// take each item id that has had a movement today, and that has a price
-		Iterator<Integer> iterator = dailyLog.moves.keySet().iterator();
+		Iterator<String> iterator = dailyLog.moves.keySet().iterator();
 		while (iterator.hasNext()) {
-			int typeId = iterator.next();
+			String typeIdDamage = iterator.next();
 			// recalculate price
-			RealPrice price = prices.get(typeId);
+			RealPrice price = prices.get(typeIdDamage);
 			if (price != null) {
-				int amount = dailyLog.moves.get(typeId);
+				int amount = dailyLog.moves.get(typeIdDamage);
 				double ratio;
 				if (amount < 0) {
 					ratio = Math.max(MIN_DAILY_RATIO, (double)1 + ((double)amount / (double)AMOUNT_RATIO));
 				} else {
 					ratio = Math.min(MAX_DAILY_RATIO, (double)1 + ((double)amount / (double)AMOUNT_RATIO));
 				}
-				String log = "- " + plugin.dataValuesFile.getName(typeId) + " :"
+				String log = "- " + plugin.dataValuesFile.getName(typeIdDamage) + " :"
 					+ " amount " + amount + " ratio " + ratio
 					+ " OLD " + price.buy + ", " + price.sell;
 				price.buy = Math.ceil(
@@ -90,7 +90,7 @@ public class RealPricesFile
 				log += " NEW " + price.buy + ", " + price.sell;
 				plugin.log.info(log);
 			} else {
-				plugin.log.info("- no market price for item " + plugin.dataValuesFile.getName(typeId));
+				plugin.log.info("- no market price for item " + plugin.dataValuesFile.getName(typeIdDamage));
 			}
 		}
 		if (!simulation) {
@@ -109,9 +109,9 @@ public class RealPricesFile
 	 * - stick (typeId=280) : 5*2=4 : 2 wooden planks gives you 4 sticks
 	 * - diamond hoe (typeId=293) : 280*2+264*2 : 2 sticks and 2 diamonds give you 1 diamond hoe
 	 */
-	public RealPrice fromRecipe(int typeId)
+	public RealPrice fromRecipe(String typeIdDamage)
 	{
-		String recipe = plugin.dataValuesFile.getRecipe(typeId);
+		String recipe = plugin.dataValuesFile.getRecipe(typeIdDamage);
 		if (recipe.equals("")) {
 			return null;
 		} else {
@@ -119,10 +119,10 @@ public class RealPricesFile
 			// recurse security
 			recurseSecurity++;
 			if (recurseSecurity > 20) {
-				plugin.log.severe("Recurse security error : " + typeId);
+				plugin.log.severe("Recurse security error : " + typeIdDamage);
 				return null;
 			} else if (recurseSecurity > 15) {
-				plugin.log.warning("Recurse security warning : " + typeId);
+				plugin.log.warning("Recurse security warning : " + typeIdDamage);
 			}
 			// resQty : result quantity
 			double resQty = (double)1;
@@ -147,8 +147,8 @@ public class RealPricesFile
 					comp = comp.substring(0, comp.indexOf("/"));
 				}
 				// compId : component type Id
-				int compId = 0;
-				try { compId = Integer.parseInt(comp); } catch (Exception e) {}
+				String compId = "0";
+				try { compId = comp; } catch (Exception e) {}
 				// calculate price
 				RealPrice compPrice = getPrice(compId);
 				if (compPrice == null) {
@@ -170,11 +170,11 @@ public class RealPricesFile
 	}
 
 	//-------------------------------------------------------------------------------------- getPrice
-	public RealPrice getPrice(int typeId)
+	public RealPrice getPrice(String typeIdDamage)
 	{
-		RealPrice price = prices.get(typeId);
+		RealPrice price = prices.get(typeIdDamage);
 		if (price == null) {
-			price = fromRecipe(typeId);
+			price = fromRecipe(typeIdDamage);
 		}
 		return price; 
 	}
@@ -196,19 +196,18 @@ public class RealPricesFile
 			);
 			String buffer;
 			StringTokenizer line;
-			int typeId;
+			String typeIdDamage;
 			RealPrice price;
 			while ((buffer = reader.readLine()) != null) {
 				line = new StringTokenizer(buffer, ";");
 				if (line.countTokens() >= 3) {
-					
 					try {
-						typeId = Integer.parseInt(line.nextToken().trim());
+						typeIdDamage = line.nextToken().trim();
 						price = new RealPrice(
 							Double.parseDouble(line.nextToken().trim()),
 							Double.parseDouble(line.nextToken().trim())
 						);
-						prices.put(typeId, price);
+						prices.put(typeIdDamage, price);
 					} catch (Exception e) {
 						// when some values are not number, then ignore
 					}
@@ -228,15 +227,15 @@ public class RealPricesFile
 				new FileWriter("plugins/" + plugin.name + "/" + fileName + ".txt")
 			);
 			writer.write("item;buy;sell;name\n");
-			Iterator<Integer> iterator = prices.keySet().iterator();
+			Iterator<String> iterator = prices.keySet().iterator();
 			while (iterator.hasNext()) {
-				Integer typeId = iterator.next();
-				RealPrice price = prices.get(typeId);
+				String typeIdDamage = iterator.next();
+				RealPrice price = prices.get(typeIdDamage);
 				writer.write(
-					typeId + ";"
+					typeIdDamage + ";"
 					+ price.buy + ";"
 					+ price.sell + ";"
-					+ plugin.dataValuesFile.getName(typeId)
+					+ plugin.dataValuesFile.getName(typeIdDamage)
 					+ "\n"
 				);
 			}

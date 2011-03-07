@@ -36,6 +36,16 @@ public class RealItemStack
 		return typeId;
 	}
 
+	//------------------------------------------------------------------------------- getTypeIdDamage
+	public String getTypeIdDamage()
+	{
+		if (durability > 0) {
+			return typeId + ":" + durability;
+		} else {
+			return "" + typeId;
+		}
+	}
+
 	//------------------------------------------------------------------------------------- setAmount
 	public void setAmount(int amount)
 	{

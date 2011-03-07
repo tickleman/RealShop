@@ -1,4 +1,4 @@
-id;name;build
+id;name;recipe
 0;Air
 1;Stone;4+263/8
 2;Grass;3
@@ -17,7 +17,11 @@ id;name;build
 15;Iron ore
 16;Coal ore
 17;Wood
+17:1;Redwood
+17:2;Birch
 18;Leaves
+18:1;Redwood Tree's Leaves
+18:2;Birch Tree's Leaves
 19;Sponge
 20;Glass;12+263/8
 21;Lapis Lazuli Ore
@@ -25,7 +29,22 @@ id;name;build
 23;Dispenser;261+331+4*7
 24;Sandstone;12*4
 25;Note Block;331+5*8
-35;Gray Cloth / Wool;String*9
+35;White Wool;287*9
+35:1;Orange Wool;35+351:14
+35:2;Magenta Wool;35+351:13
+35:3;Light Blue Wool;35+351:12
+35:4;Yellow Wool;35+351:11
+35:5;Lime Green Wool;35+351:10
+35:6;Pink Wool;35+351:9
+35:7;Gray Wool;35+351:8
+35:8;Light Gray Wool;35+351:7
+35:9;Cyan Wool;35+351:6
+35:10;Purple Wool;35+351:5
+35:11;Blue Wool;35+351:4
+35:12;Brown Wool;35+351:3
+35:13;Green Wool;35+351:2
+35:14;Red Wool;35+351:1
+35:15;Black Wool;35+351
 37;Yellow flower
 38;Red rose
 39;Brown Mushroom
@@ -33,7 +52,13 @@ id;name;build
 41;Gold Block;266*9
 42;Iron Block;265*9
 43;Double Stone Slab;44*2
-44;Stone Slab;4*3=3
+43:1;Double Sandstone Slab;44:1*2
+43:2;Double Wooden Slab;44:2*2
+43:3;Double Cobblestone Slab;44:3*2
+44;Stone Slab;1*3=3
+44:1;Sandstone Slab;24*3=3
+44:2;Wooden Slab;5*3=3
+44:3;Cobblestone Slab;4*3=3
 45;Brick;336*4
 46;TNT;289*5+12*4
 47;Bookshelf;5*6+340*3
@@ -88,6 +113,7 @@ id;name;build
 261;Bow;280*3+287*3
 262;Arrow;288+280+318
 263;Coal
+263:1;Charcoal
 264;Diamond
 265;Iron Ingot;15+263/8
 266;Gold Ingot;14+263/8
@@ -175,9 +201,25 @@ id;name;build
 348;Glowstone Dust
 349;Raw Fish
 350;Cooked Fish
-351;Lapis Lazuli/Inc Bag/Dye
+351;Ink Sac
+351:1;Rose Red;38=2
+351:2;Cactus Green;263/8+81
+351:3;Cocoa Beans
+351:4;Lapis Lazuli
+351:5;Purple Dye;351:4+351:1=2
+351:6;Cyan Dye;351:4+351:2=2
+351:7;Light Gray Dye;351+352:15*2=3|351:8+352:15=2
+351:8;Gray Dye;351+352:15=2
+351:9;Pink Dye;351:1+352:15=2
+351:10;Lime Dye;351:2+352:15=2
+351:11;Dandelion Yellow;37=2
+351:12;Light Blue Dye;351:4+352:15=2
+351:13;Magenta Dye;351:5+351:9=2
+351:14;Orange Dye;351:1+351:11=2
 352;Bone
+352:15;Bone Meal;352=3
 353;Sugar;338
 354;Cake;296*3+335*3+353*2+344
+355;Bed;5*3+35*3
 2256;Gold Music Disc
 2257;Green Music Disc

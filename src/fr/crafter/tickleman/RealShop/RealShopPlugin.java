@@ -212,7 +212,7 @@ public class RealShopPlugin extends RealPlugin
 						Iterator<RealItemStack> iterator = transaction.canceledLines.iterator();
 						while (iterator.hasNext()) {
 							player.sendMessage(
-								dataValuesFile.getName(iterator.next().getTypeId())
+								dataValuesFile.getName(iterator.next().getTypeIdDamage())
 								+ " : " + lang.tr("cancelled line")
 							);
 						}
@@ -270,7 +270,8 @@ public class RealShopPlugin extends RealPlugin
 								}
 							}
 							player.sendMessage(
-								"- " + dataValuesFile.getName(transactionLine.getTypeId()) + ": "
+								"- " + dataValuesFile.getName(transactionLine.getTypeIdDamage())
+								+ ":" + transactionLine.getDurability() + ": "
 								+ strSide
 								+ " x" + Math.abs(transactionLine.getAmount())
 								+ " " + lang.tr("price")
@@ -281,7 +282,8 @@ public class RealShopPlugin extends RealPlugin
 							if (shopPlayer != null) {
 								shopPlayer.sendMessage(
 									"SHOP " + playerName
-									+ " " + dataValuesFile.getName(transactionLine.getTypeId()) + ": "
+									+ " " + dataValuesFile.getName(transactionLine.getTypeIdDamage())
+									+ ":" + transactionLine.getDurability() + ": "
 									+ strSide
 									+ " x" + Math.abs(transactionLine.getAmount())
 									+ " " + lang.tr("price")
@@ -688,7 +690,7 @@ public class RealShopPlugin extends RealPlugin
 	public void pluginInfosPrices(Player player)
 	{
 		log.info("Market prices list :");
-		int[] ids = dataValuesFile.getIds();
+		String[] ids = dataValuesFile.getIds();
 		for (int i = 0; i < ids.length; i++) {
 			RealPrice price = marketFile.getPrice(ids[i]);
 			if (price != null) {
@@ -724,7 +726,7 @@ public class RealShopPlugin extends RealPlugin
 
 	//---------------------------------------------------------------------------- shopAddExclBuySell
 	private void shopAddExclBuySell(
-		Player player, HashMap<Integer, Boolean> addTo, String command, String what, boolean silent
+		Player player, HashMap<String, Boolean> addTo, String command, String what, boolean silent
 	) {
 		command += "+";
 		int index = command.lastIndexOf(' ') + 1;
@@ -735,11 +737,11 @@ public class RealShopPlugin extends RealPlugin
 			if ((c == '+') || (c == '-')) {
 				if (!strTypeId.equals("")) {
 					try {
-						int typeId = Integer.parseInt(strTypeId);
+						String typeIdDamage = strTypeId;
 						if (plus) {
-							addTo.put(typeId, true);
+							addTo.put(typeIdDamage, true);
 						} else {
-							addTo.remove(typeId);
+							addTo.remove(typeIdDamage);
 						}
 					} catch (Exception e) {
 					}
@@ -818,18 +820,18 @@ public class RealShopPlugin extends RealPlugin
 		String list;
 		// sell (may be a very long list)
 		list = "";
-		Iterator<Integer> sellIterator = shop.sellOnly.keySet().iterator();
+		Iterator<String> sellIterator = shop.sellOnly.keySet().iterator();
 		if (!sellIterator.hasNext()) {
 			sellIterator = dataValuesFile.getIdsIterator();
 		}
 		while (sellIterator.hasNext()) {
-			int typeId = sellIterator.next();
-			RealPrice price = marketFile.getPrice(typeId);
-			if ((price != null) && shop.isItemSellAllowed(typeId)) {
+			String typeIdDamage = sellIterator.next();
+			RealPrice price = marketFile.getPrice(typeIdDamage);
+			if ((price != null) && shop.isItemSellAllowed(typeIdDamage)) {
 				if (!list.equals("")) {
 					list += ", ";
 				}
-				list += dataValuesFile.getName(typeId) + ": " + price.sell;
+				list += dataValuesFile.getName(typeIdDamage) + ": " + price.sell;
 			}
 		}
 		if (list.equals("")) {
@@ -845,13 +847,13 @@ public class RealShopPlugin extends RealPlugin
 		Iterator<RealItemStack> buyIterator = itemStack.getContents().iterator();
 		while (buyIterator.hasNext()) {
 			RealItemStack item = buyIterator.next();
-			int typeId = item.getTypeId();
-			RealPrice price = marketFile.getPrice(typeId);
-			if ((price != null) && shop.isItemBuyAllowed(typeId)) {
+			String typeIdDamage = item.getTypeIdDamage();
+			RealPrice price = marketFile.getPrice(typeIdDamage);
+			if ((price != null) && shop.isItemBuyAllowed(typeIdDamage)) {
 				if (!list.equals("")) {
 					list += ", ";
 				}
-				list += dataValuesFile.getName(typeId) + ": " + price.buy;
+				list += dataValuesFile.getName(typeIdDamage) + ": " + price.buy;
 			}
 		}
 		if (list.equals("")) {

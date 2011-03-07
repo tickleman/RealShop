@@ -8,7 +8,7 @@ public class RealShopDailyLog
 {
 
 	private final RealShopPlugin plugin;
-	public HashMap<Integer, Integer> moves = new HashMap<Integer, Integer>();
+	public HashMap<String, Integer> moves = new HashMap<String, Integer>();
 
 	//------------------------------------------------------------------------------ RealShopDailyLog
 	public RealShopDailyLog(final RealShopPlugin plugin)
@@ -21,16 +21,16 @@ public class RealShopDailyLog
 	 * Add an amount of an item typeId to daily moves
 	 * positive amount for buy, negative amount for sell
 	 */
-	public void add(final int typeId, final int amount)
+	public void add(final String typeIdDamage, final int amount)
 	{
-		Integer balance = moves.get(typeId);
+		Integer balance = moves.get(typeIdDamage);
 		if (amount != 0) {
 			if (balance == null) {
-				moves.put(typeId, amount);
+				moves.put(typeIdDamage, amount);
 			} else if ((balance + amount) == 0) {
-				moves.remove(typeId);
+				moves.remove(typeIdDamage);
 			} else {
-				moves.put(typeId, balance + amount);
+				moves.put(typeIdDamage, balance + amount);
 			}
 		}
 	}
@@ -45,7 +45,8 @@ public class RealShopDailyLog
 			Iterator<RealShopTransactionLine> iterator = transaction.transactionLines.iterator();
 			while (iterator.hasNext()) {
 				RealShopTransactionLine item = iterator.next();
-				add(item.getTypeId(), item.getAmount());
+				String typeIdDamage = item.getTypeIdDamage();
+				add(typeIdDamage, item.getAmount());
 			}
 		}
 	}
@@ -63,11 +64,11 @@ public class RealShopDailyLog
 	public String toString()
 	{
 		String result = "RealShopDailyLog status\n";
-		Iterator<Integer> iterator = moves.keySet().iterator();
+		Iterator<String> iterator = moves.keySet().iterator();
 		while (iterator.hasNext()) {
-			int typeId = iterator.next();
-			int amount = moves.get(typeId);
-			result += "- " + plugin.dataValuesFile.getName(typeId) + " x" + amount + "\n";
+			String typeIdDamage = iterator.next();
+			int amount = moves.get(typeIdDamage);
+			result += "- " + plugin.dataValuesFile.getName(typeIdDamage) + " x" + amount + "\n";
 		}
 		return result;
 	}

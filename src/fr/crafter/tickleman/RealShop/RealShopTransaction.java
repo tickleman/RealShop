@@ -83,14 +83,14 @@ public class RealShopTransaction
 		while (iterator.hasNext()) {
 			RealItemStack itemStack = iterator.next();
 			int amount = itemStack.getAmount();
-			int typeId = itemStack.getTypeId();
-			RealPrice price = pricesFile.getPrice(typeId);
+			String typeIdDamage = itemStack.getTypeIdDamage();
+			RealPrice price = pricesFile.getPrice(typeIdDamage);
 			if (
 				(price == null)
-				|| ((amount > 0) && !shop.isItemBuyAllowed(typeId))
-				|| ((amount < 0) && !shop.isItemSellAllowed(typeId))
+				|| ((amount > 0) && !shop.isItemBuyAllowed(typeIdDamage))
+				|| ((amount < 0) && !shop.isItemSellAllowed(typeIdDamage))
 				|| ((plugin.config.shopDamagedItems.equals("false")) && (itemStack.getDurability() != 0))
-				|| ((plugin.config.shopMarketItemsOnly.equals("true")) && !plugin.marketFile.prices.containsKey(typeId))
+				|| ((plugin.config.shopMarketItemsOnly.equals("true")) && !plugin.marketFile.prices.containsKey(typeIdDamage))
 			) {
 				canceledLines.add(itemStack);
 			} else {
@@ -126,7 +126,7 @@ public class RealShopTransaction
 			Iterator<RealItemStack> iterator = canceledLines.iterator();
 			while (iterator.hasNext()) {
 				RealItemStack itemStack = iterator.next();  
-				result += "-CANCEL- " + plugin.dataValuesFile.getName(itemStack.getTypeId())
+				result += "-CANCEL- " + plugin.dataValuesFile.getName(itemStack.getTypeIdDamage())
 					+ " x" + itemStack.getAmount() + " :"
 					+ " cancelled line"
 					+ "\n";
@@ -145,7 +145,7 @@ public class RealShopTransaction
 					strSide = "purchase";
 					strGain = "expense";
 				}
-				result += prefix + plugin.dataValuesFile.getName(transactionLine.getTypeId()) + ": "
+				result += prefix + plugin.dataValuesFile.getName(transactionLine.getTypeIdDamage()) + ": "
 					+ strSide
 					+ " x" + Math.abs(transactionLine.getAmount())
 					+ " price " + transactionLine.getUnitPrice() + plugin.realEconomy.getCurrency()

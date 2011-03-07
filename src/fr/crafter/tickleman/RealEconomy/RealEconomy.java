@@ -25,20 +25,20 @@ public class RealEconomy
 	//------------------------------------------------------------------------------------ getBalance
 	public double getBalance(String playerName)
 	{
+		Double balance = (double)0;
 		if (iConomyLink.initialized && economyPlugin.equals("iConomy")) {
-			return iConomyLink.getBalance(playerName);
+			balance = iConomyLink.getBalance(playerName);
 		} else {
-			Double balance = accountsFile.accounts.get(playerName);
+			balance = accountsFile.accounts.get(playerName);
 			if (balance == null) {
 				try {
-					return Double.parseDouble(config.initialBalance);
+					balance = Double.parseDouble(config.initialBalance);
 				} catch (Exception e) {
-					return 0;
+					balance = (double)0;
 				}
-			} else {
-				return balance;
 			}
 		}
+		return Math.round(balance * 100) / 100;
 	}
 
 	//----------------------------------------------------------------------------------- getCurrency

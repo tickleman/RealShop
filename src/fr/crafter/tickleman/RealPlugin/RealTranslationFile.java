@@ -50,7 +50,7 @@ public class RealTranslationFile
 					if (line.countTokens() >= 2) {
 						String key = line.nextToken().trim();
 						String value = line.nextToken().trim();
-						if ((key != "") && (value != "")) {
+						if (!key.equals("") && !value.equals("")) {
 							translations.put(key, value);
 						}
 					}

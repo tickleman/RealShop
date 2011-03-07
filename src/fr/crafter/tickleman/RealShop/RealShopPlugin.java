@@ -215,8 +215,9 @@ public class RealShopPlugin extends RealPlugin
 						Iterator<RealItemStack> iterator = transaction.canceledLines.iterator();
 						while (iterator.hasNext()) {
 							player.sendMessage(
-								RealColor.item
-								+ dataValuesFile.getName(iterator.next().getTypeIdDamage()) + " : "
+								RealColor.message + "- "
+								+ RealColor.item + dataValuesFile.getName(iterator.next().getTypeIdDamage())
+								+ RealColor.message + " : "
 								+ RealColor.cancel + lang.tr("cancelled line")
 							);
 						}
@@ -276,7 +277,7 @@ public class RealShopPlugin extends RealPlugin
 							player.sendMessage(
 								RealColor.text + "- "
 								+ RealColor.item + dataValuesFile.getName(transactionLine.getTypeIdDamage())
-								+ RealColor.text + ": " + strSide
+								+ RealColor.text + " : " + strSide
 								+ RealColor.quantity + " x" + Math.abs(transactionLine.getAmount())
 								+ RealColor.text + " " + lang.tr("price")
 								+ RealColor.price + " " + transactionLine.getUnitPrice() + realEconomy.getCurrency()
@@ -881,9 +882,10 @@ public class RealShopPlugin extends RealPlugin
 			RealPrice price = marketFile.getPrice(typeIdDamage);
 			if ((price != null) && shop.isItemSellAllowed(typeIdDamage)) {
 				if (!list.equals("")) {
-					list += ", ";
+					list += RealColor.message + ", ";
 				}
-				list += dataValuesFile.getName(typeIdDamage) + ": " + price.sell;
+				list += RealColor.item + dataValuesFile.getName(typeIdDamage)
+					+ RealColor.message + ": " + RealColor.price + price.sell;
 			}
 		}
 		if (list.equals("")) {
@@ -903,15 +905,16 @@ public class RealShopPlugin extends RealPlugin
 			RealPrice price = marketFile.getPrice(typeIdDamage);
 			if ((price != null) && shop.isItemBuyAllowed(typeIdDamage)) {
 				if (!list.equals("")) {
-					list += ", ";
+					list += RealColor.message + ", ";
 				}
-				list += dataValuesFile.getName(typeIdDamage) + ": " + price.buy;
+				list += RealColor.item + dataValuesFile.getName(typeIdDamage)
+					+ RealColor.message + ": " + RealColor.price + price.buy;
 			}
 		}
 		if (list.equals("")) {
 			player.sendMessage(RealColor.cancel + lang.tr("Nothing to buy here"));
 		} else {
-			player.sendMessage(RealColor.message + lang.tr("You can buy") + " " + RealColor.item + list);
+			player.sendMessage(RealColor.message + lang.tr("You can buy") + " " + list);
 		}
 	}
 

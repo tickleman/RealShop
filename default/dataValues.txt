@@ -64,7 +64,7 @@ id;name;recipe
 47;Bookshelf;5*6+340*3
 48;Moss Stone
 49;Obsidian
-50;Torch;280+16=4
+50;Torch;280+263=4
 51;Fire
 52;Monster Spawner
 53;Wooden Stairs;5*6=4
@@ -113,7 +113,7 @@ id;name;recipe
 261;Bow;280*3+287*3
 262;Arrow;288+280+318
 263;Coal
-263:1;Charcoal
+263:1;Charcoal;17+5/4
 264;Diamond
 265;Iron Ingot;15+263/8
 266;Gold Ingot;14+263/8
@@ -173,20 +173,20 @@ id;name;recipe
 320;Cooked Porkchop;319+263/8
 321;Paintings;280*8+35
 322;Golden apple;260+41*8
-323;Sign
-324;Wooden door
+323;Sign;280+5*6
+324;Wooden door;5*6
 325;Bucket;265*3
-326;Water bucket;265*3+9
-327;Lava bucket;265*3+11
+326;Water bucket;325+9
+327;Lava bucket;325+11
 328;Minecart;265*5
 329;Saddle
-330;Iron door
+330;Iron door;265*6
 331;Redstone
 332;Snowball
 333;Boat;5*5
 334;Leather
 335;Milk
-336;Clay Brick
+336;Clay Brick;337+263/8
 337;Clay Balls
 338;Sugar Cane
 339;Paper;338*3=3
@@ -195,12 +195,12 @@ id;name;recipe
 342;Storage Minecart;328+54
 343;Powered Minecart;328+61
 344;Egg
-345;Compass
-346;Fishing Rod
-347;Clock
+345;Compass;265*4+331
+346;Fishing Rod;280*3+287*2
+347;Clock;266*4+331
 348;Glowstone Dust
 349;Raw Fish
-350;Cooked Fish
+350;Cooked Fish;349+263/8
 351;Ink Sac
 351:1;Rose Red;38=2
 351:2;Cactus Green;263/8+81
@@ -208,7 +208,7 @@ id;name;recipe
 351:4;Lapis Lazuli
 351:5;Purple Dye;351:4+351:1=2
 351:6;Cyan Dye;351:4+351:2=2
-351:7;Light Gray Dye;351+352:15*2=3|351:8+352:15=2
+351:7;Light Gray Dye;351+352:15*2=3
 351:8;Gray Dye;351+352:15=2
 351:9;Pink Dye;351:1+352:15=2
 351:10;Lime Dye;351:2+352:15=2

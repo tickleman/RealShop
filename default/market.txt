@@ -41,6 +41,7 @@ item:dm ; buy ; sell ; name
  327    ;  50 ;   10 ; lava bucket
  331    ;  10 ;    9 ; redstone
  332    ;   1 ;    1 ; snowball
+ 334    ;   5 ;    4 ; leather
  335    ;   5 ;    1 ; milk
  337    ; 150 ;  135 ; clay balls
  338    ;   5 ;    2 ; sugar cane

@@ -1,55 +1,57 @@
-item:dm ; buy ; sell ; name
-   1    ;   5 ;    4 ; stone
-   2    ; 100 ;    0 ; grass
-   3    ;   1 ;    1 ; dirt
-   4    ;   1 ;    1 ; cobblestone
-   5    ;   3 ;    2 ; wooden plank
-   6    ;   5 ;    4 ; sapling
-   7    ; 999 ;    0 ; bedrock
-   9    ;   1 ;    1 ; water
-  11    ;   5 ;    5 ; lava
-  12    ;   1 ;    1 ; sand
-  13    ;   1 ;    1 ; gravel
-  14    ; 300 ;  270 ; gold ore
-  15    ;  50 ;   45 ; iron ore
-  17    ;   2 ;    1 ; wood
-  17:1  ;   2 ;    1 ; redwood
-  17:2  ;   2 ;    1 ; birch
-  18    ;  30 ;    0 ; leaves
-  18:1  ;  30 ;    0 ; redwood tree's leaves
-  18:2  ;  30 ;    0 ; birch tree's leaves
-  35    ;  10 ;    9 ; wool
-  37    ;   5 ;    4 ; yellow flower
-  38    ;   5 ;    4 ; red flower
-  39    ;  10 ;    9 ; brown mushroom
-  40    ;  10 ;    9 ; red mushroom
-  48    ;  50 ;   45 ; moss stone
-  49    ; 150 ;  135 ; obsidian
-  79    ;   5 ;    1 ; ice
-  81    ;   5 ;    1 ; cactus
-  86    ;  10 ;    9 ; pumpkin
- 263    ;  15 ;   14 ; coal
- 263:1  ;  15 ;   14 ; charcoal
- 264    ; 500 ;  450 ; diamond
- 287    ;   2 ;    1 ; string
- 288    ;   5 ;    1 ; feather
- 289    ;   5 ;    1 ; sulphur
- 295    ;   3 ;    1 ; seeds
- 296    ;   5 ;    3 ; wheat
- 318    ;   5 ;    1 ; flint
- 326    ;   5 ;    1 ; water bucket
- 327    ;  50 ;   10 ; lava bucket
- 331    ;  10 ;    9 ; redstone
- 332    ;   1 ;    1 ; snowball
- 334    ;   5 ;    4 ; leather
- 335    ;   5 ;    1 ; milk
- 337    ; 150 ;  135 ; clay balls
- 338    ;   5 ;    2 ; sugar cane
- 348    ;  50 ;   45 ; glowstone dust
- 349    ;   5 ;    2 ; raw fish
- 351    ;   5 ;    2 ; ink sac
- 351:3  ; 100 ;   90 ; cocoa beans
- 351:4  ; 550 ;  495 ; lapis lazuli
- 352    ;  10 ;    9 ; bone 
-2256    ; 100 ;   90 ; yellow disc
-2257    ; 100 ;   90 ; green disc
+item:dm ;  buy ; sell ; name
+   1    ;    5 ;    4 ; stone
+   2    ;  100 ;    0 ; grass
+   3    ;    1 ;    1 ; dirt
+   4    ;    1 ;    1 ; cobblestone
+   5    ;    3 ;    2 ; wooden plank
+   6    ;    5 ;    4 ; sapling
+   7    ;  999 ;    0 ; bedrock
+   9    ;    1 ;    1 ; water
+  11    ;    5 ;    5 ; lava
+  12    ;    1 ;    1 ; sand
+  13    ;    1 ;    1 ; gravel
+  14    ;  300 ;  270 ; gold ore
+  15    ;   50 ;   45 ; iron ore
+  17    ;    2 ;    1 ; wood
+  17:1  ;    2 ;    1 ; redwood
+  17:2  ;    2 ;    1 ; birch
+  18    ;   30 ;    0 ; leaves
+  18:1  ;   30 ;    0 ; redwood tree's leaves
+  18:2  ;   30 ;    0 ; birch tree's leaves
+  35    ;   10 ;    9 ; wool
+  37    ;    5 ;    4 ; yellow flower
+  38    ;    5 ;    4 ; red flower
+  39    ;   10 ;    9 ; brown mushroom
+  40    ;   10 ;    9 ; red mushroom
+  48    ;   50 ;   45 ; moss stone
+  49    ;  150 ;  135 ; obsidian
+  79    ;    5 ;    1 ; ice
+  81    ;    5 ;    1 ; cactus
+  86    ;   10 ;    9 ; pumpkin
+  87    ;  500 ;  450 ; netherrack
+  88    ;  500 ;  450 ; soul sand
+ 263    ;   15 ;   14 ; coal
+ 263:1  ;   15 ;   14 ; charcoal
+ 264    ;  500 ;  450 ; diamond
+ 287    ;    2 ;    1 ; string
+ 288    ;    5 ;    1 ; feather
+ 289    ;    5 ;    1 ; sulphur
+ 295    ;    3 ;    1 ; seeds
+ 296    ;    5 ;    3 ; wheat
+ 318    ;    5 ;    1 ; flint
+ 326    ;    5 ;    1 ; water bucket
+ 327    ;   50 ;   10 ; lava bucket
+ 331    ;   10 ;    9 ; redstone
+ 332    ;    1 ;    1 ; snowball
+ 334    ;    5 ;    4 ; leather
+ 335    ;    5 ;    1 ; milk
+ 337    ;  150 ;  135 ; clay balls
+ 338    ;    5 ;    2 ; sugar cane
+ 348    ;   50 ;   45 ; glowstone dust
+ 349    ;    5 ;    2 ; raw fish
+ 351    ;    5 ;    2 ; ink sac
+ 351:3  ;  100 ;   90 ; cocoa beans
+ 351:4  ;  550 ;  495 ; lapis lazuli
+ 352    ;   10 ;    9 ; bone 
+2256    ; 1000 ;  900 ; yellow disc
+2257    ; 1000 ;  900 ; green disc

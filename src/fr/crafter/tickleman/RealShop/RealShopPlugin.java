@@ -321,7 +321,7 @@ public class RealShopPlugin extends RealPlugin
 			Player player = (Player)sender;
 			String command = cmd.getName().toLowerCase();
 			for (int i = 0; i < args.length; i++) {
-				args[i] = args[i].toLowerCase();
+				args[i] = args[i];
 			}
 			// SHOP
 			if (
@@ -417,7 +417,7 @@ public class RealShopPlugin extends RealPlugin
 			} else if (command.equals("mny")) {
 				if (config.economyPlugin.equals("RealEconomy")) {
 					// simple /mny commands
-					String param = ((args.length > 0) ? args[0].toLowerCase() : "");
+					String param = ((args.length > 0) ? args[0] : "");
 					String playerName = player.getName();
 					if (param.equals("help") || param.equals("h")) {
 						// HELP

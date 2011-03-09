@@ -45,9 +45,11 @@ public class RealShop
 		HashMap<String, Boolean> hashMap = new HashMap<String, Boolean>();
 		String[] typeIds = buffer.split(",");
 		for (int i = 0; i < typeIds.length; i++) {
-			try {
+			if (typeIds[i].trim().length() > 0) {
+				try {
 				hashMap.put(typeIds[i], true);
-			} catch (Exception e) {
+				} catch (Exception e) {
+				}
 			}
 		}
 		return hashMap;

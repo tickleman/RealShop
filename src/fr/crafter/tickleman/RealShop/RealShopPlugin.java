@@ -100,6 +100,7 @@ public class RealShopPlugin extends RealPlugin
 		pm.registerEvent(Event.Type.INVENTORY_OPEN, playerListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_MOVE, playerListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_QUIT, playerListener, Priority.Normal, this);
+		pm.registerEvent(Event.Type.PLAYER_DROP_ITEM, playerListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLUGIN_ENABLE, pluginListener, Priority.Normal, this);
 		// read configuration file
 		config = new RealShopConfig(this);

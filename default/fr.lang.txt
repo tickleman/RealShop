@@ -1,39 +1,39 @@
-# French translation by TICKLEMAN
-cancelled line=ligne annulee
-Cancelled transaction=Transaction annulee
-Chest-shop activation/desactivation cancelled=Activation/desactivation du coffre annulee
-Click on the chest-shop to activate/desactivate=Cliques sur le coffre-magasin a activer/desactiver
-Click on the chest-shop to add buy items=Cliques sur le coffre-magasin pour autoriser des articles a la vente
-Click on the chest-shop to add sell items=Cliques sur le coffre-magasin pour autoriser des articles a l'achat
-Click on the chest-shop to exclude buy items=Cliques sur le coffre-magasin pour exclude des articles a la vente
-Click on the chest-shop to exclude sell items=Cliques sur le coffre-magasin pour exclude des articles a l'achat
-earned=gagne
-expense=depense
-into your pocket=en poche
+# CLIENT
+Dropping items when you are in a shop is prohibited=Il est interdit de deposer des objets lorsque vous etes dans un magasin 
 Nothing can be sold here=Rien ne peut etre vendu ici
-Nothing to buy here=Il n'y a rien a acheter ici
-Now players can buy=Les joueurs peuvent acheter
-Now players can not buy=Les joueurs ne peuvent pas acheter
-Now players can not sell=Les joueurs ne peuvent pas vendre
-Now players can sell=Les joueurs peuvent vendre
-Only ops can activate/desactivate chest-shops=Seuls les Op peuvent activer/desactiver un coffre-magasin
-price=prix
-profit=gain
-purchase=achat
-sale=vente
-spent=depense
-This chest belongs to=Ce magasin appartient a
-This chest is not a shop anymore=Ce coffre n'est plus en mode magasin
-This chest is now a shop=Ce coffre est maintenant en mode magasin
-This chest belongs to=Ce coffre-magasin appartient a
-This shop is already in use by another player=Ce magasin est deja utilise par un autre joueur
-This shop was given to=Ce magasin est donne a
-Transaction total=Total transaction
-Usage=Utilisation
-Welcome into this shop=Bienvenue au magasin
-Welcome into your shop=Bienvenue dans ton magasin
-You are not allowed to break a shop-chest=Tu n'es pas autorise a detruire un coffre-magasin
-You can buy=Tu peux acheter
-You can sell=Tu peux vendre
-you have=tu as
-You've got=Tu as
+Nothing to buy here=Rien ne peut etre achete ici
+The shop +name is already in use by player +client=Le magasin +name est utilise par le joueur +client
+You can buy +items=Vous pouvez acheter +items
+You can sell +items=Vous pouvez vendre +items
+
+# CLIENT : TRANSACTION
+Cancelled purchase +item x+quantity (+linePrice)=Achat annule +item x+quantity (+linePrice)
+Cancelled sale +item x+quantity (+linePrice)=Vente annulee +item x+quantity (+linePrice)
+Cancelled transaction=Transaction annulee
+Purchased +item x+quantity (+linePrice)=Achat +item x+quantity (+linePrice)
+Sold +item x+quantity (+linePrice)=Vente +item x+quantity (+linePrice)
+Welcome into the shop +name. You've got +money in your pocket=Bienvenue dans le magasin +name. Vous avez +money en poche
+
+# SHOP OWNER : TRANSACTION
+[shop +name] +client purchased +item x+quantity (+linePrice)=[magasin +name] +client vous a achete +item x+quantity (+linePrice)
+[shop +name] +client sold +item x+quantity (+linePrice)=[magasin +name] +client vous a vendu +item x+quantity (+linePrice)
+
+# SHOP OWNER
+Now clients can buy +items=Les clients peuvent acheter +items
+Now clients can sell +items=Les clients peuvent vendre +items
+Shop +name is now closed=Le magasin +name est maintenant ferme
+Shop +name is now opened=Le magasin +name est maintenant ouvert
+The chest you selected is not a shop=Le coffre selectionne n'est pas un magasin
+The chest-shop you selected belongs to +owner=Le coffre-magasin selectionne appartient a +owner
+The shop +name has been created=Le magasin +name a ete cree
+The shop +name has been deleted=Le magasin +name a ete supprime
+The shop +name was given to +player=Le magasin +name a ete donne a +player
+Welcome into your shop +name=Bienvenue dans votre magasin +name
+You must select a shop-chest before typing any /rshop command=Vous devez selectionner un coffre-magasin avant de taper une commande /rshop
+You selected +owner's shop +name=Vous avez selectionne le magasin +name de +owner
+
+# OPERATORS
+Daily log was dumped into the realshop.log file=Daily log was dumped into the realshop.log file
+Daily prices calculation simulation is into the realshop.log file=Daily prices calculation simulation is into the realshop.log file
+Real daily prices calculation log is into the realshop.log file=Real daily prices calculation log is into the realshop.log file
+Reload RealShop configuration files=Reload RealShop configuration files

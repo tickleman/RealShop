@@ -21,6 +21,8 @@ Welcome into the shop +name. You've got +money in your pocket=Welcome into the s
 # SHOP OWNER
 Now clients can buy +items=Now clients can buy +items
 Now clients can sell +items=Now clients can sell +items
+Shop +name is now closed=Shop +name is now closed
+Shop +name is now opened=Shop +name is now opened
 The chest you selected is not a shop=The chest you selected is not a shop
 The chest-shop you selected belongs to +owner=The chest-shop you selected belongs to +owner
 The shop +name has been created=The shop +name has been created

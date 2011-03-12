@@ -45,7 +45,7 @@ public class RealTranslationFile
 			String buffer;
 			StringTokenizer line;
 			while ((buffer = reader.readLine()) != null) {
-				if (buffer.charAt(0) != '#') {
+				if ((buffer.length() > 0) && (buffer.charAt(0) != '#')) {
 					line = new StringTokenizer(buffer, "=");
 					if (line.countTokens() >= 2) {
 						String key = line.nextToken().trim();
@@ -60,12 +60,12 @@ public class RealTranslationFile
 		} catch (Exception e) {
 			if (fileName.equals("en")) {
 				plugin.log.info(
-					"You can create plugins/" + plugin.name + "/" + fileName + ".lang file"
+					"You can create plugins/" + plugin.name + "/" + fileName + ".lang.txt file"
 					+ " to change texts"
 				);
 			} else {
 				plugin.log.warning(
-					"Needs plugins/" + plugin.name + "/" + fileName + ".lang file"
+					"Needs plugins/" + plugin.name + "/" + fileName + ".lang.txt file"
 					+ " (check your language configuration)"
 				);
 			}

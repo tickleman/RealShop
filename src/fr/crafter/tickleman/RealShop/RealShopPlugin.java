@@ -196,6 +196,7 @@ public class RealShopPlugin extends RealPlugin
 				RealShop shop = shopsFile.shopAt(inChestState.block);
 				String shopPlayerName = shop.player;
 				Player shopPlayer = getServer().getPlayer(shopPlayerName);
+				boolean had_message = false;
 				if (!shop.player.equals(player.getName())) {
 					// reload prices
 					marketFile.load();
@@ -219,6 +220,7 @@ public class RealShopPlugin extends RealPlugin
 							.create(player)
 							.storeRealItemStackList(itemStackList, true);
 						player.sendMessage(RealColor.cancel + lang.tr("Cancelled transaction"));
+						had_message = true;
 					} else {
 						// some lines canceled : corresponding items go back to their original inventories
 						if (!transaction.canceledLines.isEmpty()) {
@@ -237,10 +239,11 @@ public class RealShopPlugin extends RealPlugin
 									RealColor.cancel
 									+ lang.tr("Cancelled " + strSide + " +item x+quantity (+linePrice)")
 									.replace("+item", RealColor.item + dataValuesFile.getName(line.getTypeIdDamage()) + RealColor.cancel)
-									.replace("+linePrice", RealColor.price + line.getLinePrice() + RealColor.cancel)
+									.replace("+linePrice", RealColor.price + Math.abs(line.getLinePrice()) + RealColor.cancel)
 									.replace("+price", RealColor.price + line.getUnitPrice() + RealColor.cancel)
-									.replace("+quantity", RealColor.quantity + line.getAmount() + RealColor.cancel)
+									.replace("+quantity", RealColor.quantity + Math.abs(line.getAmount()) + RealColor.cancel)
 								);
+								had_message = true;
 							}
 						}
 						boolean transactionOk = false;
@@ -296,11 +299,11 @@ public class RealShopPlugin extends RealPlugin
 								player.sendMessage(
 									RealColor.text
 									+ lang.tr(strSide + " +item x+quantity (+linePrice)")
-									.replace("+client", playerName)
+									.replace("+client", RealColor.player + playerName + RealColor.text)
 									.replace("+item", RealColor.item + dataValuesFile.getName(transactionLine.getTypeIdDamage()) + RealColor.text)
 									.replace("+linePrice", RealColor.price + Math.abs(transactionLine.getLinePrice()) + " " + realEconomy.getCurrency() + RealColor.text)
-									.replace("+name", shop.name)
-									.replace("+owner", shop.player)
+									.replace("+name", RealColor.shop + shop.name + RealColor.text)
+									.replace("+owner", RealColor.player + shop.player + RealColor.text)
 									.replace("+price", RealColor.price + transactionLine.getUnitPrice() + " " + realEconomy.getCurrency() + RealColor.text)
 									.replace("+quantity", RealColor.quantity + Math.abs(transactionLine.getAmount()) + RealColor.text)
 									.replace("  ", " ").replace("  ]", "]").replace("  [", "[")
@@ -309,19 +312,30 @@ public class RealShopPlugin extends RealPlugin
 									shopPlayer.sendMessage(
 										RealColor.text
 										+ lang.tr("[shop +name] +client " + shopStrSide + " +item x+quantity (+linePrice)")
-										.replace("+client", playerName)
+										.replace("+client", RealColor.player + playerName + RealColor.text)
 										.replace("+item", RealColor.item + dataValuesFile.getName(transactionLine.getTypeIdDamage()) + RealColor.text)
 										.replace("+linePrice", RealColor.price + Math.abs(transactionLine.getLinePrice()) + " " + realEconomy.getCurrency() + RealColor.text)
-										.replace("+name", shop.name)
-										.replace("+owner", shop.player)
+										.replace("+name", RealColor.shop + shop.name + RealColor.text)
+										.replace("+owner", RealColor.player + shop.player + RealColor.text)
 										.replace("+price", RealColor.price + transactionLine.getUnitPrice() + " " + realEconomy.getCurrency() + RealColor.text)
 										.replace("+quantity", RealColor.quantity + Math.abs(transactionLine.getAmount()) + RealColor.text)
 										.replace("  ", " ").replace("  ]", "]").replace("  [", "[")
 									);
 								}
+								had_message = true;
 							}
 						}
 					}
+				}
+				if (!had_message) {
+					player.sendMessage(
+						RealColor.message
+						+ lang.tr("No transaction")
+						.replace("+client", RealColor.player + playerName + RealColor.message)
+						.replace("+name", RealColor.shop + shop.name + RealColor.message)
+						.replace("+owner", RealColor.player + shop.player + RealColor.message)
+						.replace("  ", " ")
+					);
 				}
 			}
 			lockedChests.remove(inChestState.chest.getChestId());
@@ -815,12 +829,12 @@ public class RealShopPlugin extends RealPlugin
 	}
 
 	//------------------------------------------------------------------------------------ selectShop
-	public void selectChest(Player player, Block block)
+	public void selectChest(Player player, Block block, boolean silent)
 	{
 		String playerName = player.getName();
 		RealShop shop = shopsFile.shopAt(block);
 		lastSelectedChest.put(playerName, RealBlock.strId(block));
-		if (shop != null && (player.isOp() || playerName.equals(shop.player))) {
+		if (!silent && (shop != null) && (player.isOp() || playerName.equals(shop.player))) {
 			player.sendMessage(
 				RealColor.message 
 				+ lang.tr("You selected +owner's shop +name")
@@ -876,8 +890,8 @@ public class RealShopPlugin extends RealPlugin
 		if (!silent) {
 			player.sendMessage(
 				RealColor.message
-				+ lang.tr("Now clients can " + what + "+items")
-				.replace("+items", RealColor.item + RealShop.HashMapToCsv(addTo).replaceAll(",", ", ") + RealColor.message)
+				+ lang.tr("Now clients can " + what + " +items")
+				.replace("+items", RealColor.item + RealShop.HashMapToCsv(addTo).replace(",", ", ") + RealColor.message)
 			);
 		}
 	}
@@ -913,8 +927,8 @@ public class RealShopPlugin extends RealPlugin
 			RealColor.message
 			+ lang.tr("The shop +name was given to +client")
 			.replace("+client", RealColor.player + toPlayer + RealColor.message)
-			.replace("+name", shop.name)
-			.replace("+owner", player.getName())
+			.replace("+name", RealColor.shop + shop.name + RealColor.message)
+			.replace("+owner", RealColor.player + player.getName() + RealColor.message)
 			.replace("  ", " ")
 		);
 	}
@@ -930,6 +944,7 @@ public class RealShopPlugin extends RealPlugin
 		if (!sellIterator.hasNext()) {
 			sellIterator = dataValuesFile.getIdsIterator();
 		}
+		int count = 20;
 		while (sellIterator.hasNext()) {
 			String typeIdDamage = sellIterator.next();
 			RealPrice price = marketFile.getPrice(typeIdDamage);
@@ -939,6 +954,10 @@ public class RealShopPlugin extends RealPlugin
 				}
 				list += RealColor.item + dataValuesFile.getName(typeIdDamage)
 					+ RealColor.message + ": " + RealColor.price + price.sell;
+			}
+			if (count-- == 0) {
+				list += ", ...";
+				break;
 			}
 		}
 		if (list.equals("")) {
@@ -956,6 +975,7 @@ public class RealShopPlugin extends RealPlugin
 			RealInventory.create(RealChest.create(block)), false
 		); 
 		Iterator<RealItemStack> buyIterator = itemStack.getContents().iterator();
+		count = 20;
 		while (buyIterator.hasNext()) {
 			RealItemStack item = buyIterator.next();
 			String typeIdDamage = item.getTypeIdDamage();
@@ -966,6 +986,10 @@ public class RealShopPlugin extends RealPlugin
 				}
 				list += RealColor.item + dataValuesFile.getName(typeIdDamage)
 					+ RealColor.message + ": " + RealColor.price + price.buy;
+			}
+			if (count-- == 0) {
+				list += ", ...";
+				break;
 			}
 		}
 		if (list.equals("")) {

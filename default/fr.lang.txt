@@ -1,19 +1,20 @@
 # CLIENT
++owner's shop +name is closed=Le magasin +name de +owner est ferme
 Dropping items when you are in a shop is prohibited=Il est interdit de deposer des objets lorsque vous etes dans un magasin 
 Nothing can be sold here=Rien ne peut etre vendu ici
 Nothing to buy here=Rien ne peut etre achete ici
 The shop +name is already in use by player +client=Le magasin +name est utilise par le joueur +client
 You can buy +items=Vous pouvez acheter +items
 You can sell +items=Vous pouvez vendre +items
-+owner's shop +name is closed=Le magasin +name de +owner est ferme
+Welcome into +owner's shop +name. You've got +money in your pocket=Bienvenue dans le magasin +name de +owner. Vous avez +money en poche
 
 # CLIENT : TRANSACTION
 Cancelled purchase +item x+quantity (+linePrice)=Achat annule +item x+quantity (+linePrice)
 Cancelled sale +item x+quantity (+linePrice)=Vente annulee +item x+quantity (+linePrice)
 Cancelled transaction=Transaction annulee
+No transaction=Aucune transaction
 Purchased +item x+quantity (+linePrice)=Achat +item x+quantity (+linePrice)
 Sold +item x+quantity (+linePrice)=Vente +item x+quantity (+linePrice)
-Welcome into the shop +name. You've got +money in your pocket=Bienvenue dans le magasin +name. Vous avez +money en poche
 
 # SHOP OWNER : TRANSACTION
 [shop +name] +client purchased +item x+quantity (+linePrice)=[magasin +name] +client vous a achete +item x+quantity (+linePrice)
@@ -22,12 +23,12 @@ Welcome into the shop +name. You've got +money in your pocket=Bienvenue dans le 
 # SHOP OWNER
 Now clients can buy +items=Les clients peuvent acheter +items
 Now clients can sell +items=Les clients peuvent vendre +items
-Shop +name is now closed=Le magasin +name est maintenant ferme
-Shop +name is now opened=Le magasin +name est maintenant ouvert
 The chest you selected is not a shop=Le coffre selectionne n'est pas un magasin
 The chest-shop you selected belongs to +owner=Le coffre-magasin selectionne appartient a +owner
 The shop +name has been created=Le magasin +name a ete cree
 The shop +name has been deleted=Le magasin +name a ete supprime
+The shop +name is now closed=Le magasin +name est maintenant ferme
+The shop +name is now opened=Le magasin +name est maintenant ouvert
 The shop +name was given to +player=Le magasin +name a ete donne a +player
 Welcome into your shop +name=Bienvenue dans votre magasin +name
 You must select a shop-chest before typing any /rshop command=Vous devez selectionner un coffre-magasin avant de taper une commande /rshop

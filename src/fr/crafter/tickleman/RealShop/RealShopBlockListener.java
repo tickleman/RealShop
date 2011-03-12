@@ -39,12 +39,14 @@ public class RealShopBlockListener extends BlockListener
 			// only if block is a chest
 			Block block = event.getBlock();
 			if (block.getType().equals(Material.CHEST)) {
-				// select chest
-				plugin.selectChest(player, block);
 				// display shop prices
 				if (plugin.shopsFile.isShop(block)) {
 					plugin.shopPricesInfos(player, block);
 				}
+				// select chest
+				plugin.selectChest(player, block, false);
+				// can't damage
+				event.setCancelled(true);
 			}
 		}
 	}
@@ -62,7 +64,7 @@ public class RealShopBlockListener extends BlockListener
 					plugin.exitChest(player);
 				}
 				// select chest
-				plugin.selectChest(player, block);
+				plugin.selectChest(player, block, true);
 				// only if chest block is a shop
 				RealShop shop = plugin.shopsFile.shopAt(block);
 				if (shop != null) {

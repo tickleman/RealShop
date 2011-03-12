@@ -376,13 +376,68 @@ public class RealShopPlugin extends RealPlugin
 					);
 					String param = ((args.length > 0) ? args[0] : "");
 					String param2 = ((args.length > 1) ? args[1] : "");
+					String param3 = ((args.length > 2) ? args[2] : "");
+					String param4 = ((args.length > 3) ? args[3] : "");
 					// /rshop commands that do not need to be into a shop
 					if (isOp && (param.equals("reload") || param.equals("rel"))) {
 						reload(player);
 					} else if (isOp && (param.equals("check") || param.equals("chk"))) {
 						pluginInfos(player);
-					} else if (isOp && (param.equals("prices") || param.equals("pri"))) {
-						pluginInfosPrices(player);
+					} else if (isOp && (param.equals("market") || param.equals("m"))) {
+						if (param2.equals("")) {
+							pluginInfosPrices(player);
+						} else if (param2.equals("del") || param2.equals("d")) {
+							marketFile.prices.remove(param3);
+							marketFile.save();
+							player.sendMessage(
+								RealColor.message
+								+ lang.tr("Market price deleted for +item")
+								.replace("+item", RealColor.item + dataValuesFile.getName(param3) + RealColor.message)
+							);
+						} else if (args.length > 3) {
+							try {
+								RealPrice price = new RealPrice(
+									Double.parseDouble(param3), Double.parseDouble(param4)
+								);
+								marketFile.prices.put(param2, price);
+								marketFile.save();
+								player.sendMessage(
+									RealColor.message
+									+ lang.tr("Market price for +item : buy +buy, sell +sell")
+									.replace("+item", RealColor.item + dataValuesFile.getName(param2) + RealColor.message)
+									.replace("+buy", RealColor.price + price.buy + RealColor.message)
+									.replace("+sell", RealColor.price + price.sell + RealColor.message)
+								);
+							} catch (Exception e) {
+								player.sendMessage(
+									RealColor.cancel
+									+ lang.tr("Error while setting market price for +item")
+									.replace("+item", RealColor.item + dataValuesFile.getName(param2) + RealColor.cancel)
+								);
+								player.sendMessage(
+									RealColor.message
+									+ lang.tr("Usage: +command")
+									.replace("+command", RealColor.command + lang.tr("/rshop market <itemId>[:<itemDamage>] <sellPrice> <buyPrice>") + RealColor.message)
+								);
+							}
+						} else {
+							RealPrice price = marketFile.prices.get(param2);
+							if (price == null) {
+								player.sendMessage(
+									RealColor.cancel
+									+ lang.tr("No market price for +item")
+									.replace("+item", RealColor.item + dataValuesFile.getName(param2) + RealColor.message)
+								);
+							} else {
+								player.sendMessage(
+									RealColor.message
+									+ lang.tr("Market price set for +item : buy +buy, sell +sell")
+									.replace("+item", RealColor.item + dataValuesFile.getName(param2) + RealColor.message)
+									.replace("+buy", RealColor.price + price.buy + RealColor.message)
+									.replace("+sell", RealColor.price + price.sell + RealColor.message)
+								);
+							}
+						}
 					} else if (isOp && param.equals("log")) {
 						pluginInfosDailyLog(player);
 						player.sendMessage(

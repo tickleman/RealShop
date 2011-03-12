@@ -37,5 +37,13 @@ You selected +owner's shop +name=Vous avez selectionne le magasin +name de +owne
 # OPERATORS
 Daily log was dumped into the realshop.log file=Daily log was dumped into the realshop.log file
 Daily prices calculation simulation is into the realshop.log file=Daily prices calculation simulation is into the realshop.log file
+Error while setting market price for +item=Erreur dans votre prix du marche pour +item
+Market price deleted for +item=Prix du marche supprime pour +item
+Market price for +item : buy +buy, sell +sell=Prix du marche pour +item : achat +buy, vente +sell
+No market price for +item=Pas de prix du marche pour +item
 Real daily prices calculation log is into the realshop.log file=Real daily prices calculation log is into the realshop.log file
 Reload RealShop configuration files=Reload RealShop configuration files
+
+# DOCUMENTATION
+Usage: +command=Usage: +command
+/rshop market <itemId>[:<itemDamage>] <sellPrice> <buyPrice>=/rshop market <idArticle>[:<variante>] <prixVente> <prixAchat>

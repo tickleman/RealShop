@@ -1,5 +1,4 @@
 item:dm ;  buy ; sell ; name
-   1    ;    5 ;    4 ; stone
    2    ;  100 ;    0 ; grass
    3    ;    1 ;    1 ; dirt
    4    ;    1 ;    1 ; cobblestone

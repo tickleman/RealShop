@@ -400,7 +400,25 @@ public class RealShopPlugin extends RealPlugin
 							}
 						} else if (player.isOp() || playerName.equals(shop.player)) {
 							// /rshop commands on a chest that is a shop that belongs to me
-							if (param.equals("buy") || param.equals("b")) {
+							if (param.equals("delete")) {
+								registerBlockAsShop(player, block);
+							} else if (param.equals("open") || param.equals("o")) {
+								shop.opened = true;
+								player.sendMessage(
+									RealColor.message
+									+ lang.tr("The shop +name is now opened")
+									.replace("+name", RealColor.shop + shop.name + RealColor.message)
+									.replace("  ", " ")
+								);
+							} else if (param.equals("close") || param.equals("c")) {
+								shop.opened = false;
+								player.sendMessage(
+										RealColor.message
+										+ lang.tr("The shop +name is now closed")
+										.replace("+name", RealColor.shop + shop.name + RealColor.message)
+										.replace("  ", " ")
+									);
+							} else if (param.equals("buy") || param.equals("b")) {
 								shopAddBuy(player, block, param2, false);
 								if (neighbor != null) shopAddBuy(player, neighbor, param2, true); 
 							} else if (param.equals("sell") || param.equals("s")) {

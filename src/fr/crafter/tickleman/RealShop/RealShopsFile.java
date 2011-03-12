@@ -81,24 +81,19 @@ public class RealShopsFile
 						String player = line[4].trim();
 						String key = world + ";" + posX + ";" + posY + ";" + posZ;
 						RealShop shop = new RealShop(world, posX, posY, posZ, player);
-						if (line.length > 5) {
+						try {
 							shop.buyOnly = RealShop.csvToHashMap(line[5].trim());
-						}
-						if (line.length > 6) {
 							shop.sellOnly = RealShop.csvToHashMap(line[6].trim());
-						}
-						if (line.length > 7) {
 							shop.buyExclude = RealShop.csvToHashMap(line[7].trim());
-						}
-						if (line.length > 8) {
 							shop.sellExclude = RealShop.csvToHashMap(line[8].trim());
-						}
-						if (line.length > 9) {
 							shop.name = line[9].trim();
+							shop.opened = (line[10].trim() == "false") ? false : true;
+						} catch (Exception e) {
+							// when some values are missing, then ignore
 						}
 						shops.put(key, shop);
 					} catch (Exception e) {
-						// when some values are not number, then ignore
+						// when some values are not numbers, then ignore shop
 					}
 				}
 			}
@@ -117,6 +112,9 @@ public class RealShopsFile
 			BufferedWriter writer = new BufferedWriter(
 				new FileWriter("plugins/" + plugin.name + "/" + fileName + ".txt")
 			);
+			writer.write(
+				"#world;x;y;z;owner;buyOnly;sellOnly;buyExclude;sellExclude;name;opened\n"
+			);
 			Iterator<RealShop> iterator = shops.values().iterator();
 			while (iterator.hasNext()) {
 				RealShop shop = iterator.next();
@@ -130,7 +128,8 @@ public class RealShopsFile
 					+ RealShop.HashMapToCsv(shop.sellOnly) + ";"
 					+ RealShop.HashMapToCsv(shop.buyExclude) + ";"
 					+ RealShop.HashMapToCsv(shop.sellExclude) + ";"
-					+ shop.name
+					+ shop.name + ";"
+					+ (shop.opened ? "true" : "false")
 					+ "\n"
 				);
 			}

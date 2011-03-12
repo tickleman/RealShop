@@ -15,6 +15,7 @@ public class RealShop
 	public Integer posZ;
 	public String player;
 	public String name;
+	public boolean opened = true;
 
 	/** Players will be able to buy only these items into this shop */
 	public HashMap<String, Boolean> buyOnly = new HashMap<String, Boolean>();

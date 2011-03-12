@@ -88,6 +88,7 @@ public class RealShopsFile
 							shop.sellExclude = RealShop.csvToHashMap(line[8].trim());
 							shop.name = line[9].trim();
 							shop.opened = (line[10].trim() == "false") ? false : true;
+							shop.flags = RealShop.csvToHashMap(line[11].trim());
 						} catch (Exception e) {
 							// when some values are missing, then ignore
 						}
@@ -113,7 +114,7 @@ public class RealShopsFile
 				new FileWriter("plugins/" + plugin.name + "/" + fileName + ".txt")
 			);
 			writer.write(
-				"#world;x;y;z;owner;buyOnly;sellOnly;buyExclude;sellExclude;name;opened\n"
+				"#world;x;y;z;owner;buyOnly;sellOnly;buyExclude;sellExclude;name;opened;flags\n"
 			);
 			Iterator<RealShop> iterator = shops.values().iterator();
 			while (iterator.hasNext()) {
@@ -124,12 +125,13 @@ public class RealShopsFile
 					+ shop.posY + ";"
 					+ shop.posZ + ";"
 					+ shop.player + ";"
-					+ RealShop.HashMapToCsv(shop.buyOnly) + ";"
-					+ RealShop.HashMapToCsv(shop.sellOnly) + ";"
-					+ RealShop.HashMapToCsv(shop.buyExclude) + ";"
-					+ RealShop.HashMapToCsv(shop.sellExclude) + ";"
+					+ RealShop.hashMapToCsv(shop.buyOnly) + ";"
+					+ RealShop.hashMapToCsv(shop.sellOnly) + ";"
+					+ RealShop.hashMapToCsv(shop.buyExclude) + ";"
+					+ RealShop.hashMapToCsv(shop.sellExclude) + ";"
 					+ shop.name + ";"
-					+ (shop.opened ? "true" : "false")
+					+ (shop.opened ? "true" : "false") + ";"
+					+ RealShop.hashMapToCsv(shop.flags)
 					+ "\n"
 				);
 			}

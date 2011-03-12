@@ -90,8 +90,8 @@ public class RealShopTransaction
 				(price == null)
 				|| ((amount > 0) && !shop.isItemBuyAllowed(typeIdDamage))
 				|| ((amount < 0) && !shop.isItemSellAllowed(typeIdDamage))
-				|| ((plugin.config.shopDamagedItems.equals("false")) && (itemStack.getDurability() != 0))
-				|| ((plugin.config.shopMarketItemsOnly.equals("true")) && !plugin.marketFile.prices.containsKey(typeIdDamage))
+				|| (!shop.getFlag("damagedItems", plugin.config.shopDamagedItems.equals("true")) && (itemStack.getDurability() != 0))
+				|| (shop.getFlag("marketItemsOnly", plugin.config.shopMarketItemsOnly.equals("true")) && !plugin.marketFile.prices.containsKey(typeIdDamage))
 			) {
 				canceledLines.add(transactionLine);
 			} else {

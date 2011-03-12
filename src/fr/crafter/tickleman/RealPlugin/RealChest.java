@@ -141,4 +141,10 @@ public class RealChest
 		return null;
 	}
 
+	//-------------------------------------------------------------------------- scanForNeighborChest
+	public static Block scanForNeighborChest(Block block)
+	{
+		return scanForNeighborChest(block.getWorld(), block.getX(), block.getY(), block.getZ());
+	}
+
 }

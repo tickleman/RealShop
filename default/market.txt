@@ -2,7 +2,6 @@ item:dm ;  buy ; sell ; name
    2    ;  100 ;    0 ; grass
    3    ;    1 ;    1 ; dirt
    4    ;    1 ;    1 ; cobblestone
-   5    ;    3 ;    2 ; wooden plank
    6    ;    5 ;    4 ; sapling
    7    ;  999 ;    0 ; bedrock
    9    ;    1 ;    1 ; water

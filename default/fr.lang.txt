@@ -23,6 +23,8 @@ Sold +item x+quantity (+linePrice)=Vente +item x+quantity (+linePrice)
 # SHOP OWNER
 Now clients can buy +items=Les clients peuvent acheter +items
 Now clients can sell +items=Les clients peuvent vendre +items
+Now clients can not buy +items=Les clients ne peuvent pas acheter +items
+Now clients can not sell +items=Les clients ne peuvent pas vendre +items
 The chest you selected is not a shop=Le coffre selectionne n'est pas un magasin
 The chest-shop you selected belongs to +owner=Le coffre-magasin selectionne appartient a +owner
 The shop +name has been created=Le magasin +name a ete cree
@@ -47,3 +49,14 @@ Reload RealShop configuration files=Reload RealShop configuration files
 # DOCUMENTATION
 Usage: +command=Usage: +command
 /rshop market <itemId>[:<itemDamage>] <sellPrice> <buyPrice>=/rshop market <idArticle>[:<variante>] <prixVente> <prixAchat>
+
+# INFORMATION
++owner's shop +name : +opened=Magasin +name de +owner : +opened
+accepts damaged items=accepte endommages
+all=tous
+opened=ouvert
+closed=ferme
+infinite buy=vente illimite
+infinite sell=achat illimite
+market items only=marche seulement
+none=aucun

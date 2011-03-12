@@ -1,6 +1,5 @@
 package fr.crafter.tickleman.RealShop;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -30,7 +29,7 @@ public class RealShop
 	public HashMap<String, Boolean> sellExclude = new HashMap<String, Boolean>();
 
 	/** Flags : infiniteBuy, infiniteSell, noDamagedItems, marketItemsOnly, belongToServer */
-	public ArrayList<String> flags = new ArrayList<String>();
+	public HashMap<String, Boolean> flags = new HashMap<String, Boolean>();
 
 	//-------------------------------------------------------------------------------------- RealShop
 	public RealShop(String world, Integer posX, Integer posY, Integer posZ, String player)
@@ -66,7 +65,7 @@ public class RealShop
 	/**
 	 * Changes a HashMap indexed list to a buffer "1,5,9,19" 
 	 */
-	public static String HashMapToCsv(HashMap<String, Boolean> hashMap)
+	public static String hashMapToCsv(HashMap<String, Boolean> hashMap)
 	{
 		String csv = "";
 		Iterator<String> iterator = hashMap.keySet().iterator();
@@ -77,6 +76,17 @@ public class RealShop
 			csv += "," + iterator.next().toString();
 		}
 		return csv;
+	}
+
+	//--------------------------------------------------------------------------------------- getFlag
+	public boolean getFlag(String flag, boolean def)
+	{
+		Boolean result = flags.get(flag);
+		if (result == null) {
+			return def;
+		} else {
+			return result;
+		}
 	}
 
 	//------------------------------------------------------------------------------ isItemBuyAllowed
@@ -100,6 +110,27 @@ public class RealShop
 		return (
 			((sellOnly.size() == 0) || (sellOnly.get(typeIdDamage) != null))
 			&& (sellExclude.get(typeIdDamage) == null)
+		);
+	}
+
+	//--------------------------------------------------------------------------------------- setFlag
+	public void setFlag(String flag, boolean value)
+	{
+		if (value) {
+			flags.put(flag, value);
+		} else {
+			flags.remove(flag);
+		}
+	}
+
+	//--------------------------------------------------------------------------------------- setFlag
+	public void setFlag(String flag, String value)
+	{
+		setFlag(flag,
+			value.toLowerCase().equals("on")
+			|| value.toLowerCase().equals("yes")
+			|| value.toLowerCase().equals("true")
+			|| value.equals("1")
 		);
 	}
 

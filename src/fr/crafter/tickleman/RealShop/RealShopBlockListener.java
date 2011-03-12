@@ -86,7 +86,7 @@ public class RealShopBlockListener extends BlockListener
 					}
 					if (shop.opened) {
 						// enter chest
-						if (plugin.enterChest(player, block)) {
+						if (!plugin.enterChest(player, block)) {
 							event.setCancelled(true);
 						}
 					} else {

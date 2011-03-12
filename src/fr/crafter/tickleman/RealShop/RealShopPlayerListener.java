@@ -7,6 +7,7 @@ import org.bukkit.event.player.PlayerInventoryEvent;
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerMoveEvent;
 
+import fr.crafter.tickleman.RealPlugin.RealColor;
 import fr.crafter.tickleman.RealPlugin.RealTime;
 
 //########################################################################## RealShopPlayerListener
@@ -18,6 +19,7 @@ public class RealShopPlayerListener extends PlayerListener
 {
 
 	private final RealShopPlugin plugin;
+	long nextMoveCheck = 0;
 
 	//------------------------------------------------------------------------ RealShopPlayerListener
 	public RealShopPlayerListener(RealShopPlugin instance)
@@ -30,6 +32,7 @@ public class RealShopPlayerListener extends PlayerListener
 	@Override
 	public void onInventoryOpen(PlayerInventoryEvent event)
 	{
+		// exit previous chest
 		if (plugin.playersInChestCounter > 0) {
 			plugin.exitChest(event.getPlayer());
 		}
@@ -48,7 +51,10 @@ public class RealShopPlayerListener extends PlayerListener
 				&& inChestInfo.inChest
 			) {
 				event.setCancelled(true);
-				event.getPlayer().sendMessage("You're not allowed to drop items !!!");
+				event.getPlayer().sendMessage(
+					RealColor.cancel
+					+ plugin.lang.tr("Dropping items when you are in a shop is prohibited")
+				);
 			}
 		}
 	}
@@ -59,23 +65,26 @@ public class RealShopPlayerListener extends PlayerListener
 	{
 		if (plugin.playersInChestCounter > 0) {
 			Player player = event.getPlayer();
-			RealInChestState inChestInfo = plugin.inChestStates.get(player.getName());
-			// shop output detection : in chest + more than 3 seconds in shop + moved 1 blocks or more
-			// (last was 5 seconds and 2 blocks)
-			if (
-				(inChestInfo != null)
-				&& inChestInfo.inChest
-				&& (
-					(Math.abs(player.getLocation().getX() - inChestInfo.lastX) >= 1)
-					|| (Math.abs(player.getLocation().getZ()- inChestInfo.lastZ) >= 1)
-				)
-			) {
-				if (RealTime.worldToRealTime(player.getWorld()) < (inChestInfo.enterTime + 3)) {
-					inChestInfo.lastX = Math.round(player.getLocation().getX());
-					inChestInfo.lastZ = Math.round(player.getLocation().getZ());
-				} else {
-					plugin.exitChest(player);
+			if (System.currentTimeMillis() >= nextMoveCheck) {
+				RealInChestState inChestInfo = plugin.inChestStates.get(player.getName());
+				// shop output detection : in chest + more than 3 seconds in shop + moved 1 blocks or more
+				// (last was 5 seconds and 2 blocks)
+				if (
+					(inChestInfo != null)
+					&& inChestInfo.inChest
+					&& (
+						(Math.abs(player.getLocation().getX() - inChestInfo.lastX) >= 1)
+						|| (Math.abs(player.getLocation().getZ()- inChestInfo.lastZ) >= 1)
+					)
+				) {
+					if (RealTime.worldToRealTime(player.getWorld()) < (inChestInfo.enterTime + 3)) {
+						inChestInfo.lastX = Math.round(player.getLocation().getX());
+						inChestInfo.lastZ = Math.round(player.getLocation().getZ());
+					} else {
+						plugin.exitChest(player);
+					}
 				}
+				nextMoveCheck = System.currentTimeMillis() + 1000; 
 			}
 		}
 	}

@@ -1,0 +1,37 @@
+# CLIENT
+Dropping items when you are in a shop is prohibited=Dropping items when you are in a shop is prohibited
+Nothing can be sold here=Nothing can be sold here
+Nothing to buy here=Nothing to buy here
+The shop +name is already in use by player +client=The shop +name is already in use by player +client
+You can buy +items=You can buy +items
+You can sell +items=You can sell +items
+
+# CLIENT : TRANSACTION
+Cancelled purchase +item x+quantity (+linePrice)=Cancelled purchase +item x+quantity (+linePrice)
+Cancelled sale +item x+quantity (+linePrice)=Cancelled sale +item x+quantity (+linePrice)
+Cancelled transaction=Cancelled transaction
+Purchased +item x+quantity (+linePrice)=Purchased +item x+quantity (+linePrice)
+Sold +item x+quantity (+linePrice)=Sold +item x+quantity (+linePrice)
+Welcome into the shop +name. You've got +money in your pocket=Welcome into the shop +name. You've got +money in your pocket
+
+# SHOP OWNER : TRANSACTION
+[shop +name] +client purchased +item x+quantity (+linePrice)=[shop +name] +client purchased +item x+quantity (+linePrice)
+[shop +name] +client sold +item x+quantity (+linePrice)=[shop +name] +client sold +item x+quantity (+linePrice)
+
+# SHOP OWNER
+Now clients can buy +items=Now clients can buy +items
+Now clients can sell +items=Now clients can sell +items
+The chest you selected is not a shop=The chest you selected is not a shop
+The chest-shop you selected belongs to +owner=The chest-shop you selected belongs to +owner
+The shop +name has been created=The shop +name has been created
+The shop +name has been deleted=The shop +name has been deleted
+The shop +name was given to +player=The shop +name was given to +player
+Welcome into your shop +name=Welcome into your shop +name
+You must select a shop-chest before typing any /rshop command=You must select a shop-chest before typing any /rshop command
+You selected +owner's shop +name=You selected +owner's shop +name
+
+# OPERATORS
+Daily log was dumped into the realshop.log file=Daily log was dumped into the realshop.log file
+Daily prices calculation simulation is into the realshop.log file=Daily prices calculation simulation is into the realshop.log file
+Real daily prices calculation log is into the realshop.log file=Real daily prices calculation log is into the realshop.log file
+Reload RealShop configuration files=Reload RealShop configuration files

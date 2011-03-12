@@ -1,5 +1,6 @@
 package fr.crafter.tickleman.RealShop;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -13,6 +14,7 @@ public class RealShop
 	public Integer posY;
 	public Integer posZ;
 	public String player;
+	public String name;
 
 	/** Players will be able to buy only these items into this shop */
 	public HashMap<String, Boolean> buyOnly = new HashMap<String, Boolean>();
@@ -26,6 +28,9 @@ public class RealShop
 	/** Players will not be able to buy these items into this shop */
 	public HashMap<String, Boolean> sellExclude = new HashMap<String, Boolean>();
 
+	/** Flags : infiniteBuy, infiniteSell, noDamagedItems, marketItemsOnly, belongToServer */
+	public ArrayList<String> flags = new ArrayList<String>();
+
 	//-------------------------------------------------------------------------------------- RealShop
 	public RealShop(String world, Integer posX, Integer posY, Integer posZ, String player)
 	{
@@ -34,6 +39,7 @@ public class RealShop
 		this.posY = posY;
 		this.posZ = posZ;
 		this.player = player;
+		this.name = "";
 	}
 
 	//---------------------------------------------------------------------------------- csvToHashMap

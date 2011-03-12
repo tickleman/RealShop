@@ -10,8 +10,8 @@ public class RealColor
 	public static String player   = Color.BROWN;
 	public static String price    = Color.YELLOW;
 	public static String quantity = Color.WHITE;
+	public static String shop     = Color.RED;
 	public static String message  = Color.LIGHT_CYAN;
 	public static String text     = Color.GRAY;
-	public static String welcome  = Color.LIGHT_CYAN;
 
 }

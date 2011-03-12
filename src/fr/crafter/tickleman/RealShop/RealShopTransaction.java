@@ -19,7 +19,7 @@ public class RealShopTransaction
 	private double totalPrice = (double)0;
 	private boolean cancelAll = false;
 
-	public ArrayList<RealItemStack> canceledLines = null;
+	public ArrayList<RealShopTransactionLine> canceledLines = null;
 	public ArrayList<RealShopTransactionLine> transactionLines = null;
 
 	//##################################################################################### PRIVATE
@@ -75,7 +75,7 @@ public class RealShopTransaction
 	{
 		// Initialization
 		cancelAll = false;
-		canceledLines = new ArrayList<RealItemStack>();
+		canceledLines = new ArrayList<RealShopTransactionLine>();
 		transactionLines = new ArrayList<RealShopTransactionLine>();
 		double totalPrice = (double)0;
 		// create lines and canceled lines
@@ -85,6 +85,7 @@ public class RealShopTransaction
 			int amount = itemStack.getAmount();
 			String typeIdDamage = itemStack.getTypeIdDamage();
 			RealPrice price = pricesFile.getPrice(typeIdDamage);
+			RealShopTransactionLine transactionLine = new RealShopTransactionLine(itemStack, price); 
 			if (
 				(price == null)
 				|| ((amount > 0) && !shop.isItemBuyAllowed(typeIdDamage))
@@ -92,11 +93,8 @@ public class RealShopTransaction
 				|| ((plugin.config.shopDamagedItems.equals("false")) && (itemStack.getDurability() != 0))
 				|| ((plugin.config.shopMarketItemsOnly.equals("true")) && !plugin.marketFile.prices.containsKey(typeIdDamage))
 			) {
-				canceledLines.add(itemStack);
+				canceledLines.add(transactionLine);
 			} else {
-				RealShopTransactionLine transactionLine = new RealShopTransactionLine(
-						itemStack, price
-				); 
 				transactionLines.add(transactionLine);
 				totalPrice += transactionLine.getLinePrice();
 			}
@@ -123,7 +121,7 @@ public class RealShopTransaction
 		String prefix = cancelAll ? "-CANCEL- " : "-VALID- ";
 		{
 			// canceled lines
-			Iterator<RealItemStack> iterator = canceledLines.iterator();
+			Iterator<RealShopTransactionLine> iterator = canceledLines.iterator();
 			while (iterator.hasNext()) {
 				RealItemStack itemStack = iterator.next();  
 				result += "-CANCEL- " + plugin.dataValuesFile.getName(itemStack.getTypeIdDamage())

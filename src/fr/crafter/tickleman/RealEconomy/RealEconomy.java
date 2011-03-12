@@ -23,6 +23,17 @@ public class RealEconomy
 	}
 
 	//------------------------------------------------------------------------------------ getBalance
+	public String getBalance(String playerName, boolean withCurrency)
+	{
+		Double balance = getBalance(playerName);
+		if (withCurrency) {
+			return balance + " " + getCurrency();
+		} else {
+			return balance.toString();
+		}
+	}
+
+	//------------------------------------------------------------------------------------ getBalance
 	public double getBalance(String playerName)
 	{
 		Double balance = (double)0;

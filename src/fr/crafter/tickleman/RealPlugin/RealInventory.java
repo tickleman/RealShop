@@ -353,11 +353,12 @@ public class RealInventory
 	 * - if any add / remove error, then cancel the whole operation and return false
 	 * - return true if everything is OK
 	 */
-	public boolean storeRealItemStackList(ArrayList<RealItemStack> itemStackList, boolean reverse)
-	{
+	public boolean storeRealItemStackList(
+		ArrayList<? extends RealItemStack> itemStackList, boolean reverse
+	) {
 		boolean ok = true;
 		ArrayList<ItemStack[]> itemStackBackup = backup();
-		Iterator<RealItemStack> iterator = itemStackList.iterator();
+		Iterator<? extends RealItemStack> iterator = itemStackList.iterator();
 		while (iterator.hasNext()) {
 			RealItemStack itemStack = iterator.next();
 			int amount = (reverse ? -itemStack.getAmount() : itemStack.getAmount());

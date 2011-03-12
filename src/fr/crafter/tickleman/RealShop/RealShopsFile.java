@@ -41,16 +41,21 @@ public class RealShopsFile
 	}
 
 	//---------------------------------------------------------------------------------------- shopAt
-	public RealShop shopAt(String world, int x, int y, int z)
-	{
-		String key = world + ";" + x + ";" + y + ";" + z;
-		return shops.get(key); 
-	}
-
-	//---------------------------------------------------------------------------------------- shopAt
 	public RealShop shopAt(World world, int x, int y, int z)
 	{
 		return shopAt(world.getName(), x, y, z); 
+	}
+
+	//---------------------------------------------------------------------------------------- shopAt
+	public RealShop shopAt(String world, int x, int y, int z)
+	{
+		return shopAt(world + ";" + x + ";" + y + ";" + z);
+	}
+
+	//---------------------------------------------------------------------------------------- shopAt
+	public RealShop shopAt(String key)
+	{
+		return shops.get(key);
 	}
 
 	//------------------------------------------------------------------------------------------ load
@@ -88,6 +93,9 @@ public class RealShopsFile
 						if (line.length > 8) {
 							shop.sellExclude = RealShop.csvToHashMap(line[8].trim());
 						}
+						if (line.length > 9) {
+							shop.name = line[9].trim();
+						}
 						shops.put(key, shop);
 					} catch (Exception e) {
 						// when some values are not number, then ignore
@@ -121,7 +129,8 @@ public class RealShopsFile
 					+ RealShop.HashMapToCsv(shop.buyOnly) + ";"
 					+ RealShop.HashMapToCsv(shop.sellOnly) + ";"
 					+ RealShop.HashMapToCsv(shop.buyExclude) + ";"
-					+ RealShop.HashMapToCsv(shop.sellExclude)
+					+ RealShop.HashMapToCsv(shop.sellExclude) + ";"
+					+ shop.name
 					+ "\n"
 				);
 			}

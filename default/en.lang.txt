@@ -5,6 +5,7 @@ Nothing to buy here=Nothing to buy here
 The shop +name is already in use by player +client=The shop +name is already in use by player +client
 You can buy +items=You can buy +items
 You can sell +items=You can sell +items
++owner's shop +name is closed=+owner's shop +name is closed
 
 # CLIENT : TRANSACTION
 Cancelled purchase +item x+quantity (+linePrice)=Cancelled purchase +item x+quantity (+linePrice)

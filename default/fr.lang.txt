@@ -5,6 +5,7 @@ Nothing to buy here=Rien ne peut etre achete ici
 The shop +name is already in use by player +client=Le magasin +name est utilise par le joueur +client
 You can buy +items=Vous pouvez acheter +items
 You can sell +items=Vous pouvez vendre +items
++owner's shop +name is closed=Le magasin +name de +owner est ferme
 
 # CLIENT : TRANSACTION
 Cancelled purchase +item x+quantity (+linePrice)=Achat annule +item x+quantity (+linePrice)

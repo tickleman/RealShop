@@ -9,6 +9,8 @@ import org.bukkit.event.block.BlockInteractEvent;
 import org.bukkit.event.block.BlockListener;
 import org.bukkit.event.block.BlockPlaceEvent;
 
+import fr.crafter.tickleman.RealPlugin.RealColor;
+
 //########################################################################### RealShopBlockListener
 /**
  * HelloWorld block listener
@@ -62,7 +64,8 @@ public class RealShopBlockListener extends BlockListener
 				// select chest
 				plugin.selectChest(player, block);
 				// only if chest block is a shop
-				if (plugin.shopsFile.isShop(block)) {
+				RealShop shop = plugin.shopsFile.shopAt(block);
+				if (shop != null) {
 					// calculate daily prices fluctuations
 					if (plugin.config.dailyPricesCalculation.equals("true")) {
 						World world = block.getWorld();
@@ -81,8 +84,19 @@ public class RealShopBlockListener extends BlockListener
 							plugin.marketFile.dailyPricesCalculation(plugin.dailyLog);
 						}
 					}
-					// enter chest
-					if (plugin.enterChest(player, block)) {
+					if (shop.opened) {
+						// enter chest
+						if (plugin.enterChest(player, block)) {
+							event.setCancelled(true);
+						}
+					} else {
+						player.sendMessage(
+							RealColor.cancel
+							+ plugin.lang.tr("+owner's shop +name is closed")
+							.replace("+owner", RealColor.player + shop.player + RealColor.cancel)
+							.replace("+name", RealColor.shop + shop.name + RealColor.cancel)
+							.replace("  ", " ")
+						);
 						event.setCancelled(true);
 					}
 				}

@@ -130,6 +130,8 @@ public class RealPricesFile
 				try { resQty = Double.parseDouble(recipe.split("\\=")[1]); } catch (Exception e) {}
 				recipe = recipe.substring(0, recipe.indexOf("="));
 			}
+			System.out.println("resQty = " + resQty);
+			System.out.println("recipe = " + recipe);
 			// sum of components
 			String[] sum = recipe.split("\\+");
 			for (int sumIdx = 0; sumIdx < sum.length; sumIdx++) {
@@ -140,15 +142,18 @@ public class RealPricesFile
 					try { mulQty = Integer.parseInt(comp.split("\\*")[1]); } catch (Exception e) {}
 					comp = comp.substring(0, comp.indexOf("*"));
 				}
+				System.out.println("comp = " + comp);
 				// divQty : divider
 				int divQty = 1;
 				if (comp.indexOf("/") > 0) {
 					try { divQty = Integer.parseInt(comp.split("\\/")[1]); } catch (Exception e) {}
 					comp = comp.substring(0, comp.indexOf("/"));
 				}
+				System.out.println("divQty = " + divQty);
 				// compId : component type Id
 				String compId = "0";
 				try { compId = comp; } catch (Exception e) {}
+				System.out.println("compId = " + compId);
 				// calculate price
 				RealPrice compPrice = getPrice(compId);
 				if (compPrice == null) {
@@ -158,6 +163,8 @@ public class RealPricesFile
 					price.buy += Math.ceil((double)100 * compPrice.getBuy() * (double)mulQty / (double)divQty) / (double)100;
 					price.sell += Math.floor((double)100 * compPrice.getSell() * (double)mulQty / (double)divQty) / (double)100;
 				}
+				System.out.println("price.buy = " + price.buy);
+				System.out.println("price.sell = " + price.sell);
 			}
 			if (price != null) {
 				// round final price
@@ -165,6 +172,7 @@ public class RealPricesFile
 				price.sell = Math.floor(price.sell / resQty * (double)100 * WORKERS_RATIO) / (double)100;
 			}
 			recurseSecurity--;
+			System.out.println("recurseSecurity = " + recurseSecurity);
 			return price;
 		}
 	}

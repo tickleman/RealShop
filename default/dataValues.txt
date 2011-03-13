@@ -29,6 +29,7 @@ id;name;recipe
 23;Dispenser;261+331+4*7
 24;Sandstone;12*4
 25;Note Block;331+5*8
+26;Bed
 35;White Wool;287*9
 35:1;Orange Wool;35+351:14
 35:2;Magenta Wool;35+351:13
@@ -74,7 +75,7 @@ id;name;recipe
 57;Diamond Block;264*9
 58;Workbench;5*4
 59;Crops
-60;Soil
+60;Farmland
 61;Furnace;4*8
 62;Burning Furnace
 63;Sign Post;280+5*6
@@ -90,6 +91,7 @@ id;name;recipe
 73;Redstone Ore
 74;Glowing Redstone Ore
 75;Redstone torch;280+331
+76;Redstone torch;280+331
 77;Stone Button;1*2
 78;Snow
 79;Ice
@@ -105,6 +107,9 @@ id;name;recipe
 89;Glowstone;348*9
 90;Portal
 91;Jack-O-Lantern;86+50
+92;Cake
+93;Redstone repeater off
+94;Redstone repeater on
 256;Iron Shovel;280*2+265
 257;Iron Pickaxe;280*2+265*3
 258;Iron Axe;280+265*3
@@ -216,10 +221,12 @@ id;name;recipe
 351:12;Light Blue Dye;351:4+352:15=2
 351:13;Magenta Dye;351:5+351:9=2
 351:14;Orange Dye;351:1+351:11=2
+351:15;Bone Meal;351=3
 352;Bone
 352:15;Bone Meal;352=3
 353;Sugar;338
 354;Cake;296*3+335*3+353*2+344
 355;Bed;5*3+35*3
+356;Redstone repeater;76*2+331+1*3
 2256;Gold Music Disc
 2257;Green Music Disc

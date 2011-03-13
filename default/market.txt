@@ -4,18 +4,15 @@ item:dm ;  buy ; sell ; name
    4    ;    1 ;    1 ; cobblestone
    6    ;    5 ;    4 ; sapling
    7    ;  999 ;    0 ; bedrock
-   9    ;    1 ;    1 ; water
-  11    ;    5 ;    5 ; lava
   12    ;    1 ;    1 ; sand
   13    ;    1 ;    1 ; gravel
-  14    ;  300 ;  270 ; gold ore
-  15    ;   50 ;   45 ; iron ore
   17    ;    2 ;    1 ; wood
   17:1  ;    2 ;    1 ; redwood
   17:2  ;    2 ;    1 ; birch
   18    ;   30 ;    0 ; leaves
   18:1  ;   30 ;    0 ; redwood tree's leaves
   18:2  ;   30 ;    0 ; birch tree's leaves
+  19    ;   30 ;   27 ; sponge
   35    ;   10 ;    9 ; wool
   37    ;    5 ;    4 ; yellow flower
   38    ;    5 ;    4 ; red flower
@@ -23,28 +20,36 @@ item:dm ;  buy ; sell ; name
   40    ;   10 ;    9 ; red mushroom
   48    ;   50 ;   45 ; moss stone
   49    ;  150 ;  135 ; obsidian
+  52    ;   50 ;   45 ; mob spawner
   79    ;    5 ;    1 ; ice
   81    ;    5 ;    1 ; cactus
   86    ;   10 ;    9 ; pumpkin
   87    ;  500 ;  450 ; netherrack
   88    ;  500 ;  450 ; soul sand
+ 260    ;  500 ;  450 ; red apple
  263    ;   15 ;   14 ; coal
  263:1  ;   15 ;   14 ; charcoal
  264    ;  500 ;  450 ; diamond
+ 265    ;  300 ;  270 ; iron
+ 266    ;  300 ;  270 ; gold
  287    ;    2 ;    1 ; string
  288    ;    5 ;    1 ; feather
  289    ;    5 ;    1 ; sulphur
  295    ;    3 ;    1 ; seeds
  296    ;    5 ;    3 ; wheat
  318    ;    5 ;    1 ; flint
+ 319    ;    5 ;    1 ; raw porkshop
  326    ;    5 ;    1 ; water bucket
  327    ;   50 ;   10 ; lava bucket
+ 329    ;   10 ;    9 ; saddle
  331    ;   10 ;    9 ; redstone
  332    ;    1 ;    1 ; snowball
  334    ;    5 ;    4 ; leather
  335    ;    5 ;    1 ; milk
  337    ;  150 ;  135 ; clay balls
  338    ;    5 ;    2 ; sugar cane
+ 341    ;   10 ;    9 ; slimeball
+ 344    ;    5 ;    1 ; egg
  348    ;   50 ;   45 ; glowstone dust
  349    ;    5 ;    2 ; raw fish
  351    ;    5 ;    2 ; ink sac

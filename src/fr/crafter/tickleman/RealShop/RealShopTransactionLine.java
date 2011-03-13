@@ -12,7 +12,11 @@ public class RealShopTransactionLine extends RealItemStack
 	public RealShopTransactionLine(RealItemStack itemStack, RealPrice price)
 	{
 		super(itemStack.getTypeId(), itemStack.getAmount(), itemStack.getDurability());
-		unitPrice = ((getAmount() < 0) ? price.getSell() : price.getBuy());
+		if (price == null) {
+			unitPrice = 0;
+		} else {
+			unitPrice = ((getAmount() < 0) ? price.getSell() : price.getBuy());
+		}
 	}
 
 	//-------------------------------------------------------------------------------- getLinePrice

@@ -16,6 +16,13 @@ public class RealShopConfig extends RealConfig
 	public String shopInfiniteSell = "false";
 	public String shopMarketItemsOnly = "false";
 	public String shopOpOnly = "false";
+	public double workForceRatio = (double)1.1;
+	public double buySellRatio = (double).95;
+	public double minDailyRatio = (double).05;
+	public double maxDailyRatio = (double)1.95;
+	public double amountRatio = (double)5000;
+	public double minItemPrice = (double).1;
+	public double maxItemPrice = (double)99999;
 
 	//-------------------------------------------------------------------------------- RealShopConfig
 	public RealShopConfig(final RealShopPlugin plugin)
@@ -49,6 +56,56 @@ public class RealShopConfig extends RealConfig
 		if (key.equals("shopInfiniteSell")) { shopInfiniteSell = value; return true; }
 		if (key.equals("shopMarketItemsOnly")) { shopMarketItemsOnly = value; return true; }
 		if (key.equals("shopOpOnly")) { shopOpOnly = value; return true; }
+		if (key.equals("workForceRatio")) {
+			try {
+				workForceRatio = Double.parseDouble(value);
+			} catch (Exception e) {
+				workForceRatio = (double)1.1;
+			}
+			return true;
+		}
+		if (key.equals("buySellRatio")) {
+			try {
+				buySellRatio = Double.parseDouble(value);
+			} catch (Exception e) {
+				buySellRatio = (double).95;
+			}
+		}
+		if (key.equals("minDailyRatio")) {
+			try {
+				minDailyRatio = Double.parseDouble(value);
+			} catch (Exception e) {
+				minDailyRatio = (double).05;
+			}
+		}
+		if (key.equals("maxDailyRatio")) {
+			try {
+				maxDailyRatio = Double.parseDouble(value);
+			} catch (Exception e) {
+				maxDailyRatio = (double)1.95;
+			}
+		}
+		if (key.equals("amountRatio")) {
+			try {
+				amountRatio = Double.parseDouble(value);
+			} catch (Exception e) {
+				amountRatio = (double)5000;
+			}
+		}
+		if (key.equals("minItemPrice")) {
+			try {
+				minItemPrice = Double.parseDouble(value);
+			} catch (Exception e) {
+				minItemPrice = (double).1;
+			}
+		}
+		if (key.equals("maxItemPrice")) {
+			try {
+				maxItemPrice = Double.parseDouble(value);
+			} catch (Exception e) {
+				maxItemPrice = (double)99999;
+			}
+		}
 		return false;
 	}
 
@@ -67,6 +124,13 @@ public class RealShopConfig extends RealConfig
 		saveValue(writer, "shopInfiniteSell");
 		saveValue(writer, "shopMarketItemsOnly");
 		saveValue(writer, "shopOpOnly");
+		saveValue(writer, "workForceRatio");
+		saveValue(writer, "buySellRatio");
+		saveValue(writer, "minDailyRatio");
+		saveValue(writer, "maxDailyRatio");
+		saveValue(writer, "amountRatio");
+		saveValue(writer, "minItemPrice");
+		saveValue(writer, "maxItemPrice");
 	}
 
 }

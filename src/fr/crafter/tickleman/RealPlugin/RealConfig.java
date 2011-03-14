@@ -99,7 +99,7 @@ public class RealConfig
 	protected void saveValue(BufferedWriter writer, String field)
 	{
 		try {
-			writer.write(field + "=" + getClass().getField(field).get(this) + "\n");
+			writer.write(field + "=" + getClass().getField(field).get(this).toString() + "\n");
 		} catch (Exception e) {
 			plugin.log.severe(
 				"[" + plugin.name + "] config field " + field + " does not exist,"

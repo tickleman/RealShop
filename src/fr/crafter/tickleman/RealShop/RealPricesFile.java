@@ -14,21 +14,6 @@ import fr.crafter.tickleman.RealPlugin.RealTools;
 public class RealPricesFile
 {
 
-	/** margin ratio to pay workers that craft items */
-	public double WORKERS_RATIO = (double)1.1;
-
-	/** commercial ration to calculate sell price from buy price */
-	public double COMMERCIAL_RATIO = (double)0.95;
-
-	/** minimal daily price decrease (0.05 means that you can go down to 5% of last price) */
-	public double MIN_DAILY_RATIO = (double)0.05;
-
-	/** maximal daily price increase (1.95 means that you can go up to 95% of last price) */
-	public double MAX_DAILY_RATIO = (double)1.95;
-
-	/** base amount of sold / purchased items quantity used for calculation */
-	public double AMOUNT_RATIO = (double)5000;
-
 	/** master plugin */
 	private final RealShopPlugin plugin;
 
@@ -74,18 +59,28 @@ public class RealPricesFile
 				int amount = dailyLog.moves.get(typeIdDamage);
 				double ratio;
 				if (amount < 0) {
-					ratio = Math.max(MIN_DAILY_RATIO, (double)1 + ((double)amount / (double)AMOUNT_RATIO));
+					ratio = Math.max(
+						plugin.config.minDailyRatio,
+						(double)1 + ((double)amount / plugin.config.amountRatio)
+					);
 				} else {
-					ratio = Math.min(MAX_DAILY_RATIO, (double)1 + ((double)amount / (double)AMOUNT_RATIO));
+					ratio = Math.min(
+						plugin.config.maxDailyRatio,
+						(double)1 + ((double)amount / plugin.config.amountRatio)
+					);
 				}
 				String log = "- " + plugin.dataValuesFile.getName(typeIdDamage) + " :"
 					+ " amount " + amount + " ratio " + ratio
 					+ " OLD " + price.buy + ", " + price.sell;
 				price.buy = Math.ceil(
-						(double)100 * Math.max((double)0.1, price.buy * ratio)
+					(double)100 * Math.min(plugin.config.maxItemPrice, Math.max(
+						plugin.config.minItemPrice, price.buy * ratio
+					))
 				) / (double)100;
 				price.sell = Math.floor(
-						(double)100 * Math.max((double)0.1, price.buy * COMMERCIAL_RATIO)
+					(double)100 * Math.min(plugin.config.maxItemPrice, Math.max(
+						plugin.config.minItemPrice, price.buy * plugin.config.buySellRatio
+					))
 				) / (double)100;
 				log += " NEW " + price.buy + ", " + price.sell;
 				plugin.log.info(log);
@@ -155,14 +150,20 @@ public class RealPricesFile
 					price = null;
 					break;
 				} else {
-					price.buy += Math.ceil((double)100 * compPrice.getBuy() * (double)mulQty / (double)divQty) / (double)100;
-					price.sell += Math.floor((double)100 * compPrice.getSell() * (double)mulQty / (double)divQty) / (double)100;
+					price.buy += Math.ceil(
+						(double)100 * compPrice.getBuy() * (double)mulQty / (double)divQty
+					) / (double)100;
+					price.sell += Math.floor(
+						(double)100 * compPrice.getSell() * (double)mulQty / (double)divQty
+					) / (double)100;
 				}
 			}
 			if (price != null) {
 				// round final price
-				price.buy = Math.ceil(price.buy / resQty * (double)100 * WORKERS_RATIO) / (double)100;
-				price.sell = Math.floor(price.sell / resQty * (double)100 * WORKERS_RATIO) / (double)100;
+				price.buy = Math.ceil(price.buy / resQty * (double)100 * plugin.config.workForceRatio)
+					/ (double)100;
+				price.sell = Math.floor(price.sell / resQty * (double)100 * plugin.config.workForceRatio)
+					/ (double)100;
 			}
 			recurseSecurity--;
 			return price;

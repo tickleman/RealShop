@@ -33,12 +33,12 @@ item:dm ;  buy ; sell ; name
  265    ;  300 ;  270 ; iron
  266    ;  300 ;  270 ; gold
  287    ;    2 ;    1 ; string
- 288    ;    5 ;    1 ; feather
- 289    ;    5 ;    1 ; sulphur
+ 288    ;    5 ;    4 ; feather
+ 289    ;    5 ;    4 ; sulphur
  295    ;    3 ;    1 ; seeds
  296    ;    5 ;    3 ; wheat
- 318    ;    5 ;    1 ; flint
- 319    ;    5 ;    1 ; raw porkshop
+ 318    ;    5 ;    4 ; flint
+ 319    ;    5 ;    4 ; raw porkshop
  326    ;    5 ;    1 ; water bucket
  327    ;   50 ;   10 ; lava bucket
  329    ;   10 ;    9 ; saddle

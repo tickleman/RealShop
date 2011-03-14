@@ -137,7 +137,7 @@ id;name;recipe
 279;Diamond Axe;280*2+264*3
 280;Stick;5*2=4
 281;Bowl;5*3=4
-282;Mushroom Soup=281+39+40
+282;Mushroom Stew;281+39+40
 283;Gold Sword;280+266*2
 284;Gold Shovel;280*2+266
 285;Gold Pickaxe;280*2+266*3

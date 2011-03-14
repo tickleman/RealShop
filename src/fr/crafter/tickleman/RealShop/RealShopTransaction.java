@@ -85,7 +85,7 @@ public class RealShopTransaction
 			int amount = itemStack.getAmount();
 			String typeIdDamage = itemStack.getTypeIdDamage();
 			RealPrice price = pricesFile.getPrice(typeIdDamage);
-			RealShopTransactionLine transactionLine = new RealShopTransactionLine(itemStack, price); 
+			RealShopTransactionLine transactionLine = new RealShopTransactionLine(itemStack, price);
 			if (
 				(price == null)
 				|| ((amount > 0) && !shop.isItemBuyAllowed(typeIdDamage))

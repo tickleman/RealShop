@@ -70,6 +70,7 @@ public class RealShopConfig extends RealConfig
 			} catch (Exception e) {
 				buySellRatio = (double).95;
 			}
+			return true;
 		}
 		if (key.equals("minDailyRatio")) {
 			try {
@@ -77,6 +78,7 @@ public class RealShopConfig extends RealConfig
 			} catch (Exception e) {
 				minDailyRatio = (double).05;
 			}
+			return true;
 		}
 		if (key.equals("maxDailyRatio")) {
 			try {
@@ -84,6 +86,7 @@ public class RealShopConfig extends RealConfig
 			} catch (Exception e) {
 				maxDailyRatio = (double)1.95;
 			}
+			return true;
 		}
 		if (key.equals("amountRatio")) {
 			try {
@@ -91,6 +94,7 @@ public class RealShopConfig extends RealConfig
 			} catch (Exception e) {
 				amountRatio = (double)5000;
 			}
+			return true;
 		}
 		if (key.equals("minItemPrice")) {
 			try {
@@ -98,6 +102,7 @@ public class RealShopConfig extends RealConfig
 			} catch (Exception e) {
 				minItemPrice = (double).1;
 			}
+			return true;
 		}
 		if (key.equals("maxItemPrice")) {
 			try {
@@ -105,6 +110,7 @@ public class RealShopConfig extends RealConfig
 			} catch (Exception e) {
 				maxItemPrice = (double)99999;
 			}
+			return true;
 		}
 		return false;
 	}

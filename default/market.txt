@@ -6,6 +6,8 @@ item:dm ;  buy ; sell ; name
    7    ;  999 ;    0 ; bedrock
   12    ;    1 ;    1 ; sand
   13    ;    1 ;    1 ; gravel
+  14    ;  300 ;  270 ; gold ore
+  15    ;   50 ;   45 ; iron ore
   17    ;    2 ;    1 ; wood
   17:1  ;    2 ;    1 ; redwood
   17:2  ;    2 ;    1 ; birch
@@ -30,8 +32,6 @@ item:dm ;  buy ; sell ; name
  263    ;   15 ;   14 ; coal
  263:1  ;   15 ;   14 ; charcoal
  264    ;  500 ;  450 ; diamond
- 265    ;  300 ;  270 ; iron
- 266    ;  300 ;  270 ; gold
  287    ;    2 ;    1 ; string
  288    ;    5 ;    4 ; feather
  289    ;    5 ;    4 ; sulphur

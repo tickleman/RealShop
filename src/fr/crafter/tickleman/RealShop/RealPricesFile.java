@@ -48,7 +48,7 @@ public class RealPricesFile
 	 */
 	public void dailyPricesCalculation(RealShopDailyLog dailyLog, boolean simulation)
 	{
-		plugin.log.info("dailyPricesCalculation" + (simulation ? " SIMULATION" : " REAL"));
+		plugin.log.info("dailyPricesCalculation (" + (simulation ? "SIMULATION" : "FOR REAL") + ")");
 		// take each item id that has had a movement today, and that has a price
 		Iterator<String> iterator = dailyLog.moves.keySet().iterator();
 		while (iterator.hasNext()) {
@@ -69,7 +69,8 @@ public class RealPricesFile
 						(double)1 + ((double)amount / plugin.config.amountRatio)
 					);
 				}
-				String log = "- " + plugin.dataValuesFile.getName(typeIdDamage) + " :"
+				String log = "- "
+					+ typeIdDamage + "(" + plugin.dataValuesFile.getName(typeIdDamage) + ") :"
 					+ " amount " + amount + " ratio " + ratio
 					+ " OLD " + price.buy + ", " + price.sell;
 				price.buy = Math.ceil(
@@ -89,7 +90,7 @@ public class RealPricesFile
 			}
 		}
 		if (!simulation) {
-			plugin.log.info("SAVE new prices into " + fileName + ".txt");
+			plugin.log.info("- SAVE new prices into " + fileName + ".txt");
 			save();
 		}
 	}

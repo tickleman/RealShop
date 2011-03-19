@@ -3,6 +3,8 @@ package fr.crafter.tickleman.RealShop;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import fr.crafter.tickleman.RealPlugin.RealLog;
+
 //################################################################################ RealShopDailyLog
 public class RealShopDailyLog
 {
@@ -41,7 +43,7 @@ public class RealShopDailyLog
 	 */
 	public void addTransaction(final RealShopTransaction transaction)
 	{
-		if (!transaction.isCanceled()) {
+		if (!transaction.isCancelled()) {
 			Iterator<RealShopTransactionLine> iterator = transaction.transactionLines.iterator();
 			while (iterator.hasNext()) {
 				RealShopTransactionLine item = iterator.next();
@@ -60,17 +62,16 @@ public class RealShopDailyLog
 		moves.clear();
 	}
 
-	//-------------------------------------------------------------------------------------- toString
-	public String toString()
+	//----------------------------------------------------------------------------------------- toLog
+	public void toLog(RealLog log)
 	{
-		String result = "RealShopDailyLog status\n";
-		Iterator<String> iterator = moves.keySet().iterator();
-		while (iterator.hasNext()) {
-			String typeIdDamage = iterator.next();
+		log.info("RealShopDailyLog status");
+		for (String typeIdDamage : moves.keySet()) {
 			int amount = moves.get(typeIdDamage);
-			result += "- " + plugin.dataValuesFile.getName(typeIdDamage) + " x" + amount + "\n";
+			log.info(
+				"- " + typeIdDamage + "(" + plugin.dataValuesFile.getName(typeIdDamage) + ") x" + amount
+			);
 		}
-		return result;
 	}
 
 }

@@ -7,6 +7,7 @@ public class RealShopTransactionLine extends RealItemStack
 {
 
 	private double unitPrice;
+	public String comment; 
 
 	//--------------------------------------------------------------------- RealShopTransactionLine
 	public RealShopTransactionLine(RealItemStack itemStack, RealPrice price)

@@ -19,12 +19,12 @@ public class RealShopTransaction
 	private double totalPrice = (double)0;
 	private boolean cancelAll = false;
 
-	public ArrayList<RealShopTransactionLine> canceledLines = null;
+	public ArrayList<RealShopTransactionLine> cancelledLines = null;
 	public ArrayList<RealShopTransactionLine> transactionLines = null;
 
-	//##################################################################################### PRIVATE
+	//####################################################################################### PRIVATE
 
-	//------------------------------------------------------------------------- RealShopTransaction
+	//--------------------------------------------------------------------------- RealShopTransaction
 	private RealShopTransaction(
 		RealShopPlugin plugin,
 		String playerName,
@@ -39,9 +39,9 @@ public class RealShopTransaction
 		this.pricesFile = pricesFile;
 	}
 
-	//###################################################################################### PUBLIC
+	//######################################################################################## PUBLIC
 
-	//-------------------------------------------------------------------------------------- create
+	//---------------------------------------------------------------------------------------- create
 	public static RealShopTransaction create(
 		RealShopPlugin plugin,
 		String playerName,
@@ -58,27 +58,27 @@ public class RealShopTransaction
 		);
 	}
 
-	//------------------------------------------------------------------------------- getTotalPrice
+	//--------------------------------------------------------------------------------- getTotalPrice
 	public double getTotalPrice()
 	{
 		return totalPrice;
 	}
 
-	//---------------------------------------------------------------------------------- isCanceled
-	public boolean isCanceled()
+	//----------------------------------------------------------------------------------- isCancelled
+	public boolean isCancelled()
 	{
 		return cancelAll;
 	}
 
-	//--------------------------------------------------------------------------------- prepareBill
+	//----------------------------------------------------------------------------------- prepareBill
 	public RealShopTransaction prepareBill(RealShop shop)
 	{
 		// Initialization
 		cancelAll = false;
-		canceledLines = new ArrayList<RealShopTransactionLine>();
+		cancelledLines = new ArrayList<RealShopTransactionLine>();
 		transactionLines = new ArrayList<RealShopTransactionLine>();
 		double totalPrice = (double)0;
-		// create lines and canceled lines
+		// create lines and cancelled lines
 		Iterator<RealItemStack> iterator = itemStackHashMap.getContents().iterator();
 		while (iterator.hasNext()) {
 			RealItemStack itemStack = iterator.next();
@@ -93,7 +93,18 @@ public class RealShopTransaction
 				|| (!shop.getFlag("damagedItems", plugin.config.shopDamagedItems.equals("true")) && (itemStack.getDurability() != 0))
 				|| (shop.getFlag("marketItemsOnly", plugin.config.shopMarketItemsOnly.equals("true")) && !plugin.marketFile.prices.containsKey(typeIdDamage))
 			) {
-				canceledLines.add(transactionLine);
+				if (price == null) {
+					transactionLine.comment = "no price";
+				} else if ((amount > 0) && !shop.isItemBuyAllowed(typeIdDamage)) {
+					transactionLine.comment = "buy not allowed";
+				} else if ((amount < 0) && !shop.isItemSellAllowed(typeIdDamage)) {
+					transactionLine.comment = "sell not allowed";
+				} else if (!shop.getFlag("damagedItems", plugin.config.shopDamagedItems.equals("true")) && (itemStack.getDurability() != 0)) {
+					transactionLine.comment = "damaged item";
+				} else if (shop.getFlag("marketItemsOnly", plugin.config.shopMarketItemsOnly.equals("true")) && !plugin.marketFile.prices.containsKey(typeIdDamage)) {
+					transactionLine.comment = "not in market";
+				}
+				cancelledLines.add(transactionLine);
 			} else {
 				transactionLines.add(transactionLine);
 				totalPrice += transactionLine.getLinePrice();
@@ -110,7 +121,7 @@ public class RealShopTransaction
 		return this;
 	}
 
-	//------------------------------------------------------------------------------------ toString
+	//-------------------------------------------------------------------------------------- toString
 	public String toString()
 	{
 		String result = "";
@@ -120,8 +131,8 @@ public class RealShopTransaction
 		}
 		String prefix = cancelAll ? "-CANCEL- " : "-VALID- ";
 		{
-			// canceled lines
-			Iterator<RealShopTransactionLine> iterator = canceledLines.iterator();
+			// cancelled lines
+			Iterator<RealShopTransactionLine> iterator = cancelledLines.iterator();
 			while (iterator.hasNext()) {
 				RealItemStack itemStack = iterator.next();  
 				result += "-CANCEL- " + plugin.dataValuesFile.getName(itemStack.getTypeIdDamage())

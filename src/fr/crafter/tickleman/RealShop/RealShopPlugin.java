@@ -73,7 +73,7 @@ public class RealShopPlugin extends RealPlugin
 	//-------------------------------------------------------------------------------- RealShopPlugin
 	public RealShopPlugin()
 	{
-		super("tickleman", "RealShop", "0.53");
+		super("tickleman", "RealShop", "0.54");
 		realEconomy = new RealEconomy(this);
 	}
 
@@ -209,9 +209,8 @@ public class RealShopPlugin extends RealPlugin
 					RealShopTransaction transaction = RealShopTransaction.create(
 						this, playerName, shopPlayerName, inChestState.itemStackHashMap, marketFile
 					).prepareBill(shopsFile.shopAt(inChestState.block));
-					log.info(transaction.toString());
-					if (transaction.isCanceled()) {
-						// transaction is fully canceled : items go back in their original inventories
+					if (transaction.isCancelled()) {
+						// transaction is fully cancelled : items go back in their original inventories
 						ArrayList<RealItemStack> itemStackList = inChestState.itemStackHashMap.getContents();
 						RealInventory
 							.create(inChestState.chest)
@@ -222,26 +221,39 @@ public class RealShopPlugin extends RealPlugin
 						player.sendMessage(RealColor.cancel + lang.tr("Cancelled transaction"));
 						had_message = true;
 					} else {
-						// some lines canceled : corresponding items go back to their original inventories
-						if (!transaction.canceledLines.isEmpty()) {
+						// some lines cancelled : corresponding items go back to their original inventories
+						if (!transaction.cancelledLines.isEmpty()) {
 							RealInventory
 								.create(inChestState.chest)
-								.storeRealItemStackList(transaction.canceledLines, false);
+								.storeRealItemStackList(transaction.cancelledLines, false);
 							RealInventory
 								.create(player)
-								.storeRealItemStackList(transaction.canceledLines, true);
-							// display canceled lines information
-							Iterator<RealShopTransactionLine> iterator = transaction.canceledLines.iterator();
+								.storeRealItemStackList(transaction.cancelledLines, true);
+							// display cancelled lines information
+							Iterator<RealShopTransactionLine> iterator = transaction.cancelledLines.iterator();
 							while (iterator.hasNext()) {
 								RealShopTransactionLine line = iterator.next();
-								String strSide = (line.getAmount() < 0) ? "sale" : "purchase";  
+								String strSide = (line.getAmount() < 0) ? "sale" : "purchase";
+								log.info(
+									("[shop +name] +owner > +client: cancelled " + strSide + " +item x+quantity (+linePrice) +comment")
+									.replace("+name", shop.name)
+									.replace("+owner", shop.player)
+									.replace("+client", playerName)
+									.replace("+item", line.getTypeIdDamage() + " (" + dataValuesFile.getName(line.getTypeIdDamage()) + ")")
+									.replace("+linePrice", "" + Math.abs(line.getLinePrice()))
+									.replace("+price", "" + line.getUnitPrice())
+									.replace("+quantity", "" + Math.abs(line.getAmount()))
+									.replace("+comment", line.comment)
+									.replace("  ", " ").replace(" ]", "]").replace("[ ", "[")
+								);
 								player.sendMessage(
 									RealColor.cancel
-									+ lang.tr("Cancelled " + strSide + " +item x+quantity (+linePrice)")
+									+ lang.tr("Cancelled " + strSide + " +item x+quantity (+linePrice) +comment")
 									.replace("+item", RealColor.item + dataValuesFile.getName(line.getTypeIdDamage()) + RealColor.cancel)
 									.replace("+linePrice", RealColor.price + Math.abs(line.getLinePrice()) + RealColor.cancel)
 									.replace("+price", RealColor.price + line.getUnitPrice() + RealColor.cancel)
 									.replace("+quantity", RealColor.quantity + Math.abs(line.getAmount()) + RealColor.cancel)
+									.replace("+comment", line.comment)
 								);
 								had_message = true;
 							}
@@ -296,6 +308,16 @@ public class RealShopPlugin extends RealPlugin
 										.storeRealItemStack(transactionLine, false);
 									}
 								}
+								log.info(
+									("[shop +name] +owner > +client: " + strSide + " +item x+quantity (+linePrice)")
+									.replace("+name", shop.name)
+									.replace("+owner", shop.player)
+									.replace("+client", playerName)
+									.replace("+item", transactionLine.getTypeIdDamage() + " (" + dataValuesFile.getName(transactionLine.getTypeIdDamage()) + ")")
+									.replace("+linePrice", "" + Math.abs(transactionLine.getLinePrice()))
+									.replace("+price", "" + transactionLine.getUnitPrice())
+									.replace("+quantity", "" + Math.abs(transactionLine.getAmount()))
+								);
 								player.sendMessage(
 									RealColor.text
 									+ lang.tr(strSide + " +item x+quantity (+linePrice)")
@@ -306,7 +328,7 @@ public class RealShopPlugin extends RealPlugin
 									.replace("+owner", RealColor.player + shop.player + RealColor.text)
 									.replace("+price", RealColor.price + transactionLine.getUnitPrice() + " " + realEconomy.getCurrency() + RealColor.text)
 									.replace("+quantity", RealColor.quantity + Math.abs(transactionLine.getAmount()) + RealColor.text)
-									.replace("  ", " ").replace("  ]", "]").replace("  [", "[")
+									.replace("  ", " ").replace(" ]", "]").replace("[ ", "[")
 								);
 								if (shopPlayer != null) {
 									shopPlayer.sendMessage(
@@ -319,7 +341,7 @@ public class RealShopPlugin extends RealPlugin
 										.replace("+owner", RealColor.player + shop.player + RealColor.text)
 										.replace("+price", RealColor.price + transactionLine.getUnitPrice() + " " + realEconomy.getCurrency() + RealColor.text)
 										.replace("+quantity", RealColor.quantity + Math.abs(transactionLine.getAmount()) + RealColor.text)
-										.replace("  ", " ").replace("  ]", "]").replace("  [", "[")
+										.replace("  ", " ").replace(" ]", "]").replace("[ ", "[")
 									);
 								}
 								had_message = true;
@@ -413,8 +435,24 @@ public class RealShopPlugin extends RealPlugin
 							player.sendMessage(
 								RealColor.cancel
 								+ lang.tr("No market price for +item")
-								.replace("+item", RealColor.item + dataValuesFile.getName(param2) + RealColor.message)
+								.replace("+item", RealColor.item + dataValuesFile.getName(param2) + RealColor.cancel)
 							);
+							price = marketFile.getPrice(param2);
+							if (price == null) {
+								player.sendMessage(
+									RealColor.cancel
+									+ lang.tr("Price can't be calculated from recipes for +item")
+									.replace("+item", RealColor.item + dataValuesFile.getName(param2) + RealColor.cancel)
+								);
+							} else {
+								player.sendMessage(
+									RealColor.message
+									+ lang.tr("Calculated price (from recipes) for +item : buy +buy, sell +sell")
+									.replace("+item", RealColor.item + dataValuesFile.getName(param2) + RealColor.message)
+									.replace("+buy", RealColor.price + price.buy + RealColor.message)
+									.replace("+sell", RealColor.price + price.sell + RealColor.message)
+								);
+							}
 						} else {
 							player.sendMessage(
 								RealColor.message
@@ -846,12 +884,11 @@ public class RealShopPlugin extends RealPlugin
 	public void pluginInfosPrices(Player player)
 	{
 		log.info("Market prices list :");
-		String[] ids = dataValuesFile.getIds();
-		for (int i = 0; i < ids.length; i++) {
-			RealPrice price = marketFile.getPrice(ids[i]);
+		for (String id : dataValuesFile.getIds()) {
+			RealPrice price = marketFile.getPrice(id);
 			if (price != null) {
 				log.info(
-						"SHOP PRICES : " + ids[i] + " (" + dataValuesFile.getName(ids[i]) + ") :"
+						"- " + id + " (" + dataValuesFile.getName(id) + ") :"
 						+ " buy " + price.getBuy() + " sell " + price.getSell()
 				);
 			}
@@ -866,7 +903,7 @@ public class RealShopPlugin extends RealPlugin
 	 */
 	public void pluginInfosDailyLog(Player player)
 	{
-		log.info("Daily log status is : " + dailyLog.toString());
+		dailyLog.toLog(log);
 	}
 
 	//---------------------------------------------------------------------------------------- reload
@@ -944,7 +981,7 @@ public class RealShopPlugin extends RealPlugin
 				} else if (c == '-') {
 					plus = false;
 				}
-			} else if ((c >= '0') && (c <= '9')) {
+			} else if (((c >= '0') && (c <= '9')) || (c == ':')) {
 				strTypeId += c;
 			}
 			index ++;

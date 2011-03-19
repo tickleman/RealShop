@@ -59,7 +59,7 @@ public class RealShopsFile
 	}
 
 	//------------------------------------------------------------------------------------------ load
-	public void load()
+	public RealShopsFile load()
 	{
 		RealTools.renameFile(
 			"plugins/" + plugin.name + "/" + fileName + ".cfg",
@@ -104,6 +104,7 @@ public class RealShopsFile
 				"Needs plugins/" + plugin.name + "/" + fileName + ".txt file (will auto-create)"
 			);
 		}
+		return this;
 	}
 
 	//------------------------------------------------------------------------------------------ save

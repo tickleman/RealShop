@@ -26,7 +26,7 @@ public class RealDataValuesFile
 	/**
 	 * Load data values file from hard drive
 	 */
-	public void load()
+	public RealDataValuesFile load()
 	{
 		RealTools.renameFile(
 			"plugins/" + plugin.name + "/" + fileName + ".cfg",
@@ -39,7 +39,7 @@ public class RealDataValuesFile
 			names.clear();
 			recipes.clear();
 			BufferedReader reader = new BufferedReader(
-					new FileReader("plugins/" + plugin.name + "/" + fileName + ".txt")
+				new FileReader("plugins/" + plugin.name + "/" + fileName + ".txt")
 			);
 			String buffer;
 			StringTokenizer line;
@@ -66,11 +66,12 @@ public class RealDataValuesFile
 		} catch (Exception e) {
 			plugin.log.severe("Needs plugins/" + plugin.name + "/" + fileName + ".txt file");
 		}
+		return this;
 	}
 
 	//---------------------------------------------------------------------------------------- getIds
 	/**
-	 * Get full id list into an integer array
+	 * Get full id list into a "typeId:damageValue" array
 	 */
 	public String[] getIds()
 	{

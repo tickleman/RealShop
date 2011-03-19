@@ -28,7 +28,7 @@ public class RealTranslationFile
 	}
 
 	//------------------------------------------------------------------------------------------ load
-	public void load()
+	public RealTranslationFile load()
 	{
 		translations.clear();
 		RealTools.renameFile(
@@ -70,6 +70,7 @@ public class RealTranslationFile
 				);
 			}
 		}
+		return this;
 	}
 
 	//-------------------------------------------------------------------------------------------- tr

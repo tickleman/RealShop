@@ -29,7 +29,7 @@ public class RealConfig
 	}
 
 	//---------------------------------------------------------------------------------------- load
-	public void load()
+	public RealConfig load()
 	{
 		RealTools.renameFile(
 			"plugins/" + plugin.name + "/" + fileName + ".cfg",
@@ -68,6 +68,7 @@ public class RealConfig
 			save();
 		}
 		plugin.language = language;
+		return this;
 	}
 
 	//------------------------------------------------------------------------------------- loadValue

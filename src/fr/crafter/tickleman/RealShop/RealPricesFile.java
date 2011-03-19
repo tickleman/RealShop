@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 
+import fr.crafter.tickleman.RealPlugin.RealDataValuesFile;
 import fr.crafter.tickleman.RealPlugin.RealTools;
 
 //###################################################################################### PricesFile
@@ -195,15 +196,17 @@ public class RealPricesFile
 	//------------------------------------------------------------------------------------------ load
 	public RealPricesFile load()
 	{
+		boolean willSave = false;
 		RealTools.renameFile(
 			"plugins/" + plugin.name + "/" + fileName + ".cfg",
 			"plugins/" + plugin.name + "/" + fileName + ".txt"
 		);
 		if (
-			(fileName.equals("market.txt"))
+			(fileName.equals("market"))
 			&& !RealTools.fileExists("plugins/" + plugin.name + "/" + fileName + ".txt")
 		) {
 			RealTools.extractDefaultFile(plugin, fileName + ".txt");
+			willSave = true;
 		}
 		try {
 			prices.clear();
@@ -231,15 +234,12 @@ public class RealPricesFile
 			}
 			reader.close();
 		} catch (Exception e) {
-			if (fileName.equals("market.txt")) {
+			if (fileName.equals("market")) {
 				plugin.log.severe("Needs plugins/" + plugin.name + "/" + fileName + ".txt file");
-			} else {
-				/*
-				plugin.log.info(
-					"No player prices file plugins/" + plugin.name + "/" + fileName + ".txt"
-				);
-				*/
 			}
+		}
+		if (willSave) {
+			save();
 		}
 		return this;
 	}
@@ -268,7 +268,7 @@ public class RealPricesFile
 			BufferedWriter writer = new BufferedWriter(
 				new FileWriter("plugins/" + plugin.name + "/" + fileName + ".txt")
 			);
-			writer.write("item;buy;sell;name\n");
+			writer.write("#item:dm;buy;sell;name\n");
 			Iterator<String> iterator = prices.keySet().iterator();
 			while (iterator.hasNext()) {
 				String typeIdDamage = iterator.next();
@@ -285,6 +285,41 @@ public class RealPricesFile
 			writer.close();
 		} catch (Exception e) {
 			plugin.log.severe("Could not save plugins/" + plugin.name + "/" + fileName + ".txt file");
+		}
+		// Save all current values (including calculated prices) into currentValues.txt
+		if (fileName == "market") {
+			try {
+				RealDataValuesFile dataValues = new RealDataValuesFile(plugin, "dataValues").load();
+				BufferedWriter writer = new BufferedWriter(
+					new FileWriter("plugins/" + plugin.name + "/currentValues.txt")
+				);
+				writer.write("#item:dm;buy;sell;name\n");
+				for (String typeIdDamage : dataValues.getIds()) {
+					RealPrice price = getPrice(typeIdDamage, null);
+					if (price != null) {
+						writer.write(
+							typeIdDamage + ";"
+							+ price.buy + ";"
+							+ price.sell + ";"
+							+ plugin.dataValuesFile.getName(typeIdDamage)
+							+ "\n"
+						);
+					} else {
+						writer.write(
+							typeIdDamage + ";0;0;"
+							+ plugin.dataValuesFile.getName(typeIdDamage)
+							+ "\n"
+						);
+					}
+				}
+				plugin.log.debug("END");
+				writer.flush();
+				writer.close();
+			} catch (Exception e) {
+				plugin.log.error("Could not save plugins/" + plugin.name + "/dataValues.txt file");
+				plugin.log.error(e.getMessage());
+				plugin.log.error(e.getStackTrace().toString());
+			}
 		}
 	}
 

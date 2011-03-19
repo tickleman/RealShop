@@ -29,7 +29,7 @@ public class RealAccountsFile
 	}
 
 	//------------------------------------------------------------------------------------------ load
-	public void load()
+	public RealAccountsFile load()
 	{
 		RealTools.renameFile(
 			"plugins/" + plugin.name + "/" + fileName + ".cfg",
@@ -60,6 +60,7 @@ public class RealAccountsFile
 			);
 			save();
 		}
+		return this;
 	}
 
 	//------------------------------------------------------------------------------------------ save

@@ -32,7 +32,7 @@ public class RealShopConfig extends RealConfig
 
 	//------------------------------------------------------------------------------------------ load
 	@Override
-	public void load()
+	public RealShopConfig load()
 	{
 		super.load();
 		if (!economyPlugin.equals("RealEconomy") && !economyPlugin.equals("iConomy")) {
@@ -41,6 +41,7 @@ public class RealShopConfig extends RealConfig
 			);
 			economyPlugin = "RealEconomy";
 		}
+		return this;
 	}
 
 	//------------------------------------------------------------------------------------- loadValue

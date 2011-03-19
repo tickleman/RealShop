@@ -105,7 +105,7 @@ public class RealPricesFile
 	 * - stick (typeId=280) : 5*2=4 : 2 wooden planks gives you 4 sticks
 	 * - diamond hoe (typeId=293) : 280*2+264*2 : 2 sticks and 2 diamonds give you 1 diamond hoe
 	 */
-	public RealPrice fromRecipe(String typeIdDamage)
+	public RealPrice fromRecipe(String typeIdDamage, RealPricesFile marketFile)
 	{
 		String recipe = plugin.dataValuesFile.getRecipe(typeIdDamage);
 		if (recipe.equals("")) {
@@ -146,7 +146,7 @@ public class RealPricesFile
 				String compId = "0";
 				try { compId = comp; } catch (Exception e) {}
 				// calculate price
-				RealPrice compPrice = getPrice(compId);
+				RealPrice compPrice = getPrice(compId, marketFile);
 				if (compPrice == null) {
 					price = null;
 					break;
@@ -172,29 +172,43 @@ public class RealPricesFile
 	}
 
 	//-------------------------------------------------------------------------------------- getPrice
-	public RealPrice getPrice(String typeIdDamage)
+	public RealPrice getPrice(String typeIdDamage, RealPricesFile marketFile)
+	{
+		return getPrice(typeIdDamage, marketFile, true);
+	}
+
+	//-------------------------------------------------------------------------------------- getPrice
+	public RealPrice getPrice(String typeIdDamage, RealPricesFile marketFile, boolean recipe)
 	{
 		RealPrice price = prices.get(typeIdDamage);
 		if (price == null) {
-			price = fromRecipe(typeIdDamage);
+			if (marketFile != null) {
+				price = marketFile.getPrice(typeIdDamage, null, false);
+			}
+			if (recipe && (price == null)) {
+				price = fromRecipe(typeIdDamage, marketFile);
+			}
 		}
 		return price; 
 	}
 
 	//------------------------------------------------------------------------------------------ load
-	public void load()
+	public RealPricesFile load()
 	{
 		RealTools.renameFile(
 			"plugins/" + plugin.name + "/" + fileName + ".cfg",
 			"plugins/" + plugin.name + "/" + fileName + ".txt"
 		);
-		if (!RealTools.fileExists("plugins/" + plugin.name + "/" + fileName + ".txt")) {
+		if (
+			(fileName.equals("market.txt"))
+			&& !RealTools.fileExists("plugins/" + plugin.name + "/" + fileName + ".txt")
+		) {
 			RealTools.extractDefaultFile(plugin, fileName + ".txt");
 		}
 		try {
 			prices.clear();
 			BufferedReader reader = new BufferedReader(
-					new FileReader("plugins/" + plugin.name + "/" + fileName + ".txt")
+				new FileReader("plugins/" + plugin.name + "/" + fileName + ".txt")
 			);
 			String buffer;
 			StringTokenizer line;
@@ -217,7 +231,33 @@ public class RealPricesFile
 			}
 			reader.close();
 		} catch (Exception e) {
-			plugin.log.severe("Needs plugins/" + plugin.name + "/" + fileName + ".txt file");
+			if (fileName.equals("market.txt")) {
+				plugin.log.severe("Needs plugins/" + plugin.name + "/" + fileName + ".txt file");
+			} else {
+				/*
+				plugin.log.info(
+					"No player prices file plugins/" + plugin.name + "/" + fileName + ".txt"
+				);
+				*/
+			}
+		}
+		return this;
+	}
+
+	//--------------------------------------------------------------------------- playerHasPricesFile
+	public static boolean playerHasPricesFile(RealShopPlugin plugin, String player)
+	{
+		return RealTools.fileExists("plugins/" + plugin.name + "/" + player + ".prices.txt");
+	}
+
+	//------------------------------------------------------------------------------ playerPricesFile
+	public static RealPricesFile playerPricesFile(
+		RealShopPlugin plugin, String player, RealPricesFile defaultFile
+	) {
+		if (playerHasPricesFile(plugin, player) || (defaultFile == null)) {
+			return new RealPricesFile(plugin, player + ".prices").load();
+		} else {
+			return defaultFile;
 		}
 	}
 

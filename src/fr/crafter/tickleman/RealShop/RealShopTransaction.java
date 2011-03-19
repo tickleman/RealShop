@@ -16,6 +16,7 @@ public class RealShopTransaction
 	private String shopPlayerName;
 	private RealItemStackHashMap itemStackHashMap;
 	private RealPricesFile pricesFile;
+	private RealPricesFile marketFile;
 	private double totalPrice = (double)0;
 	private boolean cancelAll = false;
 
@@ -30,13 +31,15 @@ public class RealShopTransaction
 		String playerName,
 		String shopPlayerName,
 		RealItemStackHashMap itemStackHashMap,
-		RealPricesFile pricesFile
+		RealPricesFile pricesFile,
+		RealPricesFile marketFile
 	) {
 		this.plugin = plugin;
 		this.playerName = playerName;
 		this.shopPlayerName = shopPlayerName;
 		this.itemStackHashMap = itemStackHashMap;
 		this.pricesFile = pricesFile;
+		this.marketFile = marketFile;
 	}
 
 	//######################################################################################## PUBLIC
@@ -47,14 +50,11 @@ public class RealShopTransaction
 		String playerName,
 		String shopPlayerName,
 		RealItemStackHashMap itemStackHashMap,
-		RealPricesFile pricesFile
+		RealPricesFile pricesFile,
+		RealPricesFile marketFile
 	) {
 		return new RealShopTransaction(
-			plugin,
-			playerName,
-			shopPlayerName,
-			itemStackHashMap,
-			pricesFile
+			plugin, playerName, shopPlayerName, itemStackHashMap, pricesFile, marketFile
 		);
 	}
 
@@ -84,7 +84,10 @@ public class RealShopTransaction
 			RealItemStack itemStack = iterator.next();
 			int amount = itemStack.getAmount();
 			String typeIdDamage = itemStack.getTypeIdDamage();
-			RealPrice price = pricesFile.getPrice(typeIdDamage);
+			RealPrice price = pricesFile.getPrice(typeIdDamage, marketFile);
+			if (price == null) {
+				price = marketFile.getPrice(typeIdDamage, null);
+			}
 			RealShopTransactionLine transactionLine = new RealShopTransactionLine(itemStack, price);
 			if (
 				(price == null)

@@ -3,6 +3,7 @@
 Dropping items when you are in a shop is prohibited=Il est interdit de deposer des objets lorsque vous etes dans un magasin 
 Nothing can be sold here=Rien ne peut etre vendu ici
 Nothing to buy here=Rien ne peut etre achete ici
+Price can't be calculated from recipes for +item=Le prix ne peut etre calcule pour +item
 The shop +name is already in use by player +client=Le magasin +name est utilise par le joueur +client
 You can buy +items=Vous pouvez acheter +items
 You can sell +items=Vous pouvez vendre +items
@@ -44,7 +45,16 @@ Welcome into your shop +name=Bienvenue dans votre magasin +name
 You must select a chest-shop before typing any /rshop command=Vous devez selectionner un coffre-magasin avant de taper une commande /rshop
 You selected +owner's shop +name=Vous avez selectionne le magasin +name de +owner
 
+# SHOP OWNER : PRICES SETTINGS
+Calculated price (from market/recipes) for +item : buy +buy, sell +sell=Prix calcule (marche/recettes) pour +item : achat +buy, vente +sell
+Error while setting player's price for +item=Erreur dans votre prix du joueur pour +item
+No player's price for +item=Pas de prix du joueur pour +item
+Player's price deleted for +item=Prix du joueur supprime pour +item
+Player's price for +item : buy +buy, sell +sell=Prix du joueur pour +item : achat +buy, vente +sell
+You did not set any price=Vous n'avez defini aucun prix
+
 # OPERATORS
+Calculated price (from recipes) for +item : buy +buy, sell +sell=Prix calcule (recettes) pour +item : achat +buy, vente +sell
 Daily log was dumped into the realshop.log file=Daily log was dumped into the realshop.log file
 Daily prices calculation simulation is into the realshop.log file=Daily prices calculation simulation is into the realshop.log file
 Error while setting market price for +item=Erreur dans votre prix du marche pour +item
@@ -57,6 +67,7 @@ Reload RealShop configuration files=Reload RealShop configuration files
 # DOCUMENTATION
 Usage: +command=Usage: +command
 /rshop market <itemId>[:<itemDamage>] <sellPrice> <buyPrice>=/rshop market <idArticle>[:<variante>] <prixVente> <prixAchat>
+/rshop price <itemId>[:<itemDamage>] <sellPrice> <buyPrice>=/rshop price <idArticle>[:<variante>] <prixVente> <prixAchat>
 
 # INFORMATION
 +owner's shop +name : +opened=Magasin +name de +owner : +opened

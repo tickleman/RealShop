@@ -198,8 +198,9 @@ public class RealShopPlugin extends RealPlugin
 				Player shopPlayer = getServer().getPlayer(shopPlayerName);
 				boolean had_message = false;
 				if (!shop.player.equals(player.getName())) {
-					// reload prices
-					marketFile.load();
+					RealPricesFile pricesFile = RealPricesFile.playerPricesFile(
+						this, shopPlayerName, marketFile
+					);
 					// remove new chest's inventory items from old chest's inventory
 					// in order to know how many of each has been buy (positive) / sold (negative)
 					inChestState.itemStackHashMap.storeInventory(
@@ -207,7 +208,7 @@ public class RealShopPlugin extends RealPlugin
 					);
 					// prepare bill
 					RealShopTransaction transaction = RealShopTransaction.create(
-						this, playerName, shopPlayerName, inChestState.itemStackHashMap, marketFile
+						this, playerName, shopPlayerName, inChestState.itemStackHashMap, pricesFile, marketFile
 					).prepareBill(shopsFile.shopAt(inChestState.block));
 					if (transaction.isCancelled()) {
 						// transaction is fully cancelled : items go back in their original inventories
@@ -431,10 +432,10 @@ public class RealShopPlugin extends RealPlugin
 							+ lang.tr("Market price deleted for +item")
 							.replace("+item", RealColor.item + dataValuesFile.getName(param3) + RealColor.message)
 						);
-					} else if (args.length > 3) {
+					} else if (args.length > 2) {
 						try {
 							RealPrice price = new RealPrice(
-								Double.parseDouble(param3), Double.parseDouble(param4)
+								Double.parseDouble(param3), Double.parseDouble(param4.equals("") ? param3 : param4)
 							);
 							marketFile.prices.put(param2, price);
 							marketFile.save();
@@ -465,7 +466,7 @@ public class RealShopPlugin extends RealPlugin
 								+ lang.tr("No market price for +item")
 								.replace("+item", RealColor.item + dataValuesFile.getName(param2) + RealColor.cancel)
 							);
-							price = marketFile.getPrice(param2);
+							price = marketFile.getPrice(param2, null);
 							if (price == null) {
 								player.sendMessage(
 									RealColor.cancel
@@ -484,7 +485,87 @@ public class RealShopPlugin extends RealPlugin
 						} else {
 							player.sendMessage(
 								RealColor.message
-								+ lang.tr("Market price set for +item : buy +buy, sell +sell")
+								+ lang.tr("Market price for +item : buy +buy, sell +sell")
+								.replace("+item", RealColor.item + dataValuesFile.getName(param2) + RealColor.message)
+								.replace("+buy", RealColor.price + price.buy + RealColor.message)
+								.replace("+sell", RealColor.price + price.sell + RealColor.message)
+							);
+						}
+					}
+				} else if (param.equals("price") || param.equals("p")) {
+					if (param2.equals("")) {
+						pluginInfosPlayerPrices(player);
+					} else if (param2.equals("del") || param2.equals("d")) {
+						RealPricesFile pricesFile = RealPricesFile.playerPricesFile(
+							this, player.getName(), null
+						);
+						pricesFile.prices.remove(param3);
+						pricesFile.save();
+						player.sendMessage(
+							RealColor.message
+							+ lang.tr("Player's price deleted for +item")
+							.replace("+item", RealColor.item + dataValuesFile.getName(param3) + RealColor.message)
+						);
+					} else if (args.length > 2) {
+						RealPricesFile pricesFile = RealPricesFile.playerPricesFile(
+							this, player.getName(), null
+						);
+						try {
+							RealPrice price = new RealPrice(
+								Double.parseDouble(param3), Double.parseDouble(param4.equals("") ? param3 : param4)
+							);
+							pricesFile.prices.put(param2, price);
+							pricesFile.save();
+							player.sendMessage(
+								RealColor.message
+								+ lang.tr("Player's price for +item : buy +buy, sell +sell")
+								.replace("+item", RealColor.item + dataValuesFile.getName(param2) + RealColor.message)
+								.replace("+buy", RealColor.price + price.buy + RealColor.message)
+								.replace("+sell", RealColor.price + price.sell + RealColor.message)
+							);
+						} catch (Exception e) {
+							player.sendMessage(
+								RealColor.cancel
+								+ lang.tr("Error while setting player's price for +item")
+								.replace("+item", RealColor.item + dataValuesFile.getName(param2) + RealColor.cancel)
+							);
+							player.sendMessage(
+								RealColor.message
+								+ lang.tr("Usage: +command")
+								.replace("+command", RealColor.command + lang.tr("/rshop price <itemId>[:<itemDamage>] <sellPrice> <buyPrice>") + RealColor.message)
+							);
+						}
+					} else {
+						RealPricesFile pricesFile = RealPricesFile.playerPricesFile(
+							this, player.getName(), null
+						);
+						RealPrice price = pricesFile.prices.get(param2);
+						if (price == null) {
+							player.sendMessage(
+								RealColor.cancel
+								+ lang.tr("No player's price for +item")
+								.replace("+item", RealColor.item + dataValuesFile.getName(param2) + RealColor.cancel)
+							);
+							price = pricesFile.getPrice(param2, marketFile);
+							if (price == null) {
+								player.sendMessage(
+									RealColor.cancel
+									+ lang.tr("Price can't be calculated from recipes for +item")
+									.replace("+item", RealColor.item + dataValuesFile.getName(param2) + RealColor.cancel)
+								);
+							} else {
+								player.sendMessage(
+									RealColor.message
+									+ lang.tr("Calculated price (from market/recipes) for +item : buy +buy, sell +sell")
+									.replace("+item", RealColor.item + dataValuesFile.getName(param2) + RealColor.message)
+									.replace("+buy", RealColor.price + price.buy + RealColor.message)
+									.replace("+sell", RealColor.price + price.sell + RealColor.message)
+								);
+							}
+						} else {
+							player.sendMessage(
+								RealColor.message
+								+ lang.tr("Player's price for +item : buy +buy, sell +sell")
 								.replace("+item", RealColor.item + dataValuesFile.getName(param2) + RealColor.message)
 								.replace("+buy", RealColor.price + price.buy + RealColor.message)
 								.replace("+sell", RealColor.price + price.sell + RealColor.message)
@@ -903,6 +984,31 @@ public class RealShopPlugin extends RealPlugin
 		log.info(marketFile.prices.size() + " market prices");
 	}
 
+	//----------------------------------------------------------------------- pluginInfosPlayerPrices
+	public void pluginInfosPlayerPrices(Player player)
+	{
+		if (RealPricesFile.playerHasPricesFile(this, player.getName())) {
+			String log = "";
+			HashMap<String, RealPrice> prices = RealPricesFile
+				.playerPricesFile(this, player.getName(), marketFile)
+				.prices; 
+			for (String typeIdDamage : prices.keySet()) {
+				RealPrice price = prices.get(typeIdDamage);
+				if (log.length() > 0) {
+					log += RealColor.message + ", ";
+				}
+				log += RealColor.item + dataValuesFile.getName(typeIdDamage)
+				+ RealColor.message + ": "
+				+ RealColor.price + price.getBuy()
+				+ RealColor.message + "/"
+				+ RealColor.price + price.getSell();
+			}
+			player.sendMessage(RealColor.message + log);
+		} else {
+			player.sendMessage(RealColor.cancel + lang.tr("You did not set any price"));
+		}
+	}
+
 	//----------------------------------------------------------------------------- pluginInfosPrices
 	/**
 	 * Displays the whole market prices from RealShop
@@ -913,7 +1019,7 @@ public class RealShopPlugin extends RealPlugin
 	{
 		log.info("Market prices list :");
 		for (String id : dataValuesFile.getIds()) {
-			RealPrice price = marketFile.getPrice(id);
+			RealPrice price = marketFile.getPrice(id, null);
 			if (price != null) {
 				log.info(
 						"- " + id + " (" + dataValuesFile.getName(id) + ") :"
@@ -1101,6 +1207,9 @@ public class RealShopPlugin extends RealPlugin
 	{
 		RealShop shop = shopsFile.shopAt(block);
 		String list;
+		RealPricesFile pricesFile = RealPricesFile.playerPricesFile(
+			this, player.getName(), marketFile
+		);
 		// sell (may be a very long list)
 		list = "";
 		Iterator<String> sellIterator = shop.sellOnly.keySet().iterator();
@@ -1110,7 +1219,10 @@ public class RealShopPlugin extends RealPlugin
 		int count = 20;
 		while (sellIterator.hasNext()) {
 			String typeIdDamage = sellIterator.next();
-			RealPrice price = marketFile.getPrice(typeIdDamage);
+			RealPrice price = pricesFile.getPrice(typeIdDamage, marketFile);
+			if (price == null) {
+				price = marketFile.getPrice(typeIdDamage, null);
+			}
 			if ((price != null) && shop.isItemSellAllowed(typeIdDamage)) {
 				if (!list.equals("")) {
 					list += RealColor.message + ", ";
@@ -1142,7 +1254,10 @@ public class RealShopPlugin extends RealPlugin
 		while (buyIterator.hasNext()) {
 			RealItemStack item = buyIterator.next();
 			String typeIdDamage = item.getTypeIdDamage();
-			RealPrice price = marketFile.getPrice(typeIdDamage);
+			RealPrice price = pricesFile.getPrice(typeIdDamage, marketFile);
+			if (price == null) {
+				price = marketFile.getPrice(typeIdDamage, null);
+			}
 			if ((price != null) && shop.isItemBuyAllowed(typeIdDamage)) {
 				if (!list.equals("")) {
 					list += RealColor.message + ", ";

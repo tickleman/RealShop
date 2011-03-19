@@ -401,6 +401,9 @@ public class RealShopPlugin extends RealPlugin
 	{
 		if (sender instanceof Player) {
 			Player player = (Player)sender;
+			if (playersInChestCounter > 0) {
+				exitChest(player, true);
+			}
 			String command = cmd.getName().toLowerCase();
 			for (int i = 0; i < args.length; i++) {
 				args[i] = args[i];
@@ -923,18 +926,15 @@ public class RealShopPlugin extends RealPlugin
 		// check if shop already exists
 		RealShop shop = shopsFile.shops.get(key);
 		if ((mode == -1) || ((mode == 0) && (shop != null))) {
-			// if shop already exists or force removal : check if player has same name or op
-			if ((mode == -1) || player.isOp()) {
-				// remove shop
-				shopsFile.shops.remove(key);
-				if (neighborBlock != null) {
-					registerBlockAsShop(player, neighborBlock, shopName, -1);
-				}
-				shopsFile.save();
-				message = RealColor.message + lang.tr("The shop +name has been deleted")
-				.replace("+name", RealColor.shop + shop.name + RealColor.message)
-				.replace("  ", " ");
+			// remove shop
+			shopsFile.shops.remove(key);
+			if (neighborBlock != null) {
+				registerBlockAsShop(player, neighborBlock, shopName, -1);
 			}
+			shopsFile.save();
+			message = RealColor.message + lang.tr("The shop +name has been deleted")
+			.replace("+name", RealColor.shop + shop.name + RealColor.message)
+			.replace("  ", " ");
 		} else {
 			// if shop did not exist or force creation, then add shop
 			shop = new RealShop(

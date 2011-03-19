@@ -35,6 +35,11 @@ public class RealInventory
 	private ArrayList<ItemStack[]> itemStackBackup;
 
 	/**
+	 * Error log : when an item could not be removed, then it's logged here
+	 */
+	public ArrayList<RealItemStack> errorLog = new ArrayList<RealItemStack>();
+
+	/**
 	 * content is a collection of arrays of ItemStack objects
 	 * this can handle :
 	 * - small chest inventory (one inventory)
@@ -291,6 +296,7 @@ public class RealInventory
 	{
 		// backup inventories
 		backup();
+		int backupAmount = amount;
 		// scan inventories
 		for (int i = 0; i < inventories.length; i++) {
 			Inventory inventory = inventories[i];
@@ -306,7 +312,6 @@ public class RealInventory
 						// remove all remaining quantity from slot
 						itemStack.setAmount(itemAmount - amount);
 						update();
-						amount -= amount;
 						return true;
 					} else {
 						// empty slot
@@ -322,6 +327,7 @@ public class RealInventory
 		}
 		// if all quantity has not been moved, then rollback
 		restore();
+		errorLog.add(new RealItemStack(typeId, backupAmount, durability));
 		return false;
 	}
 
@@ -354,7 +360,7 @@ public class RealInventory
 	 * - return true if everything is OK
 	 */
 	public boolean storeRealItemStackList(
-		ArrayList<? extends RealItemStack> itemStackList, boolean reverse
+		ArrayList<? extends RealItemStack> itemStackList, boolean reverse, boolean restoreIfFail
 	) {
 		boolean ok = true;
 		ArrayList<ItemStack[]> itemStackBackup = backup();
@@ -367,10 +373,13 @@ public class RealInventory
 			} else {
 				ok = ok && add(itemStack.getTypeId(), amount, itemStack.getDurability());
 			}
-			if (!ok) {
+		}
+		if (!ok) {
+			if (restoreIfFail)  {
 				restore(itemStackBackup);
-				return false;
+				errorLog = new ArrayList<RealItemStack>();
 			}
+			return false;
 		}
 		return true;
 	}

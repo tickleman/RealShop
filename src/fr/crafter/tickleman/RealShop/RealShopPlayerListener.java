@@ -36,7 +36,7 @@ public class RealShopPlayerListener extends PlayerListener
 		System.out.println("onInventoryOpen");
 		// exit previous chest
 		if (plugin.playersInChestCounter > 0) {
-			plugin.exitChest(event.getPlayer());
+			plugin.exitChest(event.getPlayer(), false);
 		}
 	}
 
@@ -45,7 +45,7 @@ public class RealShopPlayerListener extends PlayerListener
 	public void onPlayerDropItem(PlayerDropItemEvent event)
 	{
 		if (plugin.playersInChestCounter > 0) {
-			// players that are into a shop-chest should not be able to throw items !
+			// players that are into a chest-shop should not be able to throw items !
 			Player player = event.getPlayer();
 			RealInChestState inChestInfo = plugin.inChestStates.get(player.getName());
 			if (
@@ -83,7 +83,7 @@ public class RealShopPlayerListener extends PlayerListener
 						inChestInfo.lastX = Math.round(player.getLocation().getX());
 						inChestInfo.lastZ = Math.round(player.getLocation().getZ());
 					} else {
-						plugin.exitChest(player);
+						plugin.exitChest(player, false);
 					}
 				}
 				nextMoveCheck = System.currentTimeMillis() + 1000; 
@@ -96,7 +96,10 @@ public class RealShopPlayerListener extends PlayerListener
 	public void onPlayerQuit(PlayerEvent event)
 	{
 		if (plugin.playersInChestCounter > 0) {
-			plugin.exitChest(event.getPlayer());
+			plugin.log.warning(
+				"Player " + event.getPlayer().getName() + " logs off being into a chest-shop !"
+			);
+			plugin.exitChest(event.getPlayer(), true);
 		}
 	}
 

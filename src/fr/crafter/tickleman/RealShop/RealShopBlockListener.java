@@ -34,7 +34,7 @@ public class RealShopBlockListener extends BlockListener
 		if (player != null) {
 			// exit previous chest
 			if (plugin.playersInChestCounter > 0) {
-				plugin.exitChest(player);
+				plugin.exitChest(player, false);
 			}
 			// only if block is a chest
 			Block block = event.getBlock();
@@ -64,7 +64,7 @@ public class RealShopBlockListener extends BlockListener
 				// exit previous chest
 				Player player = (Player)event.getEntity();
 				if (plugin.playersInChestCounter > 0) {
-					plugin.exitChest(player);
+					plugin.exitChest(player, false);
 				}
 				// select chest
 				plugin.selectChest(player, block, true);
@@ -114,7 +114,7 @@ public class RealShopBlockListener extends BlockListener
 	{
 		// exit previous chest
 		if (plugin.playersInChestCounter > 0) {
-			plugin.exitChest(event.getPlayer());
+			plugin.exitChest(event.getPlayer(), false);
 		}
 	}
 

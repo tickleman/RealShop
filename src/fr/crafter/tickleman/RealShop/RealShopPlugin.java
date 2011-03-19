@@ -43,7 +43,7 @@ public class RealShopPlugin extends RealPlugin
 	/** Daily log stores movements for each buy / sold item */
 	public RealShopDailyLog dailyLog = null;
 
-	/** Number of players that have opened a shop-chest */
+	/** Number of players that have opened a chest-shop */
 	public int playersInChestCounter = 0;
 
 	/** Data values files : complete list of Minecraft blocks and items */
@@ -186,7 +186,7 @@ public class RealShopPlugin extends RealPlugin
 	}
 
 	//------------------------------------------------------------------------------------- exitChest
-	public void exitChest(Player player)
+	public void exitChest(Player player, boolean playerQuits)
 	{
 		String playerName = player.getName();
 		RealInChestState inChestState = inChestStates.get(playerName);
@@ -214,10 +214,13 @@ public class RealShopPlugin extends RealPlugin
 						ArrayList<RealItemStack> itemStackList = inChestState.itemStackHashMap.getContents();
 						RealInventory
 							.create(inChestState.chest)
-							.storeRealItemStackList(itemStackList, false);
-						RealInventory
-							.create(player)
-							.storeRealItemStackList(itemStackList, true);
+							.storeRealItemStackList(itemStackList, false, false);
+						RealInventory inv = RealInventory.create(player);
+						if (!inv.storeRealItemStackList(itemStackList, true, false)) {
+							logStolenItems(player, shop, inv.errorLog);
+						} else if (playerQuits) {
+							logStolenItems(player, shop, itemStackList);
+						}
 						player.sendMessage(RealColor.cancel + lang.tr("Cancelled transaction"));
 						had_message = true;
 					} else {
@@ -225,10 +228,13 @@ public class RealShopPlugin extends RealPlugin
 						if (!transaction.cancelledLines.isEmpty()) {
 							RealInventory
 								.create(inChestState.chest)
-								.storeRealItemStackList(transaction.cancelledLines, false);
-							RealInventory
-								.create(player)
-								.storeRealItemStackList(transaction.cancelledLines, true);
+								.storeRealItemStackList(transaction.cancelledLines, false, false);
+							RealInventory inv = RealInventory.create(player);
+							if (!inv.storeRealItemStackList(transaction.cancelledLines, true, false)) {
+								logStolenItems(player, shop, inv.errorLog);
+							} else if (playerQuits) {
+								logStolenItems(player, shop, transaction.cancelledLines);
+							}
 							// display cancelled lines information
 							Iterator<RealShopTransactionLine> iterator = transaction.cancelledLines.iterator();
 							while (iterator.hasNext()) {
@@ -253,7 +259,7 @@ public class RealShopPlugin extends RealPlugin
 									.replace("+linePrice", RealColor.price + Math.abs(line.getLinePrice()) + RealColor.cancel)
 									.replace("+price", RealColor.price + line.getUnitPrice() + RealColor.cancel)
 									.replace("+quantity", RealColor.quantity + Math.abs(line.getAmount()) + RealColor.cancel)
-									.replace("+comment", line.comment)
+									.replace("+comment", lang.tr(line.comment))
 								);
 								had_message = true;
 							}
@@ -363,6 +369,28 @@ public class RealShopPlugin extends RealPlugin
 			lockedChests.remove(inChestState.chest.getChestId());
 			inChestStates.remove(playerName);
 			playersInChestCounter = inChestStates.size();
+		}
+	}
+
+	//-------------------------------------------------------------------------------- logStolenItems
+	public void logStolenItems(Player player, RealShop shop, ArrayList<? extends RealItemStack> items)
+	{
+		for (RealItemStack item : items) {
+			log.warning(
+				("[shop +name] +owner > +client: stolen +item x+quantity item duplicated !")
+				.replace("+name", shop.name)
+				.replace("+owner", shop.player)
+				.replace("+client", player.getName())
+				.replace("+item", item.getTypeIdDamage() + " (" + dataValuesFile.getName(item.getTypeIdDamage()) + ")")
+				.replace("+quantity", "" + Math.abs(item.getAmount()))
+				.replace("  ", " ").replace(" ]", "]").replace("[ ", "[")
+			);
+			player.sendMessage(
+				RealColor.cancel
+				+ lang.tr("Stolen +item x+quantity item duplicated !")
+				.replace("+item", RealColor.item + dataValuesFile.getName(item.getTypeIdDamage()) + RealColor.cancel)
+				.replace("+quantity", RealColor.quantity + Math.abs(item.getAmount()) + RealColor.cancel)
+			);
 		}
 	}
 
@@ -485,7 +513,7 @@ public class RealShopPlugin extends RealPlugin
 					// no chest selected
 					player.sendMessage(
 						RealColor.cancel
-						+ lang.tr("You must select a shop-chest before typing any /rshop command")
+						+ lang.tr("You must select a chest-shop before typing any /rshop command")
 					);
 				} else {
 					Block block = RealBlock.fromStrId(this, lastChestKey);

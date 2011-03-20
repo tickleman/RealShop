@@ -1,5 +1,7 @@
 package fr.crafter.tickleman.RealShop;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -22,6 +24,7 @@ import fr.crafter.tickleman.RealPlugin.RealItemStack;
 import fr.crafter.tickleman.RealPlugin.RealItemStackHashMap;
 import fr.crafter.tickleman.RealPlugin.RealPlugin;
 import fr.crafter.tickleman.RealPlugin.RealTime;
+import fr.crafter.tickleman.RealPlugin.RealTools;
 import fr.crafter.tickleman.RealPlugin.RealTranslationFile;
 
 //################################################################################## RealShopPlugin
@@ -373,6 +376,80 @@ public class RealShopPlugin extends RealPlugin
 		}
 	}
 
+	//------------------------------------------------------------------------------------------ help
+	public void help(Player player, boolean isOp, String page)
+	{
+		// choose help file
+		String l = language;
+		if (!RealTools.fileExists(getDataFolder() + "/" + l + ".help.txt")) {
+			RealTools.extractDefaultFile(this, l + ".help.txt");
+			if (!RealTools.fileExists(getDataFolder() + "/" + l + ".help.txt")) {
+				l = "en";
+				if (!RealTools.fileExists(getDataFolder() + "/" + l + ".help.txt")) {
+					RealTools.extractDefaultFile(this, l + ".help.txt");
+					if (!RealTools.fileExists(getDataFolder() + "/" + l + ".help.txt")) {
+						log.severe("No help file " + getDataFolder() + "/" + language + ".help.txt");
+						player.sendMessage(RealColor.cancel + lang.tr("/rshop HELP is not available"));
+						return;
+					}
+				}
+			}
+		}
+		// display help file
+		try {
+			if (page.equals("")) {
+				player.sendMessage(RealColor.text + lang.tr("/rshop HELP summary"));
+			}
+			BufferedReader reader = new BufferedReader(
+				new FileReader(getDataFolder() + "/" + l + ".help.txt")
+			);
+			String buffer;
+			boolean inside = false;
+			while ((buffer = reader.readLine()) != null) {
+				buffer = buffer.trim();
+				if (!buffer.equals("") && (buffer.charAt(0) != '#')) {
+					String[] hlp = buffer.split(":");
+					hlp[0] = hlp[0].trim();
+					if (hlp.length > 1) {
+						hlp[1] = hlp[1].trim();
+					}
+					if ((buffer.charAt(0) == '[') && (buffer.charAt(buffer.length() - 1) == ']')) {
+						// section header [help1|h|1 : text]
+						hlp[0] = hlp[0].substring(1).trim();
+						hlp[1] = hlp[1].substring(0, hlp[1].length() - 1).trim();
+						if (page.equals("")) {
+							// summary : display
+							player.sendMessage(
+								RealColor.command + "/rshop help " + hlp[0] + " "
+								+ RealColor.message + hlp[1]
+							);
+						} else {
+							// help page : check if in this section header and display title
+							inside = (("|" + hlp[0] + "|").indexOf("|" + page + "|") > -1);
+							if (inside) {
+								player.sendMessage(
+									RealColor.text
+									+ "/rshop HELP " + hlp[1]
+									+ " (" + hlp[0] + ")"
+								);
+							}
+						}
+					} else if (inside && buffer.charAt(0) == '/') {
+						// display help page command
+						player.sendMessage(RealColor.command + hlp[0] + " " + RealColor.message + hlp[1]);
+					} else if (inside) {
+						// display help page line
+						player.sendMessage(RealColor.message + buffer);
+					}
+				}
+			}
+			reader.close();
+		} catch (Exception e) {
+			log.severe(e.getMessage());
+			log.severe(e.getStackTrace().toString());
+		}
+	}
+
 	//-------------------------------------------------------------------------------- logStolenItems
 	public void logStolenItems(Player player, RealShop shop, ArrayList<? extends RealItemStack> items)
 	{
@@ -420,7 +497,9 @@ public class RealShopPlugin extends RealPlugin
 				String param3 = ((args.length > 2) ? args[2] : "");
 				String param4 = ((args.length > 3) ? args[3] : "");
 				// /rshop commands that do not need to be into a shop
-				if (isOp && (param.equals("reload") || param.equals("rel"))) {
+				if (param.equals("help") || param.equals("h") || param.equals("?")) {
+					help(player, isOp, param2);
+				} else if (isOp && (param.equals("reload") || param.equals("rel"))) {
 					reload(player);
 				} else if (isOp && (param.equals("check") || param.equals("chk"))) {
 					pluginInfos(player);
@@ -654,12 +733,36 @@ public class RealShopPlugin extends RealPlugin
 							if (neighbor != null) shopGive(player, neighbor, param2, true);
 						} else if (isOp && (param.equals("infiniteBuy") || param.equals("ib"))) {
 							shop.setFlag("infiniteBuy", param2);
+							player.sendMessage(
+								RealColor.message
+								+ lang.tr("Infinite buy flag is")
+								+ " " + RealColor.command
+								+ lang.tr(shop.getFlag("infiniteBuy", config.shopInfiniteBuy.equals("true")) ? "on" : "off")
+							);
 						} else if (isOp && (param.equals("infiniteSell") || param.equals("is"))) {
 							shop.setFlag("infiniteSell", param2);
+							player.sendMessage(
+								RealColor.message
+								+ lang.tr("Infinite sell flag is")
+								+ " " + RealColor.command
+								+ lang.tr(shop.getFlag("infiniteSell", config.shopInfiniteSell.equals("true")) ? "on" : "off")
+							);
 						} else if (param.equals("marketItemsOnly") || param.equals("mi")) {
 							shop.setFlag("marketItemsOnly", param2);
+							player.sendMessage(
+								RealColor.message
+								+ lang.tr("Trade market items only flag is")
+								+ " " + RealColor.command
+								+ lang.tr(shop.getFlag("marketItemsOnly", config.shopMarketItemsOnly.equals("true")) ? "on" : "off")
+							);
 						} else if (param.equals("damagedItems") || param.equals("di")) {
 							shop.setFlag("damagedItems", param2);
+							player.sendMessage(
+								RealColor.message
+								+ lang.tr("Damaged item buy/sell flag is")
+								+ " " + RealColor.command
+								+ lang.tr(shop.getFlag("damagedItems", config.shopDamagedItems.equals("true")) ? "on" : "off")
+							);
 						}
 					} else {
 						// /rshop commands on a chest that is a shop that belongs to someone else

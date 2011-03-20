@@ -11,7 +11,7 @@ public class RealTools
 	//---------------------------------------------------------------------------- extractDefaultFile
 	public static void extractDefaultFile(RealPlugin plugin, String name)
 	{
-		File actual = new File("plugins/" + plugin.name + "/" + name);
+		File actual = new File(plugin.getDataFolder() + "/" + name);
 		if (!actual.exists()) {
 			InputStream input = plugin.getClass().getResourceAsStream("/default/" + name);
 			if (input != null) {

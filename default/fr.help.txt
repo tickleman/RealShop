@@ -1,0 +1,38 @@
+[1|manage|s : gestion des magasins]
+/rshop create [<nom>] : cree un magasin
+/rshop delete : supprime un magasin
+/rshop close : fermeture temporaire
+/rshop open : reouverture
+/rshop : informations magasin
+
+[2|buysell|bs : restrictions ventes/achats]
+Utilisez ces commandes sans id pour avoir un statut
+/rshop buy [+<id>][-<id>][...] : ajout/suppr achats
+/rshop sell [+<id>][-<id>][...] : ajout/suppr ventes
+/rshop xbuy [+<id>][-<id>][...] : ajout/suppr achats interdits
+/rshop xsell [+<id>][-<id>][...] : ajout/suppr ventes interdites
+
+[3|flags|f : options des magasins]
+/rshop infiniteBuy on|off : achat illimite : auto-reremplissage (def: off)
+/rshop infiniteSell on|off : vente illimite : auto-vide (def: off)
+/rshop marketItemsOnly on|off : achat/vente produits du marche seulement (def: off)
+/rshop damagedItems on|off : achat/vente produits endommages (def: on)
+
+[4|prices|p|4 : gestion de votre tarif]
+/rshop price <idItem> <achat> [<vente>] : defini le prix d'un produit
+/rshop price del <idItem> : supprime un prix
+/rshop price <idItem> : affiche un prix
+/rshop price : affiche tous vos prix
+
+[5|market|m : gestion des prix du marche]
+/rshop market <idItem> <achat> [<vente>] : defini le prix d'un produit
+/rshop market del <idItem> : supprime un prix
+/rshop market <idItem> : affiche un prix
+/rshop market : affiche tous les prix du marche
+
+[6|admin|a : commandes administrateur]
+/rshop reload : recharge les fichiers de configuration
+/rshop check : informations generales magasins
+/rshop log : log des mouvements du jour
+/rshop simul : simulation recalcul du prix (realshop.log)
+/rshop daily : force recalcul du prix

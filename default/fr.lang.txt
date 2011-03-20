@@ -45,6 +45,14 @@ Welcome into your shop +name=Bienvenue dans votre magasin +name
 You must select a chest-shop before typing any /rshop command=Vous devez selectionner un coffre-magasin avant de taper une commande /rshop
 You selected +owner's shop +name=Vous avez selectionne le magasin +name de +owner
 
+# SHOP OWNER : FLAGS SETTINGS
+Damaged item buy/sell flag is=Flag accepte endommages est 
+Infinite buy flag is=Flag achat illimite est
+Infinite sell flag is=Flag vente illimitee est
+off=desactive
+on=active
+Trade market items only flag is=Flag articles du marge seulement est
+
 # SHOP OWNER : PRICES SETTINGS
 Calculated price (from market/recipes) for +item : buy +buy, sell +sell=Prix calcule (marche/recettes) pour +item : achat +buy, vente +sell
 Error while setting player's price for +item=Erreur dans votre prix du joueur pour +item
@@ -71,11 +79,12 @@ Usage: +command=Usage: +command
 
 # INFORMATION
 +owner's shop +name : +opened=Magasin +name de +owner : +opened
+/rshop HELP summary=/rshop HELP sommaire
 accepts damaged items=accepte endommages
 all=tous
 opened=ouvert
 closed=ferme
-infinite buy=vente illimite
-infinite sell=achat illimite
+infinite buy=achat illimite
+infinite sell=vente illimite
 market items only=marche seulement
 none=aucun

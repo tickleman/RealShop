@@ -17,7 +17,7 @@ public abstract class iConomyLink
 	private static String iConomyVersion = "4.x";
 	public static boolean initialized = false;
 
-	//----------------------------------------------------------------------------------- isInstalled
+	//------------------------------------------------------------------------------------------ init
 	public static boolean init(RealPlugin plugin)
 	{
 		iConomyLink.plugin = plugin;
@@ -40,7 +40,7 @@ public abstract class iConomyLink
 		return ok;
 	}
 
-	//---------------------------------------------------------------------------------- getBalance
+	//------------------------------------------------------------------------------------ getBalance
 	public static double getBalance(String playerName)
 	{
 		Account account = iConomy.getBank().getAccount(playerName);
@@ -65,7 +65,7 @@ public abstract class iConomyLink
 		}
 	}
 
-	//---------------------------------------------------------------------------------- getBalance
+	//----------------------------------------------------------------------------------- getCurrency
 	public static String getCurrency()
 	{
 		try {
@@ -84,7 +84,7 @@ public abstract class iConomyLink
 		}
 	}
 
-	//---------------------------------------------------------------------------------- getBalance
+	//------------------------------------------------------------------------------------ setBalance
 	public static boolean setBalance(String playerName, double balance)
 	{
 		boolean result = false;

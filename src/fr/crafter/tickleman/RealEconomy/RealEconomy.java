@@ -39,6 +39,8 @@ public class RealEconomy
 		Double balance = (double)0;
 		if (iConomyLink.initialized && economyPlugin.equals("iConomy")) {
 			balance = iConomyLink.getBalance(playerName);
+		} else if (BOSEconomyLink.initialized && economyPlugin.equals("BOSEconomy")) {
+			balance = BOSEconomyLink.getBalance(playerName);
 		} else {
 			balance = accountsFile.accounts.get(playerName);
 			if (balance == null) {
@@ -56,7 +58,9 @@ public class RealEconomy
 	public String getCurrency()
 	{
 		if (iConomyLink.initialized && economyPlugin.equals("iConomy")) {
-			return iConomyLink.getCurrency(); 
+			return iConomyLink.getCurrency();
+		} else if (BOSEconomyLink.initialized && economyPlugin.equals("BOSEconomy")) {
+			return BOSEconomyLink.getCurrency();
 		} else {
 			return config.currency;
 		}
@@ -67,6 +71,8 @@ public class RealEconomy
 	{
 		if (iConomyLink.initialized && economyPlugin.equals("iConomy")) {
 			return iConomyLink.setBalance(playerName, balance);
+		} else if (BOSEconomyLink.initialized && economyPlugin.equals("BOSEconomy")) {
+			return BOSEconomyLink.setBalance(playerName, balance);
 		} else {
 			try {
 				accountsFile.accounts.put(playerName, balance);

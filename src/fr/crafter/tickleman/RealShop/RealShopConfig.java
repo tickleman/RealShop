@@ -35,7 +35,11 @@ public class RealShopConfig extends RealConfig
 	public RealShopConfig load()
 	{
 		super.load();
-		if (!economyPlugin.equals("RealEconomy") && !economyPlugin.equals("iConomy")) {
+		if (
+			!economyPlugin.equals("RealEconomy")
+			&& !economyPlugin.equals("iConomy")
+			&& !economyPlugin.equals("BOSEconomy")
+		) {
 			plugin.log.warning(
 				"unknown economyPlugin " + economyPlugin + " was set to RealEconomy instead", true
 			);

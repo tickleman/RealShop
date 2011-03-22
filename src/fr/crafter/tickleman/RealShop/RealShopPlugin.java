@@ -76,7 +76,7 @@ public class RealShopPlugin extends RealPlugin
 	//-------------------------------------------------------------------------------- RealShopPlugin
 	public RealShopPlugin()
 	{
-		super("tickleman", "RealShop", "0.55");
+		super("tickleman", "RealShop", "0.56");
 		realEconomy = new RealEconomy(this);
 	}
 
@@ -216,28 +216,30 @@ public class RealShopPlugin extends RealPlugin
 					if (transaction.isCancelled()) {
 						// transaction is fully cancelled : items go back in their original inventories
 						ArrayList<RealItemStack> itemStackList = inChestState.itemStackHashMap.getContents();
-						RealInventory
-							.create(inChestState.chest)
-							.storeRealItemStackList(itemStackList, false, false);
 						RealInventory inv = RealInventory.create(player);
 						if (!inv.storeRealItemStackList(itemStackList, true, false)) {
 							logStolenItems(player, shop, inv.errorLog);
 						} else if (playerQuits) {
 							logStolenItems(player, shop, itemStackList);
+						} else {
+							RealInventory
+							.create(inChestState.chest)
+							.storeRealItemStackList(itemStackList, false, false);
 						}
 						player.sendMessage(RealColor.cancel + lang.tr("Cancelled transaction"));
 						had_message = true;
 					} else {
 						// some lines cancelled : corresponding items go back to their original inventories
 						if (!transaction.cancelledLines.isEmpty()) {
-							RealInventory
-								.create(inChestState.chest)
-								.storeRealItemStackList(transaction.cancelledLines, false, false);
 							RealInventory inv = RealInventory.create(player);
 							if (!inv.storeRealItemStackList(transaction.cancelledLines, true, false)) {
 								logStolenItems(player, shop, inv.errorLog);
 							} else if (playerQuits) {
 								logStolenItems(player, shop, transaction.cancelledLines);
+							} else {
+								RealInventory
+								.create(inChestState.chest)
+								.storeRealItemStackList(transaction.cancelledLines, false, false);
 							}
 							// display cancelled lines information
 							Iterator<RealShopTransactionLine> iterator = transaction.cancelledLines.iterator();

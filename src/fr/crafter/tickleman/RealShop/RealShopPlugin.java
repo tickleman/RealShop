@@ -76,7 +76,7 @@ public class RealShopPlugin extends RealPlugin
 	//-------------------------------------------------------------------------------- RealShopPlugin
 	public RealShopPlugin()
 	{
-		super("tickleman", "RealShop", "0.56");
+		super("tickleman", "RealShop", "0.57");
 		realEconomy = new RealEconomy(this);
 	}
 
@@ -494,7 +494,7 @@ public class RealShopPlugin extends RealPlugin
 				boolean isOp = player.isOp();
 				String playerName = player.getName();
 				String lastChestKey = lastSelectedChest.get(playerName);
-				String param = ((args.length > 0) ? args[0] : "");
+				String param  = ((args.length > 0) ? args[0] : "");
 				String param2 = ((args.length > 1) ? args[1] : "");
 				String param3 = ((args.length > 2) ? args[2] : "");
 				String param4 = ((args.length > 3) ? args[3] : "");
@@ -1312,9 +1312,7 @@ public class RealShopPlugin extends RealPlugin
 	{
 		RealShop shop = shopsFile.shopAt(block);
 		String list;
-		RealPricesFile pricesFile = RealPricesFile.playerPricesFile(
-			this, player.getName(), marketFile
-		);
+		RealPricesFile pricesFile = RealPricesFile.playerPricesFile(this, shop.player, marketFile);
 		// sell (may be a very long list)
 		list = "";
 		Iterator<String> sellIterator = shop.sellOnly.keySet().iterator();

@@ -76,7 +76,7 @@ public class RealShopPlugin extends RealPlugin
 	//-------------------------------------------------------------------------------- RealShopPlugin
 	public RealShopPlugin()
 	{
-		super("tickleman", "RealShop", "0.57");
+		super("tickleman", "RealShop", "0.58");
 		realEconomy = new RealEconomy(this);
 	}
 
@@ -98,13 +98,13 @@ public class RealShopPlugin extends RealPlugin
 	{
 		// events listeners
 		PluginManager pm = getServer().getPluginManager();
-		pm.registerEvent(Event.Type.BLOCK_DAMAGED, blockListener, Priority.Normal, this);
-		pm.registerEvent(Event.Type.BLOCK_INTERACT, blockListener, Priority.Normal, this);
-		pm.registerEvent(Event.Type.BLOCK_PLACED, blockListener, Priority.Normal, this);
+		pm.registerEvent(Event.Type.BLOCK_DAMAGE, blockListener, Priority.Normal, this);
+		pm.registerEvent(Event.Type.BLOCK_PLACE, blockListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.INVENTORY_OPEN, playerListener, Priority.Normal, this);
+		pm.registerEvent(Event.Type.PLAYER_DROP_ITEM, playerListener, Priority.Normal, this);
+		pm.registerEvent(Event.Type.PLAYER_INTERACT, playerListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_MOVE, playerListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_QUIT, playerListener, Priority.Normal, this);
-		pm.registerEvent(Event.Type.PLAYER_DROP_ITEM, playerListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLUGIN_ENABLE, pluginListener, Priority.Normal, this);
 		// read configuration file
 		config = new RealShopConfig(this);
@@ -126,7 +126,7 @@ public class RealShopPlugin extends RealPlugin
 		if (config.economyPlugin.equals("RealEconomy")) {
 			log.info("Uses built-in RealEconomy (/mny commands) as economy system", true);
 		}
-		pluginListener.onPluginEnabled(null);
+		pluginListener.onPluginEnable(null);
 		// enable
 		super.onEnable();
 	}

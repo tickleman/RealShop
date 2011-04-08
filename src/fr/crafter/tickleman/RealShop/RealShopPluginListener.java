@@ -1,6 +1,6 @@
 package fr.crafter.tickleman.RealShop;
 
-import org.bukkit.event.server.PluginEvent;
+import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.event.server.ServerListener;
 
 import fr.crafter.tickleman.RealEconomy.BOSEconomyLink;
@@ -20,9 +20,9 @@ public class RealShopPluginListener extends ServerListener
 		this.plugin = plugin;
 	}
 
-	//------------------------------------------------------------------------------- onPluginEnabled
+	//-------------------------------------------------------------------------------- onPluginEnable
 	@Override
-	public void onPluginEnabled(PluginEvent event)
+	public void onPluginEnable(PluginEnableEvent event)
 	{
 		if (plugin.config.economyPlugin.equals("iConomy") && !iConomyLink.initialized) {
 			Plugin iConomy = plugin.getServer().getPluginManager().getPlugin("iConomy");

@@ -7,7 +7,6 @@ import java.util.Iterator;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-
 //############################################################################ RealItemStackHashMap
 public class RealItemStackHashMap
 {
@@ -29,25 +28,27 @@ public class RealItemStackHashMap
 	//----------------------------------------------------------------------------------- storeItem
 	private void storeItem(ItemStack item, boolean removal)
 	{
-		Integer itemAmount = item.getAmount();
-		if (itemAmount != 0) {
-			Integer typeId = new Integer(item.getTypeId());
-			HashMap<Short, Integer> typeIdContent = content.get(typeId);
-			if (typeIdContent == null) {
-				content.put(typeId, typeIdContent = new HashMap<Short, Integer>());
-			}
-			Short durability = item.getDurability();
-			Integer amount = typeIdContent.get(durability);
-			if (amount == null) {
-				amount = 0;
-			}
-			amount = (removal ? (amount - itemAmount) : (amount + itemAmount));
-			if (amount != 0) {
-				typeIdContent.put(durability, amount);
-			} else {
-				typeIdContent.remove(durability);
-				if (typeIdContent.isEmpty()) {
-					content.remove(typeId);
+		if (item != null) {
+			Integer itemAmount = item.getAmount();
+			if (itemAmount != 0) {
+				Integer typeId = new Integer(item.getTypeId());
+				HashMap<Short, Integer> typeIdContent = content.get(typeId);
+				if (typeIdContent == null) {
+					content.put(typeId, typeIdContent = new HashMap<Short, Integer>());
+				}
+				Short durability = item.getDurability();
+				Integer amount = typeIdContent.get(durability);
+				if (amount == null) {
+					amount = 0;
+				}
+				amount = (removal ? (amount - itemAmount) : (amount + itemAmount));
+				if (amount != 0) {
+					typeIdContent.put(durability, amount);
+				} else {
+					typeIdContent.remove(durability);
+					if (typeIdContent.isEmpty()) {
+						content.remove(typeId);
+					}
 				}
 			}
 		}

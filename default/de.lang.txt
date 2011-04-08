@@ -1,0 +1,90 @@
+# CLIENT
++owner's shop +name is closed=+owners Laden +name ist geschlossen
+Dropping items when you are in a shop is prohibited=Es ist verboten, Gegenstände im Laden fallen zu lassen
+Nothing can be sold here=Hier kann nichts verkauft werden
+Nothing to buy here=Hier kann nichts gekauft werden
+Price can't be calculated from recipes for +item=Der Preis des Gegenstands +item kann nicht berechnet werden
+The shop +name is already in use by player +client=Der Laden +name wurde bereits von einem anderen Spieler eröffnet
+You can buy +items=Kaufe hier: +items
+You can sell +items=Verkaufe hier: +items
+Welcome into +owner's shop +name. You've got +money in your pocket= Willkommen im +name! Inhaber: +owner. Du hast +money dabei
+
+# CLIENT : TRANSACTION
+Cancelled purchase +item x+quantity (+linePrice) +comment=Einkauf storniert +item x+quantity (+linePrice) +comment
+Cancelled sale +item x+quantity (+linePrice) +comment=Verkauf storniert +item x+quantity (+linePrice) +comment
+Cancelled transaction=Handel wurde abgebrochen
+No transaction=Kein Handel zustande gekommen
+Purchased +item x+quantity (+linePrice)=+quantity +item für insgesamt +linePrice gekauft
+Sold +item x+quantity (+linePrice)=+quantity +item für insgesamt +linePrice verkauft
+
+# CLIENT : CANCELLED LINES COMMENTS
+buy not allowed=Kauf nicht möglich
+damaged item=Beschädigter Gegenstand
+no price=Kein Preis vorhanden
+not in market=Kein Markt-Gegenstand
+sell not allowed=Verkauf nicht möglich
+Stolen +item x+quantity item duplicated !=+quantity +item gestohlen!
+
+# SHOP OWNER : TRANSACTION
+[shop +name] +client purchased +item x+quantity (+linePrice)=[Laden +name] +client hat +quantity +item x für (+linePrice) gekauft
+[shop +name] +client sold +item x+quantity (+linePrice)=[Laden +name] +client hat +quantity +item x für (+linePrice) verkauft
+
+# SHOP OWNER
+Now clients can buy +items=Kunden können kaufen: +items 
+Now clients can sell +items=Kunden können verkaufen: +items
+Now clients can not buy +items=Kunden können nicht kaufen: +items
+Now clients can not sell +items=Kunden können nicht verkaufen: +items
+The chest you selected is not a shop=Die ausgewählte Kiste ist kein Laden
+The chest-shop you selected belongs to +owner=Die ausgewählte "Laden-Kiste" gehört +owner
+The shop +name has been created=Der Laden +name wurde erstellt
+The shop +name has been deleted=Der Laden +name wurde gelöscht
+The shop +name is now closed=Der Laden +name ist ab sofort geschlossen
+The shop +name is now opened=Der Laden +name hat ab sofort geöffnet
+The shop +name was given to +player=Die Eigentumsrechte des Ladens +name wurden an +player übertragen
+Welcome into your shop +name=Hallo Chef! Willkommen im  +name
+You must select a chest-shop before typing any /rshop command=Du must zuerst eine Laden-Kiste auswählen
+You selected +owner's shop +name=Du bist im +name von +owner
+
+# SHOP OWNER : FLAGS SETTINGS
+Damaged item buy/sell flag is=Ankauf von beschädigten Gegenständen ist
+Infinite buy flag is=Unendliche Einkaufsmenge für Kunden ist
+Infinite sell flag is=Unendliche Verkaufsmenge für Kunden ist
+off=Deaktiviert
+on=Aktiviert
+Trade market items only flag is=Nur mit Markt-Artikeln handeln ist
+
+# SHOP OWNER : PRICES SETTINGS
+Calculated price (from market/recipes) for +item : buy +buy, sell +sell=Kalkuliere Preis (über Markt/Rezepte) für +item. Kundenpreis: +buy, Ankauf: +sell
+Error while setting player's price for +item=Fehler beim festsetzen des Preises für +item
+No player's price for +item=Kein Kundenpreis für +item vorhanden
+Player's price deleted for +item=Kundenpreis für +item gelöscht
+Player's price for +item : buy +buy, sell +sell=Kundenpreis für +item. Kundenpreis: +buy, Ankauf: +sell
+You did not set any price=Du hast keinen Preis festgelegt
+
+# OPERATORS
+Calculated price (from recipes) for +item : buy +buy, sell +sell=Aus Rezepten kalkulierter Preis für +item.  Kundenpreis: +buy, Ankauf: +sell
+Daily log was dumped into the realshop.log file=Tagesbilanz in realshop.log gespeichert
+Daily prices calculation simulation is into the realshop.log file=Simulierte Tages-Preiskalkulation in der realshop.log gespeichert
+Error while setting market price for +item=Fehler beim festlegen des Marktpreises für +item
+Market price deleted for +item=Marktpreis für +item gelöscht.
+Market price for +item : buy +buy, sell +sell=Marktpreis für +item: Kundenpreis: +buy, Ankauf: +sell
+No market price for +item=Kein Marktpreis für +item vorhanden
+Real daily prices calculation log is into the realshop.log file=Tatsächliche Tages-Preiskalkulation in der realshop.log gespeichert.
+Reload RealShop configuration files=RealShop Einstellungen neu laden
+
+# DOCUMENTATION
+Usage: +command=Befehl: +command
+/rshop market <itemId>[:<itemDamage>] <sellPrice> <buyPrice>=/rshop market <Gegenstands-ID>[:<Schaden>] <Kundenpreis> <Ankaufpreis>
+/rshop price <itemId>[:<itemDamage>] <sellPrice> <buyPrice>=/rshop price <Gegenstands-ID>[:<Schaden>] <Kundenpreis> <Ankaufpreis>
+
+# INFORMATION
++owner's shop +name : +opened=Laden: +name. Besitzer: +owner. Status: +opened
+/rshop HELP summary=/rshop Hilfe
+accepts damaged items= beschädigte Gegenstände
+all=alles
+opened=geöffnet
+closed=geschlossen
+infinite buy=Kunde kann unendlich kaufen
+infinite sell=/unendlich verkaufen 
+market items only=Nur "Markt-Artikel"
+none=nichts

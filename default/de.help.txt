@@ -1,0 +1,49 @@
+[manage|s|1 : /Shop-Management]
+/rshop create [<name>] : Shop erstellen
+/rshop delete : Shop löschen
+/rshop close : Shop vorübergehend schliessen 
+/rshop open : Shop öffnen (falls geschlossen)
+/rshop : Komplette Shop-Informationen
+
+[buysell|bs|2 : An/Verkaufsbestimmungen]
+Diese Befehle ohne ID: derzeitigen Status anzeigen
+/rshop buy [+<id>][-<id>][...] : hinzufügen/entfernen von
+ Artikeln, die Kunden kaufen können
+/rshop sell [+<id>][-<id>][...] : hinzufügen/entfernen von
+ Artikeln, die Kunden verkaufen können ([-0] für alle Artikel])
+/rshop xbuy [+<id>][-<id>][...] : hinzufügen/entfernen von
+ Artikeln, die Kunden nicht kaufen können
+/rshop xsell [+<id>][-<id>][...] : hinzufügen/entfernen von
+ Artikeln, die Kunden nicht verkaufen können
+
+[flags|f|3 : Zusätzliche Shop-Einstellungen]
+/rshop infiniteBuy on|off : Kunde kann unendlich kaufen
+ Kiste automatisch nachfüllen (Standard: Deaktiviert)
+/rshop infiniteSell on|off : Kunde kann unendlich verkaufen 
+ Gegenstände gehen verloren! (Standard: Deaktiviert)
+/rshop marketItemsOnly on|off : Nur Artikel aus der Market.txt
+ ("Markt-Artikel) an/verkaufen: (Standard: Deaktiviert)
+/rshop damagedItems on|off : Beschädigte Gegenstände 
+ ankaufen: (Standard: Aktiviert)
+
+[prices|p|4|price : Preiseinstellungen]
+/rshop price <itemId> <buyPrice> [<SellPrice>] : Festlegen des 
+ An/Verkaufspreises eines Artikels
+/rshop price del <itemId> : An/Verkaufspreis eines Artikels
+ löschen
+/rshop price <itemId> : An/Verkaufspreis eines Artikels
+ anzeigen
+/rshop price : An/Verkaufspreise aller Artikel anzeigen
+
+[market|m|5 : Marktpreiseinstellungen]
+/rshop market <itemId> <buyPrice> [<SellPrice>] :Marktpreis eines Artikels festlegen
+/rshop market del <itemId> : Marktpreis eines Artikels löschen
+/rshop market <itemId> Marktpreis eines Artikels anzeigen
+/rshop market : Marktpreis aller Artikel anzeigen
+
+[admin|a|6 : Administratorbefehle]
+/rshop reload : Konfigurationsdateien neu laden
+/rshop check : Globale Informationen / Shop Vergleich
+/rshop log : Protokoll der täglichen Handelsbilanz
+/rshop simul : Preiskalkulation simulieren
+/rshop daily : Auswirkung des Tages auf die Preiskalkulation

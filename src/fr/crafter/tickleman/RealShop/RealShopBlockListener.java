@@ -40,7 +40,7 @@ public class RealShopBlockListener extends BlockListener
 				RealShop shop = plugin.shopsFile.shopAt(block);
 				if (shop != null) {
 					plugin.shopPricesInfos(player, block);
-					if (shop.player != player.getName()) {
+					if (!shop.player.equals(player.getName())) {
 						// can't damage a shop that is not yours
 						event.setCancelled(true);
 					}

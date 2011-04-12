@@ -87,7 +87,7 @@ public class RealShopsFile
 							shop.buyExclude = RealShop.csvToHashMap(line[7].trim());
 							shop.sellExclude = RealShop.csvToHashMap(line[8].trim());
 							shop.name = line[9].trim();
-							shop.opened = (line[10].trim() == "false") ? false : true;
+							shop.opened = line[10].trim().equals("false") ? false : true;
 							shop.flags = RealShop.csvToHashMap(line[11].trim());
 						} catch (Exception e) {
 							// when some values are missing, then ignore

@@ -287,7 +287,7 @@ public class RealPricesFile
 			plugin.log.severe("Could not save plugins/" + plugin.name + "/" + fileName + ".txt file");
 		}
 		// Save all current values (including calculated prices) into currentValues.txt
-		if (fileName == "market") {
+		if (fileName.equals("market")) {
 			try {
 				RealDataValuesFile dataValues = new RealDataValuesFile(plugin, "dataValues").load();
 				BufferedWriter writer = new BufferedWriter(

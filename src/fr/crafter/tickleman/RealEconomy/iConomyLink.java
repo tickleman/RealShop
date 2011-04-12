@@ -102,6 +102,7 @@ public abstract class iConomyLink
 				);
 				plugin.log.severe(e.getMessage());
 			}
+			/* BP 2011-04-12 account.save() call is deprecated :
 			try {
 				account.save();
 			} catch (Exception e) {
@@ -111,6 +112,7 @@ public abstract class iConomyLink
 				);
 				plugin.log.severe(e.getMessage());
 			}
+			*/
 		}
 		return result;
 	}

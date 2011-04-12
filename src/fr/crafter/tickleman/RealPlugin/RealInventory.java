@@ -304,7 +304,8 @@ public class RealInventory
 			for (int j = 0; j < itemStackList.length; j++) {
 				ItemStack itemStack = itemStackList[j];
 				if (
-					(itemStack.getTypeId() == typeId)
+					(itemStack != null)
+					&& (itemStack.getTypeId() == typeId)
 					&& ((durability == null) || (durability.equals(itemStack.getDurability())))
 				) {
 					int itemAmount = itemStack.getAmount();

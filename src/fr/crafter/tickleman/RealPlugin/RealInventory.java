@@ -390,6 +390,7 @@ public class RealInventory
 	 * This translate the inventories content into string
 	 * Use it for debugging
 	 */
+	@Override
 	public String toString()
 	{
 		String string = "##### RealInventory object :\n";

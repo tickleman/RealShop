@@ -49,6 +49,7 @@ public class RealShopConfig extends RealConfig
 	}
 
 	//------------------------------------------------------------------------------------- loadValue
+	@Override
 	protected boolean loadValue(String key, String value)
 	{
 		if (super.loadValue(key, value)) {

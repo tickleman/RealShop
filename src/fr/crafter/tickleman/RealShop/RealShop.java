@@ -96,7 +96,7 @@ public class RealShop
 	public boolean isItemBuyAllowed(String typeIdDamage)
 	{
 		return (
-			((buyOnly.size() == 0) || (buyOnly.get(typeIdDamage) != null))
+			(buyOnly.isEmpty() || (buyOnly.get(typeIdDamage) != null))
 			&& (buyExclude.get(typeIdDamage) == null)
 		);
 	}
@@ -108,7 +108,7 @@ public class RealShop
 	public boolean isItemSellAllowed(String typeIdDamage)
 	{
 		return (
-			((sellOnly.size() == 0) || (sellOnly.get(typeIdDamage) != null))
+			(sellOnly.isEmpty() || (sellOnly.get(typeIdDamage) != null))
 			&& (sellExclude.get(typeIdDamage) == null)
 		);
 	}

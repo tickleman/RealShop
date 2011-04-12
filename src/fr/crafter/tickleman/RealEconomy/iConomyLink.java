@@ -93,11 +93,11 @@ public abstract class iConomyLink
 			plugin.log.warning("iConomy.getAccount(" + playerName + ") returned null !");
 		} else {
 			try {
-				account.setBalance(Math.round(balance * 100) / 100);
+				account.setBalance(Math.round(balance * 100.0) / 100.0);
 				result = true;
 			} catch (Exception e) {
 				plugin.log.severe(
-					"iConomy.setBalance(" + playerName + ", " + (Math.round(balance * 100) / 100) + ")"
+					"iConomy.setBalance(" + playerName + ", " + (Math.round(balance * 100.0) / 100.0) + ")"
 					+ " crashed with this message :"
 				);
 				plugin.log.severe(e.getMessage());
@@ -107,7 +107,7 @@ public abstract class iConomyLink
 				account.save();
 			} catch (Exception e) {
 				plugin.log.severe(
-					"iConomy.save(" + playerName + ", " + (Math.round(balance * 100) / 100) + ")"
+					"iConomy.save(" + playerName + ", " + (Math.round(balance * 100.0) / 100.0) + ")"
 					+ " crashed with this message :"
 				);
 				plugin.log.severe(e.getMessage());

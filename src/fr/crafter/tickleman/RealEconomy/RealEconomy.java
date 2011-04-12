@@ -51,7 +51,7 @@ public class RealEconomy
 				}
 			}
 		}
-		return Math.round(balance * 100) / 100;
+		return Math.round(balance * 100.0) / 100.0;
 	}
 
 	//----------------------------------------------------------------------------------- getCurrency

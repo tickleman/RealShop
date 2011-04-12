@@ -76,7 +76,7 @@ public class RealShopPlugin extends RealPlugin
 	//-------------------------------------------------------------------------------- RealShopPlugin
 	public RealShopPlugin()
 	{
-		super("tickleman", "RealShop", "0.591");
+		super("tickleman", "RealShop", "0.592");
 		realEconomy = new RealEconomy(this);
 	}
 

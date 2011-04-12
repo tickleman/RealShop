@@ -16,12 +16,12 @@ public class RealShopConfig extends RealConfig
 	public String shopInfiniteSell = "false";
 	public String shopMarketItemsOnly = "false";
 	public String shopOpOnly = "false";
-	public double workForceRatio = (double)1.1;
-	public double buySellRatio = (double).95;
-	public double minDailyRatio = (double).05;
-	public double maxDailyRatio = (double)1.95;
+	public double workForceRatio = 1.1;
+	public double buySellRatio = .95;
+	public double minDailyRatio = .05;
+	public double maxDailyRatio = 1.95;
 	public double amountRatio = (double)5000;
-	public double minItemPrice = (double).1;
+	public double minItemPrice = .1;
 	public double maxItemPrice = (double)99999;
 
 	//-------------------------------------------------------------------------------- RealShopConfig
@@ -66,7 +66,7 @@ public class RealShopConfig extends RealConfig
 			try {
 				workForceRatio = Double.parseDouble(value);
 			} catch (Exception e) {
-				workForceRatio = (double)1.1;
+				workForceRatio = 1.1;
 			}
 			return true;
 		}
@@ -74,7 +74,7 @@ public class RealShopConfig extends RealConfig
 			try {
 				buySellRatio = Double.parseDouble(value);
 			} catch (Exception e) {
-				buySellRatio = (double).95;
+				buySellRatio = .95;
 			}
 			return true;
 		}
@@ -82,7 +82,7 @@ public class RealShopConfig extends RealConfig
 			try {
 				minDailyRatio = Double.parseDouble(value);
 			} catch (Exception e) {
-				minDailyRatio = (double).05;
+				minDailyRatio = .05;
 			}
 			return true;
 		}
@@ -90,7 +90,7 @@ public class RealShopConfig extends RealConfig
 			try {
 				maxDailyRatio = Double.parseDouble(value);
 			} catch (Exception e) {
-				maxDailyRatio = (double)1.95;
+				maxDailyRatio = 1.95;
 			}
 			return true;
 		}
@@ -106,7 +106,7 @@ public class RealShopConfig extends RealConfig
 			try {
 				minItemPrice = Double.parseDouble(value);
 			} catch (Exception e) {
-				minItemPrice = (double).1;
+				minItemPrice = .1;
 			}
 			return true;
 		}

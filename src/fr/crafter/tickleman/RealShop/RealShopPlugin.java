@@ -484,9 +484,6 @@ public class RealShopPlugin extends RealPlugin
 				exitChest(player, true);
 			}
 			String command = cmd.getName().toLowerCase();
-			for (int i = 0; i < args.length; i++) {
-				args[i] = args[i];
-			}
 			if (
 				(command.equals("rs") || command.equals("rshop"))
 				&& (player.isOp() || config.shopOpOnly.equals("false"))

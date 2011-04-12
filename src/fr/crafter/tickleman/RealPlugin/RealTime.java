@@ -12,7 +12,7 @@ public class RealTime
 	 */
 	public static long worldToMcTime(World world)
 	{
-		return Math.round((double)(world.getFullTime() - 6000) * (double)3.6);
+		return Math.round((double)(world.getFullTime() - 6000) * 3.6);
 	}
 
 	//------------------------------------------------------------------------------- worldToRealTime

@@ -114,7 +114,7 @@ public class RealShopTransaction
 			}
 		}
 		// if total amount exceeds available player amount, then cancel all
-		this.totalPrice = Math.ceil(totalPrice * (double)100) / (double)100;
+		this.totalPrice = Math.ceil(totalPrice * 100.0) / 100.0;
 		if (
 			this.totalPrice > plugin.realEconomy.getBalance(playerName)
 			|| (-this.totalPrice) > plugin.realEconomy.getBalance(shopPlayerName)

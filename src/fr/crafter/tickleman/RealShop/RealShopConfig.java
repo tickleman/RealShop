@@ -20,9 +20,9 @@ public class RealShopConfig extends RealConfig
 	public double buySellRatio = .95;
 	public double minDailyRatio = .05;
 	public double maxDailyRatio = 1.95;
-	public double amountRatio = (double)5000;
+	public double amountRatio = 5000.0;
 	public double minItemPrice = .1;
-	public double maxItemPrice = (double)99999;
+	public double maxItemPrice = 99999.0;
 
 	//-------------------------------------------------------------------------------- RealShopConfig
 	public RealShopConfig(final RealShopPlugin plugin)
@@ -98,7 +98,7 @@ public class RealShopConfig extends RealConfig
 			try {
 				amountRatio = Double.parseDouble(value);
 			} catch (Exception e) {
-				amountRatio = (double)5000;
+				amountRatio = 5000.0;
 			}
 			return true;
 		}
@@ -114,7 +114,7 @@ public class RealShopConfig extends RealConfig
 			try {
 				maxItemPrice = Double.parseDouble(value);
 			} catch (Exception e) {
-				maxItemPrice = (double)99999;
+				maxItemPrice = 99999.0;
 			}
 			return true;
 		}

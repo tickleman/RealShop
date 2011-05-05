@@ -24,6 +24,20 @@ public class RealEconomy
 		config.load();
 	}
 
+	//---------------------------------------------------------------------------------------- format
+	public String format(Double amount)
+	{
+		String result;
+		if (iConomyLink.initialized && economyPlugin.equals("iConomy")) {
+			result = iConomyLink.format(amount);
+		} else if (BOSEconomyLink.initialized && economyPlugin.equals("BOSEconomy")) {
+			result = BOSEconomyLink.format(amount);
+		} else {
+			result = amount.toString() + " " + getCurrency();
+		}
+		return result;
+	}
+
 	//------------------------------------------------------------------------------------ getBalance
 	public double getBalance(String playerName)
 	{
@@ -50,7 +64,7 @@ public class RealEconomy
 	{
 		Double balance = getBalance(playerName);
 		if (withCurrency) {
-			return balance + " " + getCurrency();
+			return format(balance);
 		} else {
 			return balance.toString();
 		}

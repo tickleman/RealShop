@@ -167,9 +167,9 @@ public class RealShopTransaction
 				result += prefix + plugin.dataValuesFile.getName(transactionLine.getTypeIdDamage()) + ": "
 					+ strSide
 					+ " x" + Math.abs(transactionLine.getAmount())
-					+ " price " + transactionLine.getUnitPrice() + plugin.realEconomy.getCurrency()
+					+ " price " + plugin.realEconomy.format(transactionLine.getUnitPrice())
 					+ " " + strGain + " "
-					+ Math.abs(transactionLine.getLinePrice()) + plugin.realEconomy.getCurrency()
+					+ plugin.realEconomy.format(Math.abs(transactionLine.getLinePrice()))
 					+ "\n";
 			}
 		}

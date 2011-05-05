@@ -14,6 +14,12 @@ public abstract class BOSEconomyLink
 	public static boolean initialized = false;
 
 	private static RealPlugin plugin;
+	
+	//---------------------------------------------------------------------------------------- format
+	public static String format(Double amount)
+	{
+		return amount.toString() + " " + BOSEconomyLink.getCurrency();
+	}
 
 	//------------------------------------------------------------------------------------ getBalance
 	public static double getBalance(String playerName)

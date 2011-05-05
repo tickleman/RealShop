@@ -293,10 +293,10 @@ public class RealShopPlugin extends RealPlugin
 									+ lang.tr(strSide + " +item x+quantity (+linePrice)")
 									.replace("+client", RealColor.player + playerName + RealColor.text)
 									.replace("+item", RealColor.item + dataValuesFile.getName(transactionLine.getTypeIdDamage()) + RealColor.text)
-									.replace("+linePrice", RealColor.price + Math.abs(transactionLine.getLinePrice()) + " " + realEconomy.getCurrency() + RealColor.text)
+									.replace("+linePrice", RealColor.price + realEconomy.format(Math.abs(transactionLine.getLinePrice())) + RealColor.text)
 									.replace("+name", RealColor.shop + shop.name + RealColor.text)
 									.replace("+owner", RealColor.player + shop.player + RealColor.text)
-									.replace("+price", RealColor.price + transactionLine.getUnitPrice() + " " + realEconomy.getCurrency() + RealColor.text)
+									.replace("+price", RealColor.price + realEconomy.format(transactionLine.getUnitPrice()) + RealColor.text)
 									.replace("+quantity", RealColor.quantity + Math.abs(transactionLine.getAmount()) + RealColor.text)
 									.replace("  ", " ").replace(" ]", "]").replace("[ ", "[")
 								);
@@ -306,10 +306,10 @@ public class RealShopPlugin extends RealPlugin
 										+ lang.tr("[shop +name] +client " + shopStrSide + " +item x+quantity (+linePrice)")
 										.replace("+client", RealColor.player + playerName + RealColor.text)
 										.replace("+item", RealColor.item + dataValuesFile.getName(transactionLine.getTypeIdDamage()) + RealColor.text)
-										.replace("+linePrice", RealColor.price + Math.abs(transactionLine.getLinePrice()) + " " + realEconomy.getCurrency() + RealColor.text)
+										.replace("+linePrice", RealColor.price + realEconomy.format(Math.abs(transactionLine.getLinePrice())) + RealColor.text)
 										.replace("+name", RealColor.shop + shop.name + RealColor.text)
 										.replace("+owner", RealColor.player + shop.player + RealColor.text)
-										.replace("+price", RealColor.price + transactionLine.getUnitPrice() + " " + realEconomy.getCurrency() + RealColor.text)
+										.replace("+price", RealColor.price + realEconomy.format(transactionLine.getUnitPrice()) + RealColor.text)
 										.replace("+quantity", RealColor.quantity + Math.abs(transactionLine.getAmount()) + RealColor.text)
 										.replace("  ", " ").replace(" ]", "]").replace("[ ", "[")
 									);
@@ -659,7 +659,7 @@ public class RealShopPlugin extends RealPlugin
 		 				// NO PARAM : BALANCE
 		 				player.sendMessage(
 	 						RealColor.message + "You've got "
-	 						+ RealColor.price + realEconomy.getBalance(playerName) + realEconomy.getCurrency()
+	 						+ RealColor.price + realEconomy.format(realEconomy.getBalance(playerName))
 	 						+ RealColor.message + " in your pocket"
 	 					);
 		 			} else if (param.equals("give") || param.equals("g")) {
@@ -686,7 +686,7 @@ public class RealShopPlugin extends RealPlugin
 									}
 								}
 								player.sendMessage(
-									RealColor.message + "You give " + RealColor.price + amount + realEconomy.getCurrency()
+									RealColor.message + "You give " + RealColor.price + realEconomy.format(amount)
 									+ RealColor.message + " to " + RealColor.player + toPlayerName
 								);
 								Player toPlayer = getServer().getPlayer(toPlayerName);
@@ -694,19 +694,18 @@ public class RealShopPlugin extends RealPlugin
 									toPlayer.sendMessage(
 										RealColor.player + playerName
 										+ RealColor.message + " gives you "
-										+ RealColor.price + amount + realEconomy.getCurrency()
+										+ RealColor.price + realEconomy.format(amount)
 									);
 								}
 								log.info(
 									RealColor.player + playerName
 									+ RealColor.message + " gives "
-									+ RealColor.price + amount + realEconomy.getCurrency()
+									+ RealColor.price + realEconomy.format(amount)
 									+ RealColor.message + " to " + RealColor.player + toPlayerName
 								);
 							} else {
 								player.sendMessage(
-									RealColor.cancel + "You don't have enough "
-									+ RealColor.price + realEconomy.getCurrency()
+									RealColor.cancel + "You don't have enough money"
 								);
 							}
 						}
@@ -724,7 +723,7 @@ public class RealShopPlugin extends RealPlugin
 							);
 							player.sendMessage(
 								RealColor.message + "You burned "
-								+ RealColor.price + amount + realEconomy.getCurrency()
+								+ RealColor.price + realEconomy.format(amount)
 							);
 		 				}
 		 			} else if (player.isOp()) {
@@ -733,7 +732,7 @@ public class RealShopPlugin extends RealPlugin
 		 					// TELL
 		 					player.sendMessage(
 		 						RealColor.player + toPlayerName + RealColor.message + " has got "
-		 						+ RealColor.price + realEconomy.getBalance(playerName) + realEconomy.getCurrency()
+		 						+ RealColor.price + realEconomy.getBalance(playerName, true)
 		 						+ RealColor.message + " in his pocket"
 		 					);
 		 				} else if (param.equals("set") || param.equals("s")) {
@@ -749,14 +748,14 @@ public class RealShopPlugin extends RealPlugin
 							player.sendMessage(
 								RealColor.player + toPlayerName
 								+ RealColor.message + " balance set to "
-								+ RealColor.price + amount + realEconomy.getCurrency()
+								+ RealColor.price + realEconomy.format(amount)
 							);
 							Player toPlayer = getServer().getPlayer(toPlayerName);
 							if (toPlayer != null) {
 								toPlayer.sendMessage(
 									RealColor.player + playerName
 									+ RealColor.message + " sets your balance to "
-									+ RealColor.price + amount + realEconomy.getCurrency()
+									+ RealColor.price + realEconomy.format(amount)
 								);
 							}
 		 				} else if (param.equals("inc") || param.equals("i")) {
@@ -775,14 +774,14 @@ public class RealShopPlugin extends RealPlugin
 								RealColor.message + "You increase "
 								+ RealColor.player + toPlayerName
 								+ RealColor.message + "'s balance of " 
-								+ RealColor.price + amount + realEconomy.getCurrency()
+								+ RealColor.price + realEconomy.format(amount)
 							);
 							Player toPlayer = getServer().getPlayer(toPlayerName);
 							if (toPlayer != null) {
 								toPlayer.sendMessage(
 									RealColor.player + playerName
 									+ RealColor.message + " increased your balance of "
-									+ RealColor.price + amount + realEconomy.getCurrency()
+									+ RealColor.price + realEconomy.format(amount)
 								);
 							}
 							log.info(
@@ -790,7 +789,7 @@ public class RealShopPlugin extends RealPlugin
 								+ RealColor.message + " increases the balance of "
 								+ RealColor.player + toPlayerName
 								+ RealColor.message + " of "
-								+ RealColor.price + amount + realEconomy.getCurrency()
+								+ RealColor.price + realEconomy.format(amount)
 							);
 		 				} else if (param.equals("dec") || param.equals("d")) {
 		 					// DEC
@@ -809,14 +808,14 @@ public class RealShopPlugin extends RealPlugin
 								RealColor.message + "You decrease "
 								+ RealColor.player + toPlayerName
 								+ RealColor.message + "'s balance of "
-								+ RealColor.price + amount + realEconomy.getCurrency()
+								+ RealColor.price + realEconomy.format(amount)
 							);
 							Player toPlayer = getServer().getPlayer(toPlayerName);
 							if (toPlayer != null) {
 								toPlayer.sendMessage(
 									RealColor.player + playerName
 									+ RealColor.message + " decreased your balance of "
-									+ RealColor.price + amount + realEconomy.getCurrency()
+									+ RealColor.price + realEconomy.format(amount)
 								);
 							}
 							log.info(
@@ -824,7 +823,7 @@ public class RealShopPlugin extends RealPlugin
 								+ RealColor.message + " decreases the balance of "
 								+ RealColor.player + toPlayerName
 								+ RealColor.message + " of "
-								+ RealColor.price + amount + realEconomy.getCurrency()
+								+ RealColor.price + realEconomy.format(amount)
 							);
 		 				} else {
 		 					return false;

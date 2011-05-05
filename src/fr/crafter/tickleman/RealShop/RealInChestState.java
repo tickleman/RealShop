@@ -9,15 +9,18 @@ import fr.crafter.tickleman.RealPlugin.RealItemStackHashMap;
 public class RealInChestState
 {
 
+	public Block block;
+	
+	public RealChest chest;
+
+	public long enterTime;
+	
 	public boolean inChest = false;
 	
-	public Block block;
-	public RealChest chest;
 	public RealItemStackHashMap itemStackHashMap;
 
 	public long lastX = 0;
-	public long lastZ = 0;
 
-	public long enterTime;
+	public long lastZ = 0;
 
 }

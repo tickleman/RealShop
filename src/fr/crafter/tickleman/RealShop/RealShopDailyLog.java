@@ -9,8 +9,9 @@ import fr.crafter.tickleman.RealPlugin.RealLog;
 public class RealShopDailyLog
 {
 
-	private final RealShopPlugin plugin;
 	public HashMap<String, Integer> moves = new HashMap<String, Integer>();
+
+	private final RealShopPlugin plugin;
 
 	//------------------------------------------------------------------------------ RealShopDailyLog
 	public RealShopDailyLog(final RealShopPlugin plugin)

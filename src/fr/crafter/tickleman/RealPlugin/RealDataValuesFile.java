@@ -10,9 +10,12 @@ import java.util.StringTokenizer;
 public class RealDataValuesFile
 {
 
-	private final RealPlugin plugin;
 	private final String fileName;
+
 	private HashMap<String, String> names = new HashMap<String, String>();
+
+	private final RealPlugin plugin;
+
 	private HashMap<String, String> recipes = new HashMap<String, String>();
 
 	//-------------------------------------------------------------------------------- DataValuesFile
@@ -20,53 +23,6 @@ public class RealDataValuesFile
 	{
 		this.plugin = plugin;
 		this.fileName = fileName;
-	}
-
-	//------------------------------------------------------------------------------------------ load
-	/**
-	 * Load data values file from hard drive
-	 */
-	public RealDataValuesFile load()
-	{
-		RealTools.renameFile(
-			"plugins/" + plugin.name + "/" + fileName + ".cfg",
-			"plugins/" + plugin.name + "/" + fileName + ".txt"
-		);
-		if (!RealTools.fileExists("plugins/" + plugin.name + "/" + fileName + ".txt")) {
-			RealTools.extractDefaultFile(plugin, fileName + ".txt");
-		}
-		try {
-			names.clear();
-			recipes.clear();
-			BufferedReader reader = new BufferedReader(
-				new FileReader("plugins/" + plugin.name + "/" + fileName + ".txt")
-			);
-			String buffer;
-			StringTokenizer line;
-			String typeIdDamage;
-			String typeName;
-			String recipe;
-			while ((buffer = reader.readLine()) != null) {
-				line = new StringTokenizer(buffer, ";");
-				if (line.countTokens() >= 2) {
-					try {
-						typeIdDamage = line.nextToken().trim();
-						typeName = line.nextToken().trim();
-						recipe = line.hasMoreTokens() ? line.nextToken().trim() : "";  
-						names.put(typeIdDamage, typeName);
-						if (!recipe.equals("")) {
-							recipes.put(typeIdDamage, recipe);
-						}
-					} catch (Exception e) {
-						// when some typeId are not number, then ignore
-					}
-				}
-			}
-			reader.close();
-		} catch (Exception e) {
-			plugin.log.severe("Needs plugins/" + plugin.name + "/" + fileName + ".txt file");
-		}
-		return this;
 	}
 
 	//---------------------------------------------------------------------------------------- getIds
@@ -116,6 +72,53 @@ public class RealDataValuesFile
 			result = "";
 		}
 		return result;
+	}
+
+	//------------------------------------------------------------------------------------------ load
+	/**
+	 * Load data values file from hard drive
+	 */
+	public RealDataValuesFile load()
+	{
+		RealTools.renameFile(
+			"plugins/" + plugin.name + "/" + fileName + ".cfg",
+			"plugins/" + plugin.name + "/" + fileName + ".txt"
+		);
+		if (!RealTools.fileExists("plugins/" + plugin.name + "/" + fileName + ".txt")) {
+			RealTools.extractDefaultFile(plugin, fileName + ".txt");
+		}
+		try {
+			names.clear();
+			recipes.clear();
+			BufferedReader reader = new BufferedReader(
+				new FileReader("plugins/" + plugin.name + "/" + fileName + ".txt")
+			);
+			String buffer;
+			StringTokenizer line;
+			String typeIdDamage;
+			String typeName;
+			String recipe;
+			while ((buffer = reader.readLine()) != null) {
+				line = new StringTokenizer(buffer, ";");
+				if (line.countTokens() >= 2) {
+					try {
+						typeIdDamage = line.nextToken().trim();
+						typeName = line.nextToken().trim();
+						recipe = line.hasMoreTokens() ? line.nextToken().trim() : "";  
+						names.put(typeIdDamage, typeName);
+						if (!recipe.equals("")) {
+							recipes.put(typeIdDamage, recipe);
+						}
+					} catch (Exception e) {
+						// when some typeId are not number, then ignore
+					}
+				}
+			}
+			reader.close();
+		} catch (Exception e) {
+			plugin.log.severe("Needs plugins/" + plugin.name + "/" + fileName + ".txt file");
+		}
+		return this;
 	}
 
 }

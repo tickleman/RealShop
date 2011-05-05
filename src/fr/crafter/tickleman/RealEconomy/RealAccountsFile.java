@@ -15,11 +15,12 @@ import fr.crafter.tickleman.RealPlugin.RealTools;
 public class RealAccountsFile
 {
 
-	private final RealPlugin plugin;
-	private final String fileName = "accounts";
-
 	/** Accounts list : "playerName" => (double)balance */
 	public HashMap<String, Double> accounts = new HashMap<String, Double>();
+
+	private final String fileName = "accounts";
+
+	private final RealPlugin plugin;
 
 	//--------------------------------------------------------------------------------- RealShopsFile
 	public RealAccountsFile(final RealPlugin plugin)

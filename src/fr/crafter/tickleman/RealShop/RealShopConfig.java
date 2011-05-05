@@ -9,20 +9,21 @@ public class RealShopConfig extends RealConfig
 {
 
 	/** Default configuration values (if not in file) */
+	public double amountRatio = 5000.0;
+	public double buySellRatio = .95;
 	public String dailyPricesCalculation = "false";
 	public String economyPlugin = "RealEconomy";
+	public double maxDailyRatio = 1.95;
+	public double maxItemPrice = 99999.0;
+	public double minDailyRatio = .05;
+	public double minItemPrice = .1;
+	public String permissionsPlugin = "none";
 	public String shopDamagedItems = "true";
 	public String shopInfiniteBuy = "false";
 	public String shopInfiniteSell = "false";
 	public String shopMarketItemsOnly = "false";
 	public String shopOpOnly = "false";
 	public double workForceRatio = 1.1;
-	public double buySellRatio = .95;
-	public double minDailyRatio = .05;
-	public double maxDailyRatio = 1.95;
-	public double amountRatio = 5000.0;
-	public double minItemPrice = .1;
-	public double maxItemPrice = 99999.0;
 
 	//-------------------------------------------------------------------------------- RealShopConfig
 	public RealShopConfig(final RealShopPlugin plugin)
@@ -45,6 +46,15 @@ public class RealShopConfig extends RealConfig
 			);
 			economyPlugin = "RealEconomy";
 		}
+		if (
+			!permissionsPlugin.equals("none")
+			&& !permissionsPlugin.equals("Permissions")
+		) {
+			plugin.log.warning(
+				"unknown permissionsPlugin " + permissionsPlugin + " was set to none instead", true
+			);
+			permissionsPlugin = "none";
+		}
 		return this;
 	}
 
@@ -55,18 +65,11 @@ public class RealShopConfig extends RealConfig
 		if (super.loadValue(key, value)) {
 			return true;
 		}
-		if (key.equals("dailyPricesCalculation")) { dailyPricesCalculation = value; return true; }
-		if (key.equals("economyPlugin")) { economyPlugin = value; return true; }
-		if (key.equals("shopDamagedItems")) { shopDamagedItems = value; return true; }
-		if (key.equals("shopInfiniteBuy")) { shopInfiniteBuy = value; return true; }
-		if (key.equals("shopInfiniteSell")) { shopInfiniteSell = value; return true; }
-		if (key.equals("shopMarketItemsOnly")) { shopMarketItemsOnly = value; return true; }
-		if (key.equals("shopOpOnly")) { shopOpOnly = value; return true; }
-		if (key.equals("workForceRatio")) {
+		if (key.equals("amountRatio")) {
 			try {
-				workForceRatio = Double.parseDouble(value);
+				amountRatio = Double.parseDouble(value);
 			} catch (Exception e) {
-				workForceRatio = 1.1;
+				amountRatio = 5000.0;
 			}
 			return true;
 		}
@@ -78,12 +81,12 @@ public class RealShopConfig extends RealConfig
 			}
 			return true;
 		}
-		if (key.equals("minDailyRatio")) {
-			try {
-				minDailyRatio = Double.parseDouble(value);
-			} catch (Exception e) {
-				minDailyRatio = .05;
-			}
+		if (key.equals("dailyPricesCalculation")) {
+			dailyPricesCalculation = value;
+			return true;
+		}
+		if (key.equals("economyPlugin")) {
+			economyPlugin = value;
 			return true;
 		}
 		if (key.equals("maxDailyRatio")) {
@@ -94,11 +97,19 @@ public class RealShopConfig extends RealConfig
 			}
 			return true;
 		}
-		if (key.equals("amountRatio")) {
+		if (key.equals("maxItemPrice")) {
 			try {
-				amountRatio = Double.parseDouble(value);
+				maxItemPrice = Double.parseDouble(value);
 			} catch (Exception e) {
-				amountRatio = 5000.0;
+				maxItemPrice = 99999.0;
+			}
+			return true;
+		}
+		if (key.equals("minDailyRatio")) {
+			try {
+				minDailyRatio = Double.parseDouble(value);
+			} catch (Exception e) {
+				minDailyRatio = .05;
 			}
 			return true;
 		}
@@ -110,11 +121,35 @@ public class RealShopConfig extends RealConfig
 			}
 			return true;
 		}
-		if (key.equals("maxItemPrice")) {
+		if (key.equals("permissionsPlugin")) {
+			permissionsPlugin = value;
+			return true;
+		}
+		if (key.equals("shopDamagedItems")) {
+			shopDamagedItems = value;
+			return true;
+		}
+		if (key.equals("shopInfiniteBuy")) {
+			shopInfiniteBuy = value;
+			return true;
+		}
+		if (key.equals("shopInfiniteSell")) {
+			shopInfiniteSell = value;
+			return true;
+		}
+		if (key.equals("shopMarketItemsOnly")) {
+			shopMarketItemsOnly = value;
+			return true;
+		}
+		if (key.equals("shopOpOnly")) {
+			shopOpOnly = value;
+			return true;
+		}
+		if (key.equals("workForceRatio")) {
 			try {
-				maxItemPrice = Double.parseDouble(value);
+				workForceRatio = Double.parseDouble(value);
 			} catch (Exception e) {
-				maxItemPrice = 99999.0;
+				workForceRatio = 1.1;
 			}
 			return true;
 		}
@@ -129,20 +164,21 @@ public class RealShopConfig extends RealConfig
 	protected void saveValues(BufferedWriter writer)
 	{
 		super.saveValues(writer);
+		saveValue(writer, "amountRatio");
+		saveValue(writer, "buySellRatio");
 		saveValue(writer, "dailyPricesCalculation");
 		saveValue(writer, "economyPlugin");
+		saveValue(writer, "maxDailyRatio");
+		saveValue(writer, "maxItemPrice");
+		saveValue(writer, "minDailyRatio");
+		saveValue(writer, "minItemPrice");
+		saveValue(writer, "permissionsPlugin");
 		saveValue(writer, "shopDamagedItems");
 		saveValue(writer, "shopInfiniteBuy");
 		saveValue(writer, "shopInfiniteSell");
 		saveValue(writer, "shopMarketItemsOnly");
 		saveValue(writer, "shopOpOnly");
 		saveValue(writer, "workForceRatio");
-		saveValue(writer, "buySellRatio");
-		saveValue(writer, "minDailyRatio");
-		saveValue(writer, "maxDailyRatio");
-		saveValue(writer, "amountRatio");
-		saveValue(writer, "minItemPrice");
-		saveValue(writer, "maxItemPrice");
 	}
 
 }

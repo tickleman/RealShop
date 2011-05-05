@@ -10,10 +10,11 @@ import java.util.StringTokenizer;
 public class RealConfig
 {
 
-	protected final RealPlugin plugin;
 	private final String fileName;
 
 	public String language = "en"; 
+
+	protected final RealPlugin plugin;
 
 	//---------------------------------------------------------------------------------- RealConfig
 	public RealConfig(final RealPlugin plugin)

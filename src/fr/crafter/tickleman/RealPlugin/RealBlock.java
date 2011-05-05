@@ -6,12 +6,6 @@ import org.bukkit.block.Block;
 public class RealBlock
 {
 
-	//----------------------------------------------------------------------------------------- strId
-	public static String strId(Block block)
-	{
-		return block.getWorld().getName() + ";" + block.getX() + ";" + block.getY() + ";" + block.getZ();
-	}
-
 	//------------------------------------------------------------------------------------- fromStrId
 	public static Block fromStrId(RealPlugin plugin, String str)
 	{
@@ -19,6 +13,12 @@ public class RealBlock
 		return plugin.getServer().getWorld(coords[0]).getBlockAt(
 			Integer.parseInt(coords[1]), Integer.parseInt(coords[2]), Integer.parseInt(coords[3])
 		);
+	}
+
+	//----------------------------------------------------------------------------------------- strId
+	public static String strId(Block block)
+	{
+		return block.getWorld().getName() + ";" + block.getX() + ";" + block.getY() + ";" + block.getZ();
 	}
 
 }

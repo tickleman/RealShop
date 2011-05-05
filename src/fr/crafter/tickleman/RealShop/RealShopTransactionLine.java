@@ -6,8 +6,9 @@ import fr.crafter.tickleman.RealPlugin.RealItemStack;
 public class RealShopTransactionLine extends RealItemStack 
 {
 
-	private double unitPrice;
 	public String comment; 
+
+	private double unitPrice;
 
 	//--------------------------------------------------------------------- RealShopTransactionLine
 	public RealShopTransactionLine(RealItemStack itemStack, RealPrice price)

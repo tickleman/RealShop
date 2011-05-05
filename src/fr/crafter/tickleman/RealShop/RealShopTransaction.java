@@ -10,17 +10,24 @@ import fr.crafter.tickleman.RealPlugin.RealItemStackHashMap;
 public class RealShopTransaction
 {
 
-	private RealShopPlugin plugin;
-
-	private String playerName;
-	private String shopPlayerName;
-	private RealItemStackHashMap itemStackHashMap;
-	private RealPricesFile pricesFile;
-	private RealPricesFile marketFile;
-	private double totalPrice = (double)0;
 	private boolean cancelAll = false;
 
 	public ArrayList<RealShopTransactionLine> cancelledLines = null;
+
+	private RealItemStackHashMap itemStackHashMap;
+
+	private RealPricesFile marketFile;
+
+	private String playerName;
+
+	private RealShopPlugin plugin;
+
+	private RealPricesFile pricesFile;
+
+	private String shopPlayerName;
+
+	private double totalPrice = (double)0;
+
 	public ArrayList<RealShopTransactionLine> transactionLines = null;
 
 	//####################################################################################### PRIVATE

@@ -17,6 +17,7 @@ public class RealChest
 	 * - always set by constructor 
 	 */
 	private final Chest mainChest;
+
 	private String mainChestId;
 
 	/**
@@ -25,6 +26,7 @@ public class RealChest
 	 * - another Chest object for the secondary chest when two adjacent blocks contain a big Chest
 	 */
 	private final Chest neighborChest;
+
 	private String neighborChestId;
 
 	//------------------------------------------------------------------------------------- ReadChest

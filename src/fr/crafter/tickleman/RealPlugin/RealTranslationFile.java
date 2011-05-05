@@ -9,10 +9,11 @@ import java.util.StringTokenizer;
 public class RealTranslationFile
 {
 
-	private final RealPlugin plugin;
 	private final String fileName;
 
 	private HashMap<String, String> translations = new HashMap<String, String>();
+
+	private final RealPlugin plugin;
 
 	//--------------------------------------------------------------------------- RealTranslationFile
 	public RealTranslationFile(final RealPlugin plugin)

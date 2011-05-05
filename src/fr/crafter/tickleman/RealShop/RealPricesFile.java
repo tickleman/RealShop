@@ -15,12 +15,12 @@ import fr.crafter.tickleman.RealPlugin.RealTools;
 public class RealPricesFile
 {
 
-	/** master plugin */
-	private final RealShopPlugin plugin;
-
 	/** stored file name */
 	private final String fileName;
 	
+	/** master plugin */
+	private final RealShopPlugin plugin;
+
 	/** prices list : typeId[:damageId] => RealPrice(buy, sell) */
 	public HashMap<String, RealPrice> prices = new HashMap<String, RealPrice>();
 

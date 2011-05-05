@@ -17,44 +17,11 @@ public class RealItemStackHashMap
 	 */
 	public HashMap<Integer, HashMap<Short, Integer>> content;
 
-	//##################################################################################### PRIVATE
-
 	//------------------------------------------------------------------------ RealItemStackHashMap
 	private RealItemStackHashMap()
 	{
 		content = new HashMap<Integer, HashMap<Short, Integer>>();
 	}
-
-	//----------------------------------------------------------------------------------- storeItem
-	private void storeItem(ItemStack item, boolean removal)
-	{
-		if (item != null) {
-			Integer itemAmount = item.getAmount();
-			if (itemAmount != 0) {
-				Integer typeId = new Integer(item.getTypeId());
-				HashMap<Short, Integer> typeIdContent = content.get(typeId);
-				if (typeIdContent == null) {
-					content.put(typeId, typeIdContent = new HashMap<Short, Integer>());
-				}
-				Short durability = item.getDurability();
-				Integer amount = typeIdContent.get(durability);
-				if (amount == null) {
-					amount = 0;
-				}
-				amount = (removal ? (amount - itemAmount) : (amount + itemAmount));
-				if (amount != 0) {
-					typeIdContent.put(durability, amount);
-				} else {
-					typeIdContent.remove(durability);
-					if (typeIdContent.isEmpty()) {
-						content.remove(typeId);
-					}
-				}
-			}
-		}
-	}
-
-	//######################################################################################## PUBLIC
 
 	//---------------------------------------------------------------------------------------- create
 	public static RealItemStackHashMap create()
@@ -97,6 +64,35 @@ public class RealItemStackHashMap
 			storeInventory(realInventory.inventories[i], removal);
 		}
 		return this;
+	}
+
+	//----------------------------------------------------------------------------------- storeItem
+	private void storeItem(ItemStack item, boolean removal)
+	{
+		if (item != null) {
+			Integer itemAmount = item.getAmount();
+			if (itemAmount != 0) {
+				Integer typeId = new Integer(item.getTypeId());
+				HashMap<Short, Integer> typeIdContent = content.get(typeId);
+				if (typeIdContent == null) {
+					content.put(typeId, typeIdContent = new HashMap<Short, Integer>());
+				}
+				Short durability = item.getDurability();
+				Integer amount = typeIdContent.get(durability);
+				if (amount == null) {
+					amount = 0;
+				}
+				amount = (removal ? (amount - itemAmount) : (amount + itemAmount));
+				if (amount != 0) {
+					typeIdContent.put(durability, amount);
+				} else {
+					typeIdContent.remove(durability);
+					if (typeIdContent.isEmpty()) {
+						content.remove(typeId);
+					}
+				}
+			}
+		}
 	}
 
 }

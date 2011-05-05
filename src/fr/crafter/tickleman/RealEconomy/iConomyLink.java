@@ -13,32 +13,11 @@ import fr.crafter.tickleman.RealPlugin.RealPlugin;
 public abstract class iConomyLink
 {
 
-	private static RealPlugin plugin;
 	private static String iConomyVersion = "4.x";
+
 	public static boolean initialized = false;
 
-	//------------------------------------------------------------------------------------------ init
-	public static boolean init(RealPlugin plugin)
-	{
-		iConomyLink.plugin = plugin;
-		boolean ok = (plugin.getServer().getPluginManager().getPlugin("iConomy") != null);
-		if (ok) {
-			try {
-				getCurrency();
-			} catch (Exception e) {
-				ok = false;
-			}
-			if (ok) {
-				plugin.log.info("load dependency : iConomy " + iConomyVersion + " ok", true);
-				initialized = true;
-			} else {
-				plugin.log.severe(
-					"load dependency : iConomy was found but was not version " + iConomyVersion, true
-				);
-			}
-		}
-		return ok;
-	}
+	private static RealPlugin plugin;
 
 	//------------------------------------------------------------------------------------ getBalance
 	public static double getBalance(String playerName)
@@ -82,6 +61,29 @@ public abstract class iConomyLink
 			}
 			return "Coin";
 		}
+	}
+
+	//------------------------------------------------------------------------------------------ init
+	public static boolean init(RealPlugin plugin)
+	{
+		iConomyLink.plugin = plugin;
+		boolean ok = (plugin.getServer().getPluginManager().getPlugin("iConomy") != null);
+		if (ok) {
+			try {
+				getCurrency();
+			} catch (Exception e) {
+				ok = false;
+			}
+			if (ok) {
+				plugin.log.info("load dependency : iConomy " + iConomyVersion + " ok", true);
+				initialized = true;
+			} else {
+				plugin.log.severe(
+					"load dependency : iConomy was found but was not version " + iConomyVersion, true
+				);
+			}
+		}
+		return ok;
 	}
 
 	//------------------------------------------------------------------------------------ setBalance

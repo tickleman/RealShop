@@ -29,12 +29,6 @@ public class RealInventory
 	private Chest[] chests;
 
 	/**
-	 * Backup ItemStack[] for each inventory
-	 * Set with backup(), and used by restore() to restore
-	 */
-	private ArrayList<ItemStack[]> itemStackBackup;
-
-	/**
 	 * Error log : when an item could not be removed, then it's logged here
 	 */
 	public ArrayList<RealItemStack> errorLog = new ArrayList<RealItemStack>();
@@ -49,7 +43,11 @@ public class RealInventory
 	 */
 	public Inventory[] inventories;
 
-	//####################################################################################### PRIVATE
+	/**
+	 * Backup ItemStack[] for each inventory
+	 * Set with backup(), and used by restore() to restore
+	 */
+	private ArrayList<ItemStack[]> itemStackBackup;
 
 	//--------------------------------------------------------------------------------- RealInventory
 	/**
@@ -76,134 +74,6 @@ public class RealInventory
 	private RealInventory(RealChest chest)
 	{
 		loadFromRealChestInventory(chest);
-	}
-
-	//----------------------------------------------------------------------------------------- clear
-	/**
-	 * Clear inventory, resetting its collection of arrays of ItemStack objects
-	 */
-	private void clear()
-	{
-		chests = new Chest[2];
-		inventories = new Inventory[0];
-	}
-
-	//-------------------------------------------------------------------------------------- copyFrom
-	/**
-	 * Copy a RealInventory content from another one
-	 * result ItemStack objects are newly created (independent, thus)
-	 * but all the link to the original inventories are kept
-	 * source and destination should have exactly the same size (or this will crash)
-	 */
-	/*
-	private void copyFrom(RealInventory source)
-	{
-		for (int i = 0; i < source.inventories.length; i++) {
-			inventories[i].setContents(source.inventories[i].getContents().clone());
-		}
-	}
-	*/
-
-	//----------------------------------------------------------------------- loadFromPlayerInventory
-	/**
-	 * Clear current inventory (if set) and link RealInventory to a player's inventory
-	 * (excluding armor slots)
-	 */
-	private void loadFromPlayerInventory(Player player)
-	{
-		clear();
-		inventories = new Inventory[1];
-		inventories[0] = player.getInventory();
-	}
-
-	//-------------------------------------------------------------------- loadFromRealChestInventory
-	/**
-	 * Clear current inventory (if set) and link RealInventory to a chest's inventory
-	 * (including the neighbor chest inventory if big chest)
-	 */
-	private void loadFromRealChestInventory(RealChest chest)
-	{
-		clear();
-		chests[0] = chest.getMainChest();
-		chests[1] = chest.getNeighborChest();
-		inventories = new Inventory[(chests[1] == null) ? 1 : 2];
-		inventories[0] = chests[0].getInventory();
-		if (chests[1] != null) {
-			inventories[1] = chests[1].getInventory();
-		}
-	}
-
-	//---------------------------------------------------------------------------------------- update
-	/**
-	 * Update chests states (if this is a chest inventory)
-	 * Called after each modification into the inventory
-	 */
-	private void update()
-	{
-		if (chests[0] != null) {
-			chests[0].update();
-		}
-		if (chests[1] != null) {
-			chests[1].update();
-		}
-	}
-
-	//######################################################################################## PUBLIC
-
-	//---------------------------------------------------------------------------------------- create
-	/**
-	 * Static constructor #1
-	 * - return the RealInventory linked to a player's inventory 
-	 *   (inventory contains full player's inventory, including armor slots) 
-	 */
-	public static RealInventory create(Player player)
-	{
-		return new RealInventory(player);
-	}
-
-	//---------------------------------------------------------------------------------------- create
-	/**
-	 * Static constructor #2
-	 * - return the RealInventory linked to a chest's inventory
-	 *   (works with both small and big chests) 
-	 */
-	public static RealInventory create(RealChest chest)
-	{
-		return new RealInventory(chest);
-	}
-
-	//---------------------------------------------------------------------------------------- backup
-	/**
-	 * Backups RealInventory to a copy of the inventory
-	 */
-	public ArrayList<ItemStack[]> backup()
-	{
-		itemStackBackup = new ArrayList<ItemStack[]>();
-		for (int i = 0; i < inventories.length; i++) {
-			itemStackBackup.add(inventories[i].getContents().clone());
-		}
-		return itemStackBackup;
-	}
-
-	//--------------------------------------------------------------------------------------- restore
-	/**
-	 * Restore inventory from last backup
-	 */
-	public void restore()
-	{
-		restore(itemStackBackup);
-	}
-
-	//--------------------------------------------------------------------------------------- restore
-	/**
-	 * Restore inventory from last backup
-	 */
-	public void restore(ArrayList<ItemStack[]> itemStackBackup)
-	{
-		for (int i = 0; i < inventories.length; i++) {
-			inventories[i].setContents(itemStackBackup.get(i));
-		}
-		update();
 	}
 
 	//------------------------------------------------------------------------------------------- add
@@ -253,6 +123,117 @@ public class RealInventory
 			}
 		}
 		return false;
+	}
+
+	//---------------------------------------------------------------------------------------- backup
+	/**
+	 * Backups RealInventory to a copy of the inventory
+	 */
+	public ArrayList<ItemStack[]> backup()
+	{
+		itemStackBackup = new ArrayList<ItemStack[]>();
+		for (int i = 0; i < inventories.length; i++) {
+			itemStackBackup.add(inventories[i].getContents().clone());
+		}
+		return itemStackBackup;
+	}
+
+	//----------------------------------------------------------------------------------------- clear
+	/**
+	 * Clear inventory, resetting its collection of arrays of ItemStack objects
+	 */
+	private void clear()
+	{
+		chests = new Chest[2];
+		inventories = new Inventory[0];
+	}
+
+	//---------------------------------------------------------------------------------------- create
+	/**
+	 * Static constructor #1
+	 * - return the RealInventory linked to a player's inventory 
+	 *   (inventory contains full player's inventory, including armor slots) 
+	 */
+	public static RealInventory create(Player player)
+	{
+		return new RealInventory(player);
+	}
+
+	//---------------------------------------------------------------------------------------- create
+	/**
+	 * Static constructor #2
+	 * - return the RealInventory linked to a chest's inventory
+	 *   (works with both small and big chests) 
+	 */
+	public static RealInventory create(RealChest chest)
+	{
+		return new RealInventory(chest);
+	}
+
+	//-------------------------------------------------------------------------------------- copyFrom
+	/**
+	 * Copy a RealInventory content from another one
+	 * result ItemStack objects are newly created (independent, thus)
+	 * but all the link to the original inventories are kept
+	 * source and destination should have exactly the same size (or this will crash)
+	 */
+	/*
+	private void copyFrom(RealInventory source)
+	{
+		for (int i = 0; i < source.inventories.length; i++) {
+			inventories[i].setContents(source.inventories[i].getContents().clone());
+		}
+	}
+	*/
+
+	//----------------------------------------------------------------------- loadFromPlayerInventory
+	/**
+	 * Clear current inventory (if set) and link RealInventory to a player's inventory
+	 * (excluding armor slots)
+	 */
+	private void loadFromPlayerInventory(Player player)
+	{
+		clear();
+		inventories = new Inventory[1];
+		inventories[0] = player.getInventory();
+	}
+
+	//-------------------------------------------------------------------- loadFromRealChestInventory
+	/**
+	 * Clear current inventory (if set) and link RealInventory to a chest's inventory
+	 * (including the neighbor chest inventory if big chest)
+	 */
+	private void loadFromRealChestInventory(RealChest chest)
+	{
+		clear();
+		chests[0] = chest.getMainChest();
+		chests[1] = chest.getNeighborChest();
+		inventories = new Inventory[(chests[1] == null) ? 1 : 2];
+		inventories[0] = chests[0].getInventory();
+		if (chests[1] != null) {
+			inventories[1] = chests[1].getInventory();
+		}
+	}
+
+	//--------------------------------------------------------------------------------------- restore
+	/**
+	 * Restore inventory from last backup
+	 */
+	public void restore()
+	{
+		restore(itemStackBackup);
+	}
+
+	//--------------------------------------------------------------------------------------- restore
+	/**
+	 * Restore inventory from last backup
+	 */
+	public void restore(ArrayList<ItemStack[]> itemStackBackup)
+	{
+		for (int i = 0; i < inventories.length; i++) {
+			inventories[i].setContents(itemStackBackup.get(i));
+		}
+		update();
 	}
 
 	//-------------------------------------------------------------------------------------- moveFrom
@@ -408,6 +389,21 @@ public class RealInventory
 		}
 		string += "##### RealInventory object end";
 		return string;
+	}
+
+	//---------------------------------------------------------------------------------------- update
+	/**
+	 * Update chests states (if this is a chest inventory)
+	 * Called after each modification into the inventory
+	 */
+	private void update()
+	{
+		if (chests[0] != null) {
+			chests[0].update();
+		}
+		if (chests[1] != null) {
+			chests[1].update();
+		}
 	}
 
 }

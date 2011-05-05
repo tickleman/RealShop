@@ -1,22 +1,23 @@
 package fr.crafter.tickleman.RealPlugin;
 
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 //###################################################################################### RealPlugin
 public class RealPlugin extends JavaPlugin
 {
 
-	/** Plugin identification (use it for your logs !) */
 	public String author;
-	public String name;
-	public String version;
 
-	/** Translation links */
 	public RealTranslationFile lang;
+
 	public String language = "en";
 
-	/** Use this log object to log, as the plugin name will automatically be added */
 	public RealLog log;
+
+	public String name;
+
+	public String version;
 
 	//------------------------------------------------------------------------------------ RealPlugin
 	public RealPlugin(String author, String name, String version)
@@ -27,6 +28,12 @@ public class RealPlugin extends JavaPlugin
 		this.version = version;
 		RealTools.mkDir("plugins/" + name);
 		log = new RealLog(this);
+	}
+
+	//--------------------------------------------------------------------------------- hasPermission
+	public boolean hasPermission(Player player, String permission)
+	{
+		return player.isOp();
 	}
 
 	//------------------------------------------------------------------------------------- onDisable

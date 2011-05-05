@@ -10,10 +10,13 @@ import java.util.logging.Logger;
 public class RealLog
 {
 
+	private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
 	private final Logger globalLog = Logger.getLogger("Minecraft");
-	private final RealPlugin plugin;
+
 	private final String logFile;
-	private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+
+	private final RealPlugin plugin;
 
 	//------------------------------------------------------------------------------------- RealLog
 	public RealLog(RealPlugin plugin)
@@ -64,30 +67,6 @@ public class RealLog
 		log("INFO", text, global);
 	}
 
-	//-------------------------------------------------------------------------------------- severe
-	public void severe(String text)
-	{
-		log("SEVERE", text, true);
-	}
-
-	//-------------------------------------------------------------------------------------- severe
-	public void severe(String text, boolean global)
-	{
-		log("SEVERE", text, global);
-	}
-
-	//------------------------------------------------------------------------------------- warning
-	public void warning(String text)
-	{
-		log("WARNING", text);
-	}
-
-	//------------------------------------------------------------------------------------- warning
-	public void warning(String text, boolean global)
-	{
-		log("WARNING", text, global);
-	}
-
 	//----------------------------------------------------------------------------------------- log
 	private void log(String mark, String text)
 	{
@@ -124,4 +103,28 @@ public class RealLog
 		}
 	}
 	
+	//-------------------------------------------------------------------------------------- severe
+	public void severe(String text)
+	{
+		log("SEVERE", text, true);
+	}
+
+	//-------------------------------------------------------------------------------------- severe
+	public void severe(String text, boolean global)
+	{
+		log("SEVERE", text, global);
+	}
+
+	//------------------------------------------------------------------------------------- warning
+	public void warning(String text)
+	{
+		log("WARNING", text);
+	}
+
+	//------------------------------------------------------------------------------------- warning
+	public void warning(String text, boolean global)
+	{
+		log("WARNING", text, global);
+	}
+
 }

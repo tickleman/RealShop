@@ -10,7 +10,9 @@ public class RealEconomyConfig extends RealConfig
 {
 
 	/** Default configuration values (if not in file) */
+
 	public String currency = "Coin"; 
+
 	public String initialBalance = "100";
 
 	//----------------------------------------------------------------------------- RealEconomyConfig

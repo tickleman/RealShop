@@ -5,6 +5,7 @@ import org.bukkit.event.server.ServerListener;
 
 import fr.crafter.tickleman.RealEconomy.BOSEconomyLink;
 import fr.crafter.tickleman.RealEconomy.iConomyLink;
+import fr.crafter.tickleman.RealPermissions.PermissionsLink;
 
 import org.bukkit.plugin.Plugin;
 
@@ -46,6 +47,19 @@ public class RealShopPluginListener extends ServerListener
 						plugin.realEconomy.economyPlugin = "BOSEconomy";
 					} else {
 						plugin.log.severe("Uses RealEconomy instead of BOSEconomy !");
+					}
+				}
+			}
+		}
+		if (plugin.config.permissionsPlugin.equals("Permissions") && !PermissionsLink.initialized) {
+			Plugin permissions = plugin.getServer().getPluginManager().getPlugin("Permissions");
+			if (permissions != null) {
+				if (permissions.isEnabled()) {
+					if (PermissionsLink.init(plugin)) {
+						plugin.log.info("Uses Permissions plugin as permissions plugin", true);
+						plugin.realPermissions.permissionsPlugin = "Permissions";
+					} else {
+						plugin.log.severe("Use built-in op/user permissions instead of Permissions !");
 					}
 				}
 			}

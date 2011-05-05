@@ -7,30 +7,38 @@ import java.util.Iterator;
 public class RealShop
 {
 
-	/** Shop basics : position and player */
-	public String world;
-	public Integer posX;
-	public Integer posY;
-	public Integer posZ;
-	public String player;
-	public String name;
-	public boolean opened = true;
+	/** Players will not be able to sell these items into this shop */
+	public HashMap<String, Boolean> buyExclude = new HashMap<String, Boolean>();
 
 	/** Players will be able to buy only these items into this shop */
 	public HashMap<String, Boolean> buyOnly = new HashMap<String, Boolean>();
 
-	/** Players will be able to sell only these items into this shop */
-	public HashMap<String, Boolean> sellOnly = new HashMap<String, Boolean>();
+	/** Flags : infiniteBuy, infiniteSell, noDamagedItems, marketItemsOnly, belongToServer */
+	public HashMap<String, Boolean> flags = new HashMap<String, Boolean>();
 
-	/** Players will not be able to sell these items into this shop */
-	public HashMap<String, Boolean> buyExclude = new HashMap<String, Boolean>();
+	/** Shop's optional name */
+	public String name;
+	
+	/** Shop is opened if true */
+	public boolean opened = true;
+
+	/** Shop's position */
+	public Integer posX;
+	public Integer posY;
+	public Integer posZ;
+
+	/** Shop's owner name */
+	public String player;
 
 	/** Players will not be able to buy these items into this shop */
 	public HashMap<String, Boolean> sellExclude = new HashMap<String, Boolean>();
 
-	/** Flags : infiniteBuy, infiniteSell, noDamagedItems, marketItemsOnly, belongToServer */
-	public HashMap<String, Boolean> flags = new HashMap<String, Boolean>();
+	/** Players will be able to sell only these items into this shop */
+	public HashMap<String, Boolean> sellOnly = new HashMap<String, Boolean>();
 
+	/** Position is in this world name */
+	public String world;
+	
 	//-------------------------------------------------------------------------------------- RealShop
 	public RealShop(String world, Integer posX, Integer posY, Integer posZ, String player)
 	{
@@ -61,6 +69,17 @@ public class RealShop
 		return hashMap;
 	}
 
+	//--------------------------------------------------------------------------------------- getFlag
+	public boolean getFlag(String flag, boolean def)
+	{
+		Boolean result = flags.get(flag);
+		if (result == null) {
+			return def;
+		} else {
+			return result;
+		}
+	}
+
 	//---------------------------------------------------------------------------------- hashMapToCsv
 	/**
 	 * Changes a HashMap indexed list to a buffer "1,5,9,19" 
@@ -76,17 +95,6 @@ public class RealShop
 			csv += "," + iterator.next().toString();
 		}
 		return csv;
-	}
-
-	//--------------------------------------------------------------------------------------- getFlag
-	public boolean getFlag(String flag, boolean def)
-	{
-		Boolean result = flags.get(flag);
-		if (result == null) {
-			return def;
-		} else {
-			return result;
-		}
 	}
 
 	//------------------------------------------------------------------------------ isItemBuyAllowed

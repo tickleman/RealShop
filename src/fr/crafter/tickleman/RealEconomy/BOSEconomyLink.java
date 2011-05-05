@@ -9,40 +9,11 @@ import fr.crafter.tickleman.RealPlugin.RealPlugin;
 public abstract class BOSEconomyLink
 {
 
-	private static RealPlugin plugin;
 	private static BOSEconomy economy;
+
 	public static boolean initialized = false;
 
-	//------------------------------------------------------------------------------------------ init
-	public static boolean init(RealPlugin plugin)
-	{
-		BOSEconomyLink.plugin = plugin;
-		// load BOSEconomy plugin
-		Plugin temp = plugin.getServer().getPluginManager().getPlugin("BOSEconomy");
-		if (temp != null) {
-			BOSEconomyLink.economy = (BOSEconomy)plugin.getServer().getPluginManager().getPlugin("BOSEconomy");
-		} else {
-			BOSEconomyLink.economy = null;
-		}
-		// ok
-		boolean ok = (economy != null);
-		if (ok) {
-			try {
-				getCurrency();
-			} catch (Exception e) {
-				ok = false;
-			}
-			if (ok) {
-				plugin.log.info("load dependency : BOSEconomy ok", true);
-				initialized = true;
-			} else {
-				plugin.log.severe(
-					"load dependency : BOSEconomy was found but was not a compatible version", true
-				);
-			}
-		}
-		return ok;
-	}
+	private static RealPlugin plugin;
 
 	//------------------------------------------------------------------------------------ getBalance
 	public static double getBalance(String playerName)
@@ -80,6 +51,37 @@ public abstract class BOSEconomyLink
 			}
 			return "Coin";
 		}
+	}
+
+	//------------------------------------------------------------------------------------------ init
+	public static boolean init(RealPlugin plugin)
+	{
+		BOSEconomyLink.plugin = plugin;
+		// load BOSEconomy plugin
+		Plugin temp = plugin.getServer().getPluginManager().getPlugin("BOSEconomy");
+		if (temp != null) {
+			BOSEconomyLink.economy = (BOSEconomy)plugin.getServer().getPluginManager().getPlugin("BOSEconomy");
+		} else {
+			BOSEconomyLink.economy = null;
+		}
+		// ok
+		boolean ok = (economy != null);
+		if (ok) {
+			try {
+				getCurrency();
+			} catch (Exception e) {
+				ok = false;
+			}
+			if (ok) {
+				plugin.log.info("load dependency : BOSEconomy ok", true);
+				initialized = true;
+			} else {
+				plugin.log.severe(
+					"load dependency : BOSEconomy was found but was not a compatible version", true
+				);
+			}
+		}
+		return ok;
 	}
 
 	//------------------------------------------------------------------------------------ setBalance

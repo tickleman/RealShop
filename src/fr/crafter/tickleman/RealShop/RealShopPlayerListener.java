@@ -23,8 +23,9 @@ import fr.crafter.tickleman.RealPlugin.RealTime;
 public class RealShopPlayerListener extends PlayerListener
 {
 
-	private final RealShopPlugin plugin;
 	long nextMoveCheck = 0;
+
+	private final RealShopPlugin plugin;
 
 	//------------------------------------------------------------------------ RealShopPlayerListener
 	public RealShopPlayerListener(RealShopPlugin instance)

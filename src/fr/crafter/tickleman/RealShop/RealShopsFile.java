@@ -16,8 +16,9 @@ import fr.crafter.tickleman.RealPlugin.RealTools;
 public class RealShopsFile
 {
 
-	private final RealShopPlugin plugin;
 	private final String fileName = "shops";
+
+	private final RealShopPlugin plugin;
 
 	/** Shops list : "world;x;y;z" => RealShop */
 	public HashMap<String, RealShop> shops = new HashMap<String, RealShop>();
@@ -32,30 +33,6 @@ public class RealShopsFile
 	public boolean isShop(Block block)
 	{
 		return (shopAt(block) != null);
-	}
-
-	//---------------------------------------------------------------------------------------- shopAt
-	public RealShop shopAt(Block block)
-	{
-		return shopAt(block.getWorld().getName(), block.getX(), block.getY(), block.getZ());
-	}
-
-	//---------------------------------------------------------------------------------------- shopAt
-	public RealShop shopAt(World world, int x, int y, int z)
-	{
-		return shopAt(world.getName(), x, y, z); 
-	}
-
-	//---------------------------------------------------------------------------------------- shopAt
-	public RealShop shopAt(String world, int x, int y, int z)
-	{
-		return shopAt(world + ";" + x + ";" + y + ";" + z);
-	}
-
-	//---------------------------------------------------------------------------------------- shopAt
-	public RealShop shopAt(String key)
-	{
-		return shops.get(key);
 	}
 
 	//------------------------------------------------------------------------------------------ load
@@ -105,6 +82,30 @@ public class RealShopsFile
 			);
 		}
 		return this;
+	}
+
+	//---------------------------------------------------------------------------------------- shopAt
+	public RealShop shopAt(Block block)
+	{
+		return shopAt(block.getWorld().getName(), block.getX(), block.getY(), block.getZ());
+	}
+
+	//---------------------------------------------------------------------------------------- shopAt
+	public RealShop shopAt(World world, int x, int y, int z)
+	{
+		return shopAt(world.getName(), x, y, z); 
+	}
+
+	//---------------------------------------------------------------------------------------- shopAt
+	public RealShop shopAt(String world, int x, int y, int z)
+	{
+		return shopAt(world + ";" + x + ";" + y + ";" + z);
+	}
+
+	//---------------------------------------------------------------------------------------- shopAt
+	public RealShop shopAt(String key)
+	{
+		return shops.get(key);
 	}
 
 	//------------------------------------------------------------------------------------------ save

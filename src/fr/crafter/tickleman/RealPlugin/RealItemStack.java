@@ -4,9 +4,11 @@ package fr.crafter.tickleman.RealPlugin;
 public class RealItemStack
 {
 
-	private int typeId;
 	private int amount;
+
 	private short durability;
+
+	private int typeId;
 
 	//######################################################################################## PUBLIC
 

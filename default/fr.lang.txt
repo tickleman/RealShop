@@ -1,4 +1,5 @@
 # CLIENT
+You don't have the permission to shop=Vous n'avez pas les permissions d'acceder aux magasins
 +owner's shop +name is closed=Le magasin +name de +owner est ferme
 Dropping items when you are in a shop is prohibited=Il est interdit de deposer des objets lorsque vous etes dans un magasin 
 Nothing can be sold here=Rien ne peut etre vendu ici

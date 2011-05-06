@@ -1,0 +1,38 @@
+[manage|s|1 : hjälp med drift av affär]
+/rshop create [<name>] : skapa en affär
+/rshop delete : ta bort en affär
+/rshop close : stäng affären temporärt
+/rshop open : öppna affären (ifall den är stängd)
+/rshop : affärens fulla instruktioner
+
+[buysell|bs|2 : äffärens köp/sälj restrict. hjälp]
+använd dessa kommandsen utan ids för att få aktuell status
+/rshop buy [+<id>][-<id>][...] : lägg till/ta bort "köp-endast" saker
+/rshop sell [+<id>][-<id>][...] : lägg till/ta bort \"sälj-endast\" saker
+/rshop xbuy [+<id>][-<id>][...] : lägg till/ta bort \"köp-inte\" saker
+/rshop xsell [+<id>][-<id>][...] : lägg till/ta bort \"sälj-inte\" saker
+
+[flags|f|3 : affärs inställningar hjälp]
+/rshop infiniteBuy on|off : köp i oändligheter : auto-refilla kistan (default: off)
+/rshop infiniteSell on|off : sälj i oändligheter : sålda saker försvinner (default: off)
+/rshop marketItemsOnly on|off : köp/sälj endast affärssaker (default: off)
+/rshop damagedItems on|off : köp/sälj skadade saker (default: on)
+
+[prices|p|4|price : spelarens pris inställningar hjälp]
+/rshop price <itemId> <buyPrice> [<SellPrice>] : bestämm en saks pris
+/rshop price del <itemId> : ta bort en saks pris
+/rshop price <itemId> : tala om en saks pris
+/rshop price : tala om alla ens priser
+
+[market|m|5 : marknads-pris inställningar hjälp]
+/rshop market <itemId> <buyPrice> [<SellPrice>] : bestämm priset på marknaden
+/rshop market del <itemId> : ta bort sakens pris från marknaden
+/rshop market <itemId> : tala om sakens pris på marknaden
+/rshop market : tala om alla priser från marknaden
+
+[admin|a|6 : admin kommands hjälp]
+/rshop reload : ladda om konfigurations filerna
+/rshop check : checka infon på äffärerna globalt
+/rshop log : visa loggen för daglig prisrörelse
+/rshop simul : sumulera en omräkning av priserna (realshop.log)
+/rshop daily : forcera en omräkning av priserna

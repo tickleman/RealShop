@@ -92,57 +92,65 @@ public class RealShopPlugin extends RealPlugin
 	//------------------------------------------------------------------------------------ enterChest
 	public boolean enterChest(Player player, Block block)
 	{
-		// write in-chest state (inChest = true, player's coordinates, inventory backup)
-		String playerName = player.getName();
-		RealInChestState inChestState = inChestStates.get(playerName);
-		if (inChestState == null) {
-			inChestState = new RealInChestState();
-			inChestStates.put(playerName, inChestState);
-		}
-		inChestState.enterTime = RealTime.worldToRealTime(player.getWorld());
-		inChestState.inChest = true;
-		inChestState.block = block;
-		RealShop shop = shopsFile.shopAt(inChestState.block);
-		inChestState.chest = RealChest.create(block);
-		String chestId = inChestState.chest.getChestId();
-		String otherPlayerName = lockedChests.get(chestId); 
-		if (otherPlayerName != null) {
+		if (!hasPermission(player, "shop")) {
 			player.sendMessage(
 				RealColor.cancel
-				+ lang.tr("The shop +name is already in use by player +client")
-				.replace("+client", RealColor.player + otherPlayerName + RealColor.cancel)
-				.replace("+name", RealColor.shop + shop.name + RealColor.cancel)
-				.replace("  ", " ")
+				+ lang.tr("You don't have the permission to shop")
 			);
-			inChestStates.remove(playerName);
 			return false;
 		} else {
-			lockedChests.put(chestId, playerName);
-			inChestState.lastX = Math.round(player.getLocation().getX());
-			inChestState.lastZ = Math.round(player.getLocation().getZ());
-			inChestState.itemStackHashMap = RealItemStackHashMap.create().storeInventory(
-					RealInventory.create(inChestState.chest), false
-			);
-			// shop information
-			if (shop.player.equals(playerName)) {
-				player.sendMessage(
-					RealColor.message
-					+ lang.tr("Welcome into your shop +name")
-					.replace("+name", RealColor.shop + shop.name + RealColor.message)
-					.replace("  ", " ")
-				);
-			} else {
-				player.sendMessage(
-					RealColor.message
-					+ lang.tr("Welcome into +owner's shop +name. You've got +money in your pocket")
-					.replace("+money", RealColor.price + realEconomy.getBalance(player.getName(), true) + RealColor.message)
-					.replace("+name", RealColor.shop + shop.name + RealColor.message)
-					.replace("+owner", RealColor.player + shop.player + RealColor.message)
-					.replace("  ", " ")
-				);
+			// write in-chest state (inChest = true, player's coordinates, inventory backup)
+			String playerName = player.getName();
+			RealInChestState inChestState = inChestStates.get(playerName);
+			if (inChestState == null) {
+				inChestState = new RealInChestState();
+				inChestStates.put(playerName, inChestState);
 			}
-			playersInChestCounter = inChestStates.size();
-			return true;
+			inChestState.enterTime = RealTime.worldToRealTime(player.getWorld());
+			inChestState.inChest = true;
+			inChestState.block = block;
+			RealShop shop = shopsFile.shopAt(inChestState.block);
+			inChestState.chest = RealChest.create(block);
+			String chestId = inChestState.chest.getChestId();
+			String otherPlayerName = lockedChests.get(chestId); 
+			if (otherPlayerName != null) {
+				player.sendMessage(
+					RealColor.cancel
+					+ lang.tr("The shop +name is already in use by player +client")
+					.replace("+client", RealColor.player + otherPlayerName + RealColor.cancel)
+					.replace("+name", RealColor.shop + shop.name + RealColor.cancel)
+					.replace("  ", " ")
+				);
+				inChestStates.remove(playerName);
+				return false;
+			} else {
+				lockedChests.put(chestId, playerName);
+				inChestState.lastX = Math.round(player.getLocation().getX());
+				inChestState.lastZ = Math.round(player.getLocation().getZ());
+				inChestState.itemStackHashMap = RealItemStackHashMap.create().storeInventory(
+						RealInventory.create(inChestState.chest), false
+				);
+				// shop information
+				if (shop.player.equals(playerName)) {
+					player.sendMessage(
+						RealColor.message
+						+ lang.tr("Welcome into your shop +name")
+						.replace("+name", RealColor.shop + shop.name + RealColor.message)
+						.replace("  ", " ")
+					);
+				} else {
+					player.sendMessage(
+						RealColor.message
+						+ lang.tr("Welcome into +owner's shop +name. You've got +money in your pocket")
+						.replace("+money", RealColor.price + realEconomy.getBalance(player.getName(), true) + RealColor.message)
+						.replace("+name", RealColor.shop + shop.name + RealColor.message)
+						.replace("+owner", RealColor.player + shop.player + RealColor.message)
+						.replace("  ", " ")
+					);
+				}
+				playersInChestCounter = inChestStates.size();
+				return true;
+			}
 		}
 	}
 
@@ -340,10 +348,41 @@ public class RealShopPlugin extends RealPlugin
 	public boolean hasPermission(Player player, String permission)
 	{
 		if (realPermissions.permissionsPlugin.equals("none")) {
-			System.out.println("op/user permission " + permission);
-			return (player.isOp() || config.shopOpOnly.equals("false"));
+			if (player.isOp()) {
+				// operator access everything
+				return true;
+			} else {
+				// permissions only for functions that users have access to
+				if (config.shopOpOnly.equals("true")) {
+					return false;
+				} else if (
+					permission == "shop"
+					|| permission == "help"
+					|| permission == "info"
+					|| permission == "create"
+					|| permission == "delete"
+					|| permission == "give"
+					|| permission == "open"
+					|| permission == "close"
+					|| permission == "buy"
+					|| permission == "sell"
+					|| permission == "xbuy"
+					|| permission == "xsell"
+					|| permission == "marketitemsonly"
+					|| permission == "damageditems"
+					|| permission == "price"
+					|| permission == "price.info"
+					|| permission == "price.display"
+					|| permission == "price.set"
+					|| permission == "price.del"
+				) {
+					return true;
+				} else {
+					return false;
+				}
+			}
 		} else {
-			System.out.println(realPermissions.permissionsPlugin + " permission " + permission);
+			// uses a permissions plugin
 			return realPermissions.hasPermission(player, permission);
 		}
 	}
@@ -456,7 +495,7 @@ public class RealShopPlugin extends RealPlugin
 			String command = cmd.getName().toLowerCase();
 			if (
 				(command.equals("rs") || command.equals("rshop"))
-				&& (player.isOp() || config.shopOpOnly.equals("false"))
+				&& (hasPermission(player, "op") || config.shopOpOnly.equals("false"))
 			) {
 				boolean isOp = player.isOp();
 				String playerName = player.getName();
@@ -465,25 +504,42 @@ public class RealShopPlugin extends RealPlugin
 				String param2 = ((args.length > 1) ? args[1] : "");
 				String param3 = ((args.length > 2) ? args[2] : "");
 				String param4 = ((args.length > 3) ? args[3] : "");
-				if (param == "") param = "info";
-				else if (param == "m") param = "market";
-				else if (param == "p") param = "price";
-				else if (param == "chk") param = "check";
-				else if (param == "day") param = "daily";
-				else if (param == "rel") param = "reload";
-				else if (param == "sim") param = "simul";
+				// shortcuts
+				if (param.equals("")) param = "info";
+				else if (param.equals("?"))   param = "help";
+				else if (param.equals("b"))   param = "buy";
+				else if (param.equals("chk")) param = "check";
+				else if (param.equals("cl"))  param = "close";
+				else if (param.equals("day")) param = "daily";
+				else if (param.equals("di"))  param = "damagedItems";
+				else if (param.equals("g"))   param = "give";
+				else if (param.equals("h"))   param = "help";
+				else if (param.equals("i"))   param = "info";
+				else if (param.equals("ib"))  param = "infiniteBuy";
+				else if (param.equals("is"))  param = "infiniteSell";
+				else if (param.equals("m"))   param = "market";
+				else if (param.equals("mi"))  param = "marketItemsOnly";
+				else if (param.equals("op"))  param = "open";
+				else if (param.equals("p"))   param = "price";
+				else if (param.equals("rel")) param = "reload";
+				else if (param.equals("s"))   param = "sell";
+				else if (param.equals("sim")) param = "simul";
+				else if (param.equals("xb"))  param = "xbuy";
+				else if (param.equals("xs"))  param = "xsell";
+				// second shortcuts
+				if (param2.equals("d")) param2 = "del";
+				if (param2.equals("i")) param2 = "info";
 				if (hasPermission(player, param)) {
 					// /rshop commands that do not need to be into a shop
-					if (param.equals("help") || param.equals("h") || param.equals("?")) {
+					if (param.equals("help")) {
 						help(player, isOp, param2);
-					} else if (isOp && (param.equals("reload"))) {
+					} else if (param.equals("reload")) {
 						reload(player);
-					} else if (isOp && (param.equals("check"))) {
+					} else if (param.equals("check")) {
 						pluginInfos(player);
-					} else if (isOp && (param.equals("market"))) {
-						if (param2.equals("")) param2 = "info";
-						else if (param2.equals("d")) param2 = "del";
-						else param2 = args.length > 2 ? "set" : "display";
+					} else if (param.equals("market")) {
+						if (param2.equals(""))          param2 = "info";
+						else if (!param2.equals("del")) param2 = args.length > 2 ? "set" : "display";
 						if (hasPermission(player, param + "." + param2)) {
 							if (param2.equals("info")) {
 								pluginInfosPrices(player);
@@ -496,9 +552,8 @@ public class RealShopPlugin extends RealPlugin
 							}
 						}
 					} else if (param.equals("price")) {
-						if (param2.equals("")) param2 = "info";
-						else if (param2.equals("d")) param2 = "del";
-						else param2 = args.length > 2 ? "set" : "display";
+						if (param2.equals(""))          param2 = "info";
+						else if (!param2.equals("del")) param2 = args.length > 2 ? "set" : "display";
 						if (hasPermission(player, param + "." + param2)) {
 							if (param2.equals("")) {
 								pluginInfosPlayerPrices(player);
@@ -510,19 +565,19 @@ public class RealShopPlugin extends RealPlugin
 								commands.playerPriceDisplay(player, param2);
 							}
 						}
-					} else if (isOp && param.equals("log")) {
+					} else if (param.equals("log")) {
 						pluginInfosDailyLog(player);
 						player.sendMessage(
 							RealColor.text
 							+ lang.tr("Daily log was dumped into the realshop.log file")
 						);
-					} else if (isOp && (param.equals("simul"))) {
+					} else if (param.equals("simul")) {
 						marketFile.dailyPricesCalculation(dailyLog, true);
 						player.sendMessage(
 							RealColor.text
 							+ lang.tr("Daily prices calculation simulation is into the realshop.log file")
 						);
-					} else if (isOp && (param.equals("daily"))) {
+					} else if (param.equals("daily")) {
 						marketFile.dailyPricesCalculation(dailyLog);
 						player.sendMessage(
 							RealColor.text
@@ -552,11 +607,11 @@ public class RealShopPlugin extends RealPlugin
 							}
 						} else if (param.equals("info")) {
 							shopInfo(player, block);
-						} else if (player.isOp() || playerName.equals(shop.player)) {
+						} else if (hasPermission(player, "op") || playerName.equals(shop.player)) {
 							// /rshop commands on a chest that is a shop that belongs to me
 							if (param.equals("delete")) {
 								registerBlockAsShop(player, block, param2);
-							} else if (param.equals("open") || param.equals("o")) {
+							} else if (param.equals("open")) {
 								shop.opened = true;
 								player.sendMessage(
 									RealColor.message
@@ -564,7 +619,7 @@ public class RealShopPlugin extends RealPlugin
 									.replace("+name", RealColor.shop + shop.name + RealColor.message)
 									.replace("  ", " ")
 								);
-							} else if (param.equals("close") || param.equals("c")) {
+							} else if (param.equals("close")) {
 								shop.opened = false;
 								player.sendMessage(
 										RealColor.message
@@ -572,22 +627,22 @@ public class RealShopPlugin extends RealPlugin
 										.replace("+name", RealColor.shop + shop.name + RealColor.message)
 										.replace("  ", " ")
 									);
-							} else if (param.equals("buy") || param.equals("b")) {
+							} else if (param.equals("buy")) {
 								shopAddBuy(player, block, param2, false);
 								if (neighbor != null) shopAddBuy(player, neighbor, param2, true); 
-							} else if (param.equals("sell") || param.equals("s")) {
+							} else if (param.equals("sell")) {
 								shopAddSell(player, block, param2, false);
 								if (neighbor != null) shopAddSell(player, neighbor, param2, true);
-							} else if (param.equals("xbuy") || param.equals("xb")) {
+							} else if (param.equals("xbuy")) {
 								shopExclBuy(player, block, param2, false);
 								if (neighbor != null) shopExclBuy(player, neighbor, param2, true);
-							} else if (param.equals("xsell") || param.equals("xs")) {
+							} else if (param.equals("xsell")) {
 								shopExclSell(player, block, param2, false);
 								if (neighbor != null) shopExclSell(player, neighbor, param2, true);
 							} else if (param.equals("give")) {
 								shopGive(player, block, param2, false);
 								if (neighbor != null) shopGive(player, neighbor, param2, true);
-							} else if (isOp && (param.equals("infiniteBuy") || param.equals("ib"))) {
+							} else if (param.equals("infiniteBuy")) {
 								shop.setFlag("infiniteBuy", param2);
 								player.sendMessage(
 									RealColor.message
@@ -595,7 +650,7 @@ public class RealShopPlugin extends RealPlugin
 									+ " " + RealColor.command
 									+ lang.tr(shop.getFlag("infiniteBuy", config.shopInfiniteBuy.equals("true")) ? "on" : "off")
 								);
-							} else if (isOp && (param.equals("infiniteSell") || param.equals("is"))) {
+							} else if (param.equals("infiniteSell")) {
 								shop.setFlag("infiniteSell", param2);
 								player.sendMessage(
 									RealColor.message
@@ -603,7 +658,7 @@ public class RealShopPlugin extends RealPlugin
 									+ " " + RealColor.command
 									+ lang.tr(shop.getFlag("infiniteSell", config.shopInfiniteSell.equals("true")) ? "on" : "off")
 								);
-							} else if (param.equals("marketItemsOnly") || param.equals("mi")) {
+							} else if (param.equals("marketItemsOnly")) {
 								shop.setFlag("marketItemsOnly", param2);
 								player.sendMessage(
 									RealColor.message
@@ -611,7 +666,7 @@ public class RealShopPlugin extends RealPlugin
 									+ " " + RealColor.command
 									+ lang.tr(shop.getFlag("marketItemsOnly", config.shopMarketItemsOnly.equals("true")) ? "on" : "off")
 								);
-							} else if (param.equals("damagedItems") || param.equals("di")) {
+							} else if (param.equals("damagedItems")) {
 								shop.setFlag("damagedItems", param2);
 								player.sendMessage(
 									RealColor.message

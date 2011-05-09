@@ -35,7 +35,7 @@ public class RealEconomy
 		} else {
 			result = amount.toString() + " " + getCurrency();
 		}
-		return result;
+		return result.replace(".00 ", "").replace(".0 ", "");
 	}
 
 	//------------------------------------------------------------------------------------ getBalance

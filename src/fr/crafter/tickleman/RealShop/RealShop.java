@@ -3,6 +3,8 @@ package fr.crafter.tickleman.RealShop;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import fr.crafter.tickleman.RealPlugin.RealItemStack;
+
 //######################################################################################## RealShop
 public class RealShop
 {
@@ -101,8 +103,9 @@ public class RealShop
 	/**
 	 * Returns true if the player can buy an item into this shop
 	 */
-	public boolean isItemBuyAllowed(String typeIdDamage)
+	public boolean isItemBuyAllowed(String typeIdDurability)
 	{
+		String typeIdDamage = RealItemStack.typeIdDurabilityWithoutDamage(typeIdDurability);
 		return (
 			(buyOnly.isEmpty() || (buyOnly.get(typeIdDamage) != null))
 			&& (buyExclude.get(typeIdDamage) == null)
@@ -113,8 +116,9 @@ public class RealShop
 	/**
 	 * Returns true if the player can sell an item into this shop
 	 */
-	public boolean isItemSellAllowed(String typeIdDamage)
+	public boolean isItemSellAllowed(String typeIdDurability)
 	{
+		String typeIdDamage = RealItemStack.typeIdDurabilityWithoutDamage(typeIdDurability);
 		return (
 			(sellOnly.isEmpty() || (sellOnly.get(typeIdDamage) != null))
 			&& (sellExclude.get(typeIdDamage) == null)

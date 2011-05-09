@@ -48,7 +48,7 @@ public class RealShopDailyLog
 			Iterator<RealShopTransactionLine> iterator = transaction.transactionLines.iterator();
 			while (iterator.hasNext()) {
 				RealShopTransactionLine item = iterator.next();
-				String typeIdDamage = item.getTypeIdDamage();
+				String typeIdDamage = item.getTypeIdDurability();
 				add(typeIdDamage, item.getAmount());
 			}
 		}

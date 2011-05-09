@@ -208,16 +208,17 @@ public class RealShopPlugin extends RealPlugin
 								.storeRealItemStackList(transaction.cancelledLines, false, false);
 							}
 							// display cancelled lines information
-							Iterator<RealShopTransactionLine> iterator = transaction.cancelledLines.iterator();
-							while (iterator.hasNext()) {
-								RealShopTransactionLine line = iterator.next();
+							//Iterator<RealShopTransactionLine> iterator = transaction.cancelledLines.iterator();
+							for (RealShopTransactionLine line : transaction.cancelledLines) {
+							//while (iterator.hasNext()) {
+								//RealShopTransactionLine line = iterator.next();
 								String strSide = (line.getAmount() < 0) ? "sale" : "purchase";
 								log.info(
 									("[shop +name] +owner > +client: cancelled " + strSide + " +item x+quantity (+linePrice) +comment")
 									.replace("+name", shop.name)
 									.replace("+owner", shop.player)
 									.replace("+client", playerName)
-									.replace("+item", line.getTypeIdDamage() + " (" + dataValuesFile.getName(line.getTypeIdDamage()) + ")")
+									.replace("+item", line.getTypeIdDurability() + " (" + dataValuesFile.getName(line.getTypeIdDurability()) + ")")
 									.replace("+linePrice", "" + Math.abs(line.getLinePrice()))
 									.replace("+price", "" + line.getUnitPrice())
 									.replace("+quantity", "" + Math.abs(line.getAmount()))
@@ -227,7 +228,7 @@ public class RealShopPlugin extends RealPlugin
 								player.sendMessage(
 									RealColor.cancel
 									+ lang.tr("Cancelled " + strSide + " +item x+quantity (+linePrice) +comment")
-									.replace("+item", RealColor.item + dataValuesFile.getName(line.getTypeIdDamage()) + RealColor.cancel)
+									.replace("+item", RealColor.item + dataValuesFile.getName(line.getTypeIdDurability()) + RealColor.cancel)
 									.replace("+linePrice", RealColor.price + Math.abs(line.getLinePrice()) + RealColor.cancel)
 									.replace("+price", RealColor.price + line.getUnitPrice() + RealColor.cancel)
 									.replace("+quantity", RealColor.quantity + Math.abs(line.getAmount()) + RealColor.cancel)
@@ -257,9 +258,10 @@ public class RealShopPlugin extends RealPlugin
 							// store transaction lines into daily log
 							dailyLog.addTransaction(transaction);
 							// display transaction lines information
-							Iterator<RealShopTransactionLine> iterator = transaction.transactionLines.iterator();
-							while (iterator.hasNext()) {
-								RealShopTransactionLine transactionLine = iterator.next();
+							//Iterator<RealShopTransactionLine> iterator = transaction.transactionLines.iterator();
+							//while (iterator.hasNext()) {
+							for (RealShopTransactionLine transactionLine : transaction.transactionLines) {
+								//RealShopTransactionLine transactionLine = iterator.next();
 								String strSide, shopStrSide;
 								if (transactionLine.getAmount() < 0) {
 									strSide = "Sold";
@@ -291,7 +293,7 @@ public class RealShopPlugin extends RealPlugin
 									.replace("+name", shop.name)
 									.replace("+owner", shop.player)
 									.replace("+client", playerName)
-									.replace("+item", transactionLine.getTypeIdDamage() + " (" + dataValuesFile.getName(transactionLine.getTypeIdDamage()) + ")")
+									.replace("+item", transactionLine.getTypeIdDurability() + " (" + dataValuesFile.getName(transactionLine.getTypeIdDurability()) + ")")
 									.replace("+linePrice", "" + Math.abs(transactionLine.getLinePrice()))
 									.replace("+price", "" + transactionLine.getUnitPrice())
 									.replace("+quantity", "" + Math.abs(transactionLine.getAmount()))
@@ -300,7 +302,7 @@ public class RealShopPlugin extends RealPlugin
 									RealColor.text
 									+ lang.tr(strSide + " +item x+quantity (+linePrice)")
 									.replace("+client", RealColor.player + playerName + RealColor.text)
-									.replace("+item", RealColor.item + dataValuesFile.getName(transactionLine.getTypeIdDamage()) + RealColor.text)
+									.replace("+item", RealColor.item + dataValuesFile.getName(transactionLine.getTypeIdDurability()) + RealColor.text)
 									.replace("+linePrice", RealColor.price + realEconomy.format(Math.abs(transactionLine.getLinePrice())) + RealColor.text)
 									.replace("+name", RealColor.shop + shop.name + RealColor.text)
 									.replace("+owner", RealColor.player + shop.player + RealColor.text)
@@ -313,7 +315,7 @@ public class RealShopPlugin extends RealPlugin
 										RealColor.text
 										+ lang.tr("[shop +name] +client " + shopStrSide + " +item x+quantity (+linePrice)")
 										.replace("+client", RealColor.player + playerName + RealColor.text)
-										.replace("+item", RealColor.item + dataValuesFile.getName(transactionLine.getTypeIdDamage()) + RealColor.text)
+										.replace("+item", RealColor.item + dataValuesFile.getName(transactionLine.getTypeIdDurability()) + RealColor.text)
 										.replace("+linePrice", RealColor.price + realEconomy.format(Math.abs(transactionLine.getLinePrice())) + RealColor.text)
 										.replace("+name", RealColor.shop + shop.name + RealColor.text)
 										.replace("+owner", RealColor.player + shop.player + RealColor.text)
@@ -470,14 +472,14 @@ public class RealShopPlugin extends RealPlugin
 				.replace("+name", shop.name)
 				.replace("+owner", shop.player)
 				.replace("+client", player.getName())
-				.replace("+item", item.getTypeIdDamage() + " (" + dataValuesFile.getName(item.getTypeIdDamage()) + ")")
+				.replace("+item", item.getTypeIdDurability() + " (" + dataValuesFile.getName(item.getTypeIdDurability()) + ")")
 				.replace("+quantity", "" + Math.abs(item.getAmount()))
 				.replace("  ", " ").replace(" ]", "]").replace("[ ", "[")
 			);
 			player.sendMessage(
 				RealColor.cancel
 				+ lang.tr("Stolen +item x+quantity item duplicated !")
-				.replace("+item", RealColor.item + dataValuesFile.getName(item.getTypeIdDamage()) + RealColor.cancel)
+				.replace("+item", RealColor.item + dataValuesFile.getName(item.getTypeIdDurability()) + RealColor.cancel)
 				.replace("+quantity", RealColor.quantity + Math.abs(item.getAmount()) + RealColor.cancel)
 			);
 		}
@@ -595,6 +597,7 @@ public class RealShopPlugin extends RealPlugin
 							block.getWorld(), block.getX(), block.getY(), block.getZ()
 						);
 						RealShop shop = shopsFile.shopAt(lastChestKey);
+						RealShop neighborShop = ((neighbor == null) ? null : shopsFile.shopAt(neighbor));
 						if (shop == null) {
 							// /rshop commands on a chest that is not a shop
 							if (param.equals("create") || param.equals("c")) {
@@ -613,6 +616,7 @@ public class RealShopPlugin extends RealPlugin
 								registerBlockAsShop(player, block, param2);
 							} else if (param.equals("open")) {
 								shop.opened = true;
+								if (neighborShop != null) neighborShop.opened = true;
 								player.sendMessage(
 									RealColor.message
 									+ lang.tr("The shop +name is now opened")
@@ -621,6 +625,7 @@ public class RealShopPlugin extends RealPlugin
 								);
 							} else if (param.equals("close")) {
 								shop.opened = false;
+								if (neighborShop != null) neighborShop.opened = false;
 								player.sendMessage(
 										RealColor.message
 										+ lang.tr("The shop +name is now closed")
@@ -1305,7 +1310,7 @@ public class RealShopPlugin extends RealPlugin
 		count = 20;
 		while (buyIterator.hasNext()) {
 			RealItemStack item = buyIterator.next();
-			String typeIdDamage = item.getTypeIdDamage();
+			String typeIdDamage = item.getTypeIdDurability();
 			RealPrice price = pricesFile.getPrice(typeIdDamage, marketFile);
 			if (price == null) {
 				price = marketFile.getPrice(typeIdDamage, null);

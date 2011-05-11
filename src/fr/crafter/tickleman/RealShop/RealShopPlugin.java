@@ -83,7 +83,7 @@ public class RealShopPlugin extends RealPlugin
 	//-------------------------------------------------------------------------------- RealShopPlugin
 	public RealShopPlugin()
 	{
-		super("tickleman", "RealShop", "0.61");
+		super("tickleman", "RealShop", "0.62");
 		commands = new RealShopCommands(this);
 		realEconomy = new RealEconomy(this);
 		realPermissions = new RealPermissions(this);
@@ -540,9 +540,13 @@ public class RealShopPlugin extends RealPlugin
 					} else if (param.equals("check")) {
 						pluginInfos(player);
 					} else if (param.equals("market")) {
-						if (param2.equals(""))          param2 = "info";
-						else if (!param2.equals("del")) param2 = args.length > 2 ? "set" : "display";
-						if (hasPermission(player, param + "." + param2)) {
+						String permParam = param2;
+						if (param2.equals("")) {
+							param2 = permParam = "info";
+						} else if (!param2.equals("del")) {
+							permParam = args.length > 2 ? "set" : "display";
+						}
+						if (hasPermission(player, param + "." + permParam)) {
 							if (param2.equals("info")) {
 								pluginInfosPrices(player);
 							} else if (param2.equals("del")) {
@@ -554,10 +558,15 @@ public class RealShopPlugin extends RealPlugin
 							}
 						}
 					} else if (param.equals("price")) {
-						if (param2.equals(""))          param2 = "info";
-						else if (!param2.equals("del")) param2 = args.length > 2 ? "set" : "display";
-						if (hasPermission(player, param + "." + param2)) {
-							if (param2.equals("")) {
+						String permParam = param2;
+						if (param2.equals("")) {
+							param2 = permParam = "info";
+						} else if (!param2.equals("del")) {
+							permParam = args.length > 2 ? "set" : "display";
+						}
+						player.sendMessage(param + " " + param2);
+						if (hasPermission(player, param + "." + permParam)) {
+							if (param2.equals("info")) {
 								pluginInfosPlayerPrices(player);
 							} else if (param2.equals("del")) {
 								commands.playerPriceDel(player, param3);

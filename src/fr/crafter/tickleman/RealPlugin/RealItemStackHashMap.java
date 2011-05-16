@@ -6,6 +6,7 @@ import java.util.Iterator;
 
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
 //############################################################################ RealItemStackHashMap
 public class RealItemStackHashMap
@@ -47,6 +48,16 @@ public class RealItemStackHashMap
 		return result;
 	}
 
+	//------------------------------------------------------------------------- storeItemStackHashMap
+	public RealItemStackHashMap storeItemStackHashMap(
+		RealItemStackHashMap realItemStackHashMap, boolean removal
+	) {
+		for (RealItemStack realItemStack : realItemStackHashMap.getContents()) {
+			storeItem(realItemStack, removal);
+		}
+		return this;
+	}
+
 	//-------------------------------------------------------------------------------- storeInventory
 	public RealItemStackHashMap storeInventory(Inventory inventory, boolean removal)
 	{
@@ -63,11 +74,26 @@ public class RealItemStackHashMap
 		for (int i = 0; i < realInventory.inventories.length; i++) {
 			storeInventory(realInventory.inventories[i], removal);
 		}
+		if (realInventory.playerFlag) {
+			PlayerInventory inventory = (PlayerInventory)realInventory.inventories[1];
+			storeItem(inventory.getHelmet(), removal);
+			storeItem(inventory.getChestplate(), removal);
+			storeItem(inventory.getLeggings(), removal);
+			storeItem(inventory.getBoots(), removal);
+		}
 		return this;
 	}
 
-	//----------------------------------------------------------------------------------- storeItem
+	//------------------------------------------------------------------------------------- storeItem
 	private void storeItem(ItemStack item, boolean removal)
+	{
+		if (item != null) {
+			storeItem(new RealItemStack(item), removal);
+		}
+	}
+
+	//------------------------------------------------------------------------------------- storeItem
+	private void storeItem(RealItemStack item, boolean removal)
 	{
 		if (item != null) {
 			Integer itemAmount = item.getAmount();

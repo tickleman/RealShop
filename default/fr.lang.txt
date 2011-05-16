@@ -14,9 +14,11 @@ Welcome into +owner's shop +name. You've got +money in your pocket=Bienvenue dan
 Cancelled purchase +item x+quantity (+linePrice) +comment=Achat annule +item x+quantity (+linePrice) +comment
 Cancelled sale +item x+quantity (+linePrice) +comment=Vente annulee +item x+quantity (+linePrice) +comment
 Cancelled transaction=Transaction annulee
+had not enough money=n'a pas assez d'argent
 No transaction=Aucune transaction
 Purchased +item x+quantity (+linePrice)=Achat +item x+quantity (+linePrice)
 Sold +item x+quantity (+linePrice)=Vente +item x+quantity (+linePrice)
++owner can't pay +amount to +client=+owner ne peut pas payer +amount a +client
 
 # CLIENT : CANCELLED LINES COMMENTS
 buy not allowed=achat interdit
@@ -43,6 +45,7 @@ The shop +name is now closed=Le magasin +name est maintenant ferme
 The shop +name is now opened=Le magasin +name est maintenant ouvert
 The shop +name was given to +player=Le magasin +name a ete donne a +player
 Welcome into your shop +name=Bienvenue dans votre magasin +name
+You leave your shop +name=Vous quittez votre magasin +name
 You must select a chest-shop before typing any /rshop command=Vous devez selectionner un coffre-magasin avant de taper une commande /rshop
 You selected +owner's shop +name=Vous avez selectionne le magasin +name de +owner
 

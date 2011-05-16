@@ -8,7 +8,7 @@ import org.bukkit.block.Chest;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-
+import org.bukkit.inventory.PlayerInventory;
 
 //################################################################################### RealInventory
 /*
@@ -29,7 +29,7 @@ public class RealInventory
 	private Chest[] chests;
 
 	/**
-	 * Error log : when an item could not be removed, then it's logged here
+	 * Error log : when an item could not be added / removed, then it's logged here
 	 */
 	public ArrayList<RealItemStack> errorLog = new ArrayList<RealItemStack>();
 
@@ -48,6 +48,11 @@ public class RealInventory
 	 * Set with backup(), and used by restore() to restore
 	 */
 	private ArrayList<ItemStack[]> itemStackBackup;
+
+	/**
+	 * true if this is a player's inventory
+	 */
+	public boolean playerFlag;
 
 	//--------------------------------------------------------------------------------- RealInventory
 	/**
@@ -101,6 +106,7 @@ public class RealInventory
 				amount = remaining.get(0).getAmount();
 			}
 		}
+		// not enough room : restore inventory and return false
 		restore();
 		return false;
 	}
@@ -135,6 +141,15 @@ public class RealInventory
 		for (int i = 0; i < inventories.length; i++) {
 			itemStackBackup.add(inventories[i].getContents().clone());
 		}
+		if (playerFlag) {
+			PlayerInventory playerInventory = (PlayerInventory)inventories[0];
+			ItemStack[] itemStacks = new ItemStack[4];
+			itemStacks[0] = RealItemStack.clone(playerInventory.getHelmet());
+			itemStacks[1] = RealItemStack.clone(playerInventory.getChestplate());
+			itemStacks[2] = RealItemStack.clone(playerInventory.getLeggings());
+			itemStacks[3] = RealItemStack.clone(playerInventory.getBoots());
+			itemStackBackup.add(itemStacks);
+		}
 		return itemStackBackup;
 	}
 
@@ -146,6 +161,7 @@ public class RealInventory
 	{
 		chests = new Chest[2];
 		inventories = new Inventory[0];
+		playerFlag = false;
 	}
 
 	//---------------------------------------------------------------------------------------- create
@@ -189,13 +205,14 @@ public class RealInventory
 	//----------------------------------------------------------------------- loadFromPlayerInventory
 	/**
 	 * Clear current inventory (if set) and link RealInventory to a player's inventory
-	 * (excluding armor slots)
+	 * (including armor slots)
 	 */
 	private void loadFromPlayerInventory(Player player)
 	{
 		clear();
 		inventories = new Inventory[1];
 		inventories[0] = player.getInventory();
+		playerFlag = true;
 	}
 
 	//-------------------------------------------------------------------- loadFromRealChestInventory
@@ -233,20 +250,14 @@ public class RealInventory
 		for (int i = 0; i < inventories.length; i++) {
 			inventories[i].setContents(itemStackBackup.get(i));
 		}
-		update();
-	}
-
-	//-------------------------------------------------------------------------------------- moveFrom
-	public boolean moveFrom(RealInventory source, int typeId, int amount, short durability)
-	{
-		ArrayList<ItemStack[]> itemStackBackup = source.backup();
-		if (source.remove(typeId, amount, durability)) {
-			if (add(typeId, amount, durability)) {
-				return true;
-			}
-			source.restore(itemStackBackup);
+		if (playerFlag) {
+			PlayerInventory inventory = (PlayerInventory)inventories[0];
+			inventory.setHelmet(RealItemStack.clone(itemStackBackup.get(1)[0]));
+			inventory.setChestplate(RealItemStack.clone(itemStackBackup.get(1)[1]));
+			inventory.setLeggings(RealItemStack.clone(itemStackBackup.get(1)[2]));
+			inventory.setBoots(RealItemStack.clone(itemStackBackup.get(1)[3]));
 		}
-		return false;
+		update();
 	}
 
 	//-------------------------------------------------------------------------------------- moveFrom
@@ -257,6 +268,18 @@ public class RealInventory
 		);
 	}
 
+	//-------------------------------------------------------------------------------------- moveFrom
+	public boolean moveFrom(RealInventory source, int typeId, int amount, short durability)
+	{
+		ArrayList<ItemStack[]> itemStackBackup = source.backup();
+		if (source.remove(typeId, amount, durability)) {
+			if (add(typeId, amount, durability)) {
+				return true;
+			}
+		}
+		source.restore(itemStackBackup);
+		return false;
+	}
 
 	//---------------------------------------------------------------------------------------- remove
 	/**
@@ -380,7 +403,43 @@ public class RealInventory
 			ItemStack[] itemStackList = inventories[i].getContents();
 			for (int j = 0; j < itemStackList.length; j++) {
 				ItemStack itemStack = itemStackList[j];
-				string += "- " + j
+				if (itemStack == null) {
+					string += "- " + j + ": null\n";
+				} else {
+					string += "- " + j
+					+ ": typeId=" + itemStack.getTypeId()
+					+ ", amount=" + itemStack.getAmount()
+					+ ", durability=" + itemStack.getDurability()
+					+ "\n";
+				}
+			}
+		}
+		if (playerFlag) {
+			ItemStack itemStack;
+			PlayerInventory inventory = (PlayerInventory)inventories[0];
+			if ((itemStack = inventory.getHelmet()) != null) {
+				string += "- helmet"
+				+ ": typeId=" + itemStack.getTypeId()
+				+ ", amount=" + itemStack.getAmount()
+				+ ", durability=" + itemStack.getDurability()
+				+ "\n";
+			}
+			if ((itemStack = inventory.getChestplate()) != null) {
+				string += "- chestplate"
+				+ ": typeId=" + itemStack.getTypeId()
+				+ ", amount=" + itemStack.getAmount()
+				+ ", durability=" + itemStack.getDurability()
+				+ "\n";
+			}
+			if ((itemStack = inventory.getLeggings()) != null) {
+				string += "- leggings"
+				+ ": typeId=" + itemStack.getTypeId()
+				+ ", amount=" + itemStack.getAmount()
+				+ ", durability=" + itemStack.getDurability()
+				+ "\n";
+			}
+			if ((itemStack = inventory.getBoots()) != null) {
+				string += "- boots"
 				+ ": typeId=" + itemStack.getTypeId()
 				+ ", amount=" + itemStack.getAmount()
 				+ ", durability=" + itemStack.getDurability()

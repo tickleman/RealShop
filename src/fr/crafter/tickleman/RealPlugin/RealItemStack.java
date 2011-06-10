@@ -41,7 +41,9 @@ public class RealItemStack
 				itemStack.getAmount(),
 				itemStack.getDurability()
 			);
-			clone.setData(itemStack.getData());
+			if (itemStack.getData() != null) {
+				clone.setData(itemStack.getData());
+			}
 			return clone;
 		}
 	}

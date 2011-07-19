@@ -595,9 +595,6 @@ public class RealShopPlugin extends RealPlugin
 								commands.playerPriceDisplay(player, param2);
 							}
 						}
-					} else if (param.equals("inv")) {
-						RealInventory inventory = RealInventory.create(player);
-						System.out.println(inventory.toString());
 					} else if (param.equals("log")) {
 						pluginInfosDailyLog(player);
 						player.sendMessage(

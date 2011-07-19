@@ -1,7 +1,5 @@
 package fr.crafter.tickleman.RealPlugin;
 
-import org.bukkit.inventory.ItemStack;
-
 //############################################################################# class RealItemStack
 public class RealItemStack
 {
@@ -15,35 +13,11 @@ public class RealItemStack
 	//######################################################################################## PUBLIC
 
 	//--------------------------------------------------------------------------------- RealItemStack
-	public RealItemStack(ItemStack itemStack)
-	{
-		setTypeId(itemStack.getTypeId());
-		setAmount(itemStack.getAmount());
-		setDurability(itemStack.getDurability());
-	}
-
-	//--------------------------------------------------------------------------------- RealItemStack
 	public RealItemStack(int typeId, int amount, short durability)
 	{
 		setTypeId(typeId);
 		setAmount(amount);
 		setDurability(durability);
-	}
-
-	//----------------------------------------------------------------------------------------- clone
-	public static ItemStack clone(ItemStack itemStack)
-	{
-		if (itemStack == null) {
-			return null;
-		} else {
-			ItemStack clone = new ItemStack(
-				itemStack.getTypeId(),
-				itemStack.getAmount(),
-				itemStack.getDurability()
-			);
-			clone.setData(itemStack.getData());
-			return clone;
-		}
 	}
 
 	//------------------------------------------------------------------------------------- getAmount

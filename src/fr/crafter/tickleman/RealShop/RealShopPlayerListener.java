@@ -38,7 +38,7 @@ public class RealShopPlayerListener extends PlayerListener
 	@Override
 	public void onInventoryOpen(PlayerInventoryEvent event)
 	{
-		// craftbukkit 440-766 : cratbukkit seems to never call this, sorry !
+		// craftbukkit 440-740 : cratbukkit seems to never call this, sorry !
 		System.out.println("onInventoryOpen");
 		// exit previous chest
 		if (plugin.playersInChestCounter > 0) {
@@ -71,58 +71,56 @@ public class RealShopPlayerListener extends PlayerListener
 	@Override
 	public void onPlayerInteract(PlayerInteractEvent event)
 	{
+		// exit previous chest
 		if (plugin.playersInChestCounter > 0) {
-			// exit previous chest
 			plugin.exitChest(event.getPlayer(), false);
-			event.setCancelled(true);
-		} else {
-			// works only with players
-	    if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
-	    	Block block = event.getClickedBlock();
-				if (block.getType().equals(Material.CHEST)) {
-					// exit previous chest
-					Player player = event.getPlayer();
-					if (plugin.playersInChestCounter > 0) {
-						plugin.exitChest(player, false);
-					}
-					// select chest
-					plugin.selectChest(player, block, true);
-					// only if chest block is a shop
-					RealShop shop = plugin.shopsFile.shopAt(block);
-					if (shop != null) {
-						// calculate daily prices fluctuations
-						if (plugin.config.dailyPricesCalculation.equals("true")) {
-							World world = block.getWorld();
-							String worldName = world.getName();
-							Long worldTime = world.getFullTime();
-							Long lastTime = plugin.lastDayTime.get(worldName);
-							if (lastTime == null) {
-								lastTime = (long)0;
-							}
-							if (worldTime > lastTime) {
-								// notice that a world begins at 6000 (6:00am),
-								// so we have to translate if we want to fix the prices at midnight
-								long nextTime = ((worldTime + 6000) / 24000) * 24000 + 18000;
-								plugin.lastDayTime.put(worldName, nextTime);
-								// daily prices calculation
-								plugin.marketFile.dailyPricesCalculation(plugin.dailyLog);
-							}
+		}
+		// works only with players
+    if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+    	Block block = event.getClickedBlock();
+			if (block.getType().equals(Material.CHEST)) {
+				// exit previous chest
+				Player player = event.getPlayer();
+				if (plugin.playersInChestCounter > 0) {
+					plugin.exitChest(player, false);
+				}
+				// select chest
+				plugin.selectChest(player, block, true);
+				// only if chest block is a shop
+				RealShop shop = plugin.shopsFile.shopAt(block);
+				if (shop != null) {
+					// calculate daily prices fluctuations
+					if (plugin.config.dailyPricesCalculation.equals("true")) {
+						World world = block.getWorld();
+						String worldName = world.getName();
+						Long worldTime = world.getFullTime();
+						Long lastTime = plugin.lastDayTime.get(worldName);
+						if (lastTime == null) {
+							lastTime = (long)0;
 						}
-						if (shop.opened) {
-							// enter chest
-							if (!plugin.enterChest(player, block)) {
-								event.setCancelled(true);
-							}
-						} else {
-							player.sendMessage(
-								RealColor.cancel
-								+ plugin.lang.tr("+owner's shop +name is closed")
-								.replace("+owner", RealColor.player + shop.player + RealColor.cancel)
-								.replace("+name", RealColor.shop + shop.name + RealColor.cancel)
-								.replace("  ", " ")
-							);
+						if (worldTime > lastTime) {
+							// notice that a world begins at 6000 (6:00am),
+							// so we have to translate if we want to fix the prices at midnight
+							long nextTime = ((worldTime + 6000) / 24000) * 24000 + 18000;
+							plugin.lastDayTime.put(worldName, nextTime);
+							// daily prices calculation
+							plugin.marketFile.dailyPricesCalculation(plugin.dailyLog);
+						}
+					}
+					if (shop.opened) {
+						// enter chest
+						if (!plugin.enterChest(player, block)) {
 							event.setCancelled(true);
 						}
+					} else {
+						player.sendMessage(
+							RealColor.cancel
+							+ plugin.lang.tr("+owner's shop +name is closed")
+							.replace("+owner", RealColor.player + shop.player + RealColor.cancel)
+							.replace("+name", RealColor.shop + shop.name + RealColor.cancel)
+							.replace("  ", " ")
+						);
+						event.setCancelled(true);
 					}
 				}
 			}

@@ -81,8 +81,10 @@ public class RealShopTransaction
 		cancelledLines = new ArrayList<RealShopTransactionLine>();
 		transactionLines = new ArrayList<RealShopTransactionLine>();
 		double totalPrice = (double)0;
-		// create lines and canceled lines
-		for (RealItemStack itemStack : itemStackHashMap.getContents()) {
+		// create lines and cancelled lines
+		Iterator<RealItemStack> iterator = itemStackHashMap.getContents().iterator();
+		while (iterator.hasNext()) {
+			RealItemStack itemStack = iterator.next();
 			int amount = itemStack.getAmount();
 			String typeIdDurability = itemStack.getTypeIdDurability();
 			RealPrice price = pricesFile.getPrice(typeIdDurability, marketFile);
@@ -117,7 +119,7 @@ public class RealShopTransaction
 		// if total amount exceeds available player amount, then cancel all
 		this.totalPrice = Math.ceil(totalPrice * 100.0) / 100.0;
 		if (
-			(this.totalPrice > plugin.realEconomy.getBalance(playerName))
+			this.totalPrice > plugin.realEconomy.getBalance(playerName)
 			|| (-this.totalPrice) > plugin.realEconomy.getBalance(shopPlayerName)
 		) {
 			cancelAll = true;

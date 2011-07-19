@@ -1,49 +1,49 @@
 [manage|s|1 : /Shop-Management]
 /rshop create [<name>] : Shop erstellen
-/rshop delete : Shop löschen
-/rshop close : Shop vorübergehend schliessen 
-/rshop open : Shop öffnen (falls geschlossen)
+/rshop delete : Shop loeschen
+/rshop close : Shop voruebergehend schliessen 
+/rshop open : Shop oeffnen (falls geschlossen)
 /rshop : Komplette Shop-Informationen
 
 [buysell|bs|2 : An/Verkaufsbestimmungen]
 Diese Befehle ohne ID: derzeitigen Status anzeigen
-/rshop buy [+<id>][-<id>][...] : hinzufügen/entfernen von
- Artikeln, die Kunden kaufen können
-/rshop sell [+<id>][-<id>][...] : hinzufügen/entfernen von
- Artikeln, die Kunden verkaufen können ([-0] für alle Artikel])
-/rshop xbuy [+<id>][-<id>][...] : hinzufügen/entfernen von
- Artikeln, die Kunden nicht kaufen können
-/rshop xsell [+<id>][-<id>][...] : hinzufügen/entfernen von
- Artikeln, die Kunden nicht verkaufen können
+/rshop buy [+<id>][-<id>][...] : hinzufuegen/entfernen von
+ Artikeln, die Kunden kaufen koennen
+/rshop sell [+<id>][-<id>][...] : hinzufuegen/entfernen von
+ Artikeln, die Kunden verkaufen koennen ([-0] fuer alle Artikel])
+/rshop xbuy [+<id>][-<id>][...] : hinzufuegen/entfernen von
+ Artikeln, die Kunden nicht kaufen koennen
+/rshop xsell [+<id>][-<id>][...] : hinzufuegen/entfernen von
+ Artikeln, die Kunden nicht verkaufen koennen
 
-[flags|f|3 : Zusätzliche Shop-Einstellungen]
+[flags|f|3 : Zusaetzliche Shop-Einstellungen]
 /rshop infiniteBuy on|off : Kunde kann unendlich kaufen
- Kiste automatisch nachfüllen (Standard: Deaktiviert)
+ Kiste automatisch nachfuellen (Standard: Deaktiviert)
 /rshop infiniteSell on|off : Kunde kann unendlich verkaufen 
- Gegenstände gehen verloren! (Standard: Deaktiviert)
+ Gegenstaende gehen verloren! (Standard: Deaktiviert)
 /rshop marketItemsOnly on|off : Nur Artikel aus der Market.txt
  ("Markt-Artikel) an/verkaufen: (Standard: Deaktiviert)
-/rshop damagedItems on|off : Beschädigte Gegenstände 
+/rshop damagedItems on|off : Beschaedigte Gegenstaende 
  ankaufen: (Standard: Aktiviert)
 
 [prices|p|4|price : Preiseinstellungen]
 /rshop price <itemId> <buyPrice> [<SellPrice>] : Festlegen des 
  An/Verkaufspreises eines Artikels
 /rshop price del <itemId> : An/Verkaufspreis eines Artikels
- löschen
+ loeschen
 /rshop price <itemId> : An/Verkaufspreis eines Artikels
  anzeigen
 /rshop price : An/Verkaufspreise aller Artikel anzeigen
 
 [market|m|5 : Marktpreiseinstellungen]
 /rshop market <itemId> <buyPrice> [<SellPrice>] :Marktpreis eines Artikels festlegen
-/rshop market del <itemId> : Marktpreis eines Artikels löschen
+/rshop market del <itemId> : Marktpreis eines Artikels loeschen
 /rshop market <itemId> Marktpreis eines Artikels anzeigen
 /rshop market : Marktpreis aller Artikel anzeigen
 
 [admin|a|6 : Administratorbefehle]
 /rshop reload : Konfigurationsdateien neu laden
 /rshop check : Globale Informationen / Shop Vergleich
-/rshop log : Protokoll der täglichen Handelsbilanz
+/rshop log : Protokoll der taeglichen Handelsbilanz
 /rshop simul : Preiskalkulation simulieren
 /rshop daily : Auswirkung des Tages auf die Preiskalkulation

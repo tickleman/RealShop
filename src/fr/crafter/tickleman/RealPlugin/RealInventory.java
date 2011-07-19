@@ -94,7 +94,7 @@ public class RealInventory
 	 */
 	public boolean add(int typeId, int amount, short durability)
 	{
-		ArrayList<ItemStack[]> itemStackBackup = backup();
+		backup();
 		for (int i = 0; i < inventories.length; i++) {
 			HashMap<Integer, ItemStack> remaining = inventories[i].addItem(
 				new ItemStack(typeId, amount, durability)
@@ -107,31 +107,8 @@ public class RealInventory
 			}
 		}
 		// not enough room : restore inventory and return false
-		restore(itemStackBackup);
+		restore();
 		return false;
-	}
-
-	//---------------------------------------------------------------------------------------- backup
-	/**
-	 * Backups RealInventory to a copy of the inventory
-	 */
-	public ArrayList<ItemStack[]> backup()
-	{
-System.out.println("BACKUP: " + toString());
-		itemStackBackup = new ArrayList<ItemStack[]>();
-		for (int i = 0; i < inventories.length; i++) {
-			itemStackBackup.add(inventories[i].getContents().clone());
-		}
-		if (playerFlag) {
-			PlayerInventory playerInventory = (PlayerInventory)inventories[0];
-			ItemStack[] itemStacks = new ItemStack[4];
-			itemStacks[0] = RealItemStack.clone(playerInventory.getHelmet());
-			itemStacks[1] = RealItemStack.clone(playerInventory.getChestplate());
-			itemStacks[2] = RealItemStack.clone(playerInventory.getLeggings());
-			itemStacks[3] = RealItemStack.clone(playerInventory.getBoots());
-			itemStackBackup.add(itemStacks);
-		}
-		return itemStackBackup;
 	}
 
 	//-------------------------------------------------------------------------------------- contains
@@ -152,6 +129,28 @@ System.out.println("BACKUP: " + toString());
 			}
 		}
 		return false;
+	}
+
+	//---------------------------------------------------------------------------------------- backup
+	/**
+	 * Backups RealInventory to a copy of the inventory
+	 */
+	public ArrayList<ItemStack[]> backup()
+	{
+		itemStackBackup = new ArrayList<ItemStack[]>();
+		for (int i = 0; i < inventories.length; i++) {
+			itemStackBackup.add(inventories[i].getContents().clone());
+		}
+		if (playerFlag) {
+			PlayerInventory playerInventory = (PlayerInventory)inventories[0];
+			ItemStack[] itemStacks = new ItemStack[4];
+			itemStacks[0] = RealItemStack.clone(playerInventory.getHelmet());
+			itemStacks[1] = RealItemStack.clone(playerInventory.getChestplate());
+			itemStacks[2] = RealItemStack.clone(playerInventory.getLeggings());
+			itemStacks[3] = RealItemStack.clone(playerInventory.getBoots());
+			itemStackBackup.add(itemStacks);
+		}
+		return itemStackBackup;
 	}
 
 	//----------------------------------------------------------------------------------------- clear
@@ -249,21 +248,16 @@ System.out.println("BACKUP: " + toString());
 	public void restore(ArrayList<ItemStack[]> itemStackBackup)
 	{
 		for (int i = 0; i < inventories.length; i++) {
-			ItemStack[] itemStackList = itemStackBackup.get(i);
-			for (int j = 0; j < itemStackList.length; j++) {
-				inventories[i].setItem(j, RealItemStack.clone(itemStackList[j]));
-			}
+			inventories[i].setContents(itemStackBackup.get(i));
 		}
 		if (playerFlag) {
 			PlayerInventory inventory = (PlayerInventory)inventories[0];
-			ItemStack[] itemStackList = itemStackBackup.get(1);
-			inventory.setHelmet(RealItemStack.clone(itemStackList[0]));
-			inventory.setChestplate(RealItemStack.clone(itemStackList[1]));
-			inventory.setLeggings(RealItemStack.clone(itemStackList[2]));
-			inventory.setBoots(RealItemStack.clone(itemStackList[3]));
+			inventory.setHelmet(RealItemStack.clone(itemStackBackup.get(1)[0]));
+			inventory.setChestplate(RealItemStack.clone(itemStackBackup.get(1)[1]));
+			inventory.setLeggings(RealItemStack.clone(itemStackBackup.get(1)[2]));
+			inventory.setBoots(RealItemStack.clone(itemStackBackup.get(1)[3]));
 		}
 		update();
-System.out.println("RESTORE: " + toString());
 	}
 
 	//-------------------------------------------------------------------------------------- moveFrom
@@ -429,8 +423,6 @@ System.out.println("RESTORE: " + toString());
 				+ ", amount=" + itemStack.getAmount()
 				+ ", durability=" + itemStack.getDurability()
 				+ "\n";
-			} else {
-				string += "- helmet: null\n";
 			}
 			if ((itemStack = inventory.getChestplate()) != null) {
 				string += "- chestplate"
@@ -438,8 +430,6 @@ System.out.println("RESTORE: " + toString());
 				+ ", amount=" + itemStack.getAmount()
 				+ ", durability=" + itemStack.getDurability()
 				+ "\n";
-			} else {
-				string += "- chestplate: null\n";
 			}
 			if ((itemStack = inventory.getLeggings()) != null) {
 				string += "- leggings"
@@ -447,8 +437,6 @@ System.out.println("RESTORE: " + toString());
 				+ ", amount=" + itemStack.getAmount()
 				+ ", durability=" + itemStack.getDurability()
 				+ "\n";
-			} else {
-				string += "- leggings: null\n";
 			}
 			if ((itemStack = inventory.getBoots()) != null) {
 				string += "- boots"
@@ -456,8 +444,6 @@ System.out.println("RESTORE: " + toString());
 				+ ", amount=" + itemStack.getAmount()
 				+ ", durability=" + itemStack.getDurability()
 				+ "\n";
-			} else {
-				string += "- boots: null\n";
 			}
 		}
 		string += "##### RealInventory object end";

@@ -30,6 +30,10 @@ id;name;recipe
 24;Sandstone;12*4
 25;Note Block;331+5*8
 26;Bed
+27;Powered Rail;266*6+280+331
+28;Detector Rail;265*6+70+331
+29;Sticky Piston;33+341
+33;Piston;5*3+4*4+265+331
 35;White Wool;287*9
 35:1;Orange Wool;35+351:14
 35:2;Magenta Wool;35+351:13
@@ -110,6 +114,7 @@ id;name;recipe
 92;Cake
 93;Redstone repeater off
 94;Redstone repeater on
+96;Trapdoor;5*6/2
 256;Iron Shovel;280*2+265
 257;Iron Pickaxe;280*2+265*3
 258;Iron Axe;280+265*3
@@ -228,5 +233,8 @@ id;name;recipe
 354;Cake;296*3+335*3+353*2+344
 355;Bed;5*3+35*3
 356;Redstone repeater;76*2+331+1*3
+357;Cookie;296*2+351:3
+358;Map;339*8+345
+359;Shears;265*2
 2256;Gold Music Disc
 2257;Green Music Disc

@@ -358,25 +358,25 @@ public class RealShopPlugin extends RealPlugin
 				if (config.shopOpOnly.equals("true")) {
 					return false;
 				} else if (
-					permission == "shop"
-					|| permission == "help"
-					|| permission == "info"
-					|| permission == "create"
-					|| permission == "delete"
-					|| permission == "give"
-					|| permission == "open"
-					|| permission == "close"
-					|| permission == "buy"
-					|| permission == "sell"
-					|| permission == "xbuy"
-					|| permission == "xsell"
-					|| permission == "marketitemsonly"
-					|| permission == "damageditems"
-					|| permission == "price"
-					|| permission == "price.info"
-					|| permission == "price.display"
-					|| permission == "price.set"
-					|| permission == "price.del"
+					permission.equals("shop")
+					|| permission.equals("help")
+					|| permission.equals("info")
+					|| permission.equals("create")
+					|| permission.equals("delete")
+					|| permission.equals("give")
+					|| permission.equals("open")
+					|| permission.equals("close")
+					|| permission.equals("buy")
+					|| permission.equals("sell")
+					|| permission.equals("xbuy")
+					|| permission.equals("xsell")
+					|| permission.equals("marketitemsonly")
+					|| permission.equals("damageditems")
+					|| permission.equals("price")
+					|| permission.equals("price.info")
+					|| permission.equals("price.display")
+					|| permission.equals("price.set")
+					|| permission.equals("price.del")
 				) {
 					return true;
 				} else {

@@ -7,10 +7,7 @@ authors:
 commands:
   mny:
     description: RealEconomy money commands
-    usage: /<command> help
   rs:
     description: RealShop chest-shop commands
-    usage: /<command> help
   rshop:
     description: RealShop chest-shop commands
-    usage: /<command> help

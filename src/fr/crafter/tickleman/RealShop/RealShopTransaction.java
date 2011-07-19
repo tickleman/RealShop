@@ -90,12 +90,6 @@ public class RealShopTransaction
 				price = marketFile.getPrice(typeIdDurability, null);
 			}
 			RealShopTransactionLine transactionLine = new RealShopTransactionLine(itemStack, price);
-			System.out.println("buyAllowed " + shop.isItemBuyAllowed(typeIdDurability));
-			System.out.println("sellAllowed " + shop.isItemSellAllowed(typeIdDurability));
-			System.out.println("damagedItems " + plugin.config.shopDamagedItems.equals("true"));
-			System.out.println("itemStack.getDamage() " + itemStack.getDamage());
-			System.out.println("marketItemsOnly " + plugin.config.shopMarketItemsOnly.equals("true"));
-			System.out.println("marketFile.prices " + plugin.marketFile.prices.containsKey(typeIdDurability));
 			if (
 				(price == null)
 				|| ((amount > 0) && !shop.isItemBuyAllowed(typeIdDurability))

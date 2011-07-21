@@ -51,8 +51,7 @@ public class RealPlugin extends JavaPlugin
 	public void onEnable()
 	{
 		// read language file
-		lang = new RealTranslationFile(this, language);
-		lang.load();
+		lang = new RealTranslationFile(this, language).load();
 		// enabled
 		log.info("version [" + version + "] (" + author + ") loaded", true);
 	}

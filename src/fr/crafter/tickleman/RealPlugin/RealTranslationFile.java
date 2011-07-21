@@ -4,6 +4,9 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.HashMap;
 import java.util.StringTokenizer;
+import java.util.logging.Level;
+
+import org.bukkit.plugin.java.JavaPlugin;
 
 //############################################################################# RealTranslationFile
 public class RealTranslationFile
@@ -11,46 +14,48 @@ public class RealTranslationFile
 
 	private final String fileName;
 
-	private HashMap<String, String> translations = new HashMap<String, String>();
+	private HashMap<String, String> translations	= new HashMap<String, String>();
 
-	private final RealPlugin plugin;
+	private final JavaPlugin plugin;
 
-	//--------------------------------------------------------------------------- RealTranslationFile
-	public RealTranslationFile(final RealPlugin plugin)
+	// -------------------------------------------------------------------------- RealTranslationFile
+	public RealTranslationFile(final JavaPlugin plugin)
 	{
 		this(plugin, "en");
 	}
-	
-	//--------------------------------------------------------------------------- RealTranslationFile
-	public RealTranslationFile(final RealPlugin plugin, final String fileName)
+
+	// -------------------------------------------------------------------------- RealTranslationFile
+	public RealTranslationFile(final JavaPlugin plugin, final String fileName)
 	{
 		this.plugin = plugin;
 		this.fileName = fileName;
 	}
 
-	//------------------------------------------------------------------------------------------ load
+	// ----------------------------------------------------------------------------------------- load
 	public RealTranslationFile load()
 	{
 		translations.clear();
 		RealTools.renameFile(
-			"plugins/" + plugin.name + "/" + fileName + ".lang",
-			"plugins/" + plugin.name + "/" + fileName + ".lang.txt"
+			"plugins/" + plugin.getDescription().getName() + "/" + fileName + ".lang",
+			"plugins/" + plugin.getDescription().getName() + "/" + fileName + ".lang.txt"
 		);
-		if (!RealTools.fileExists("plugins/" + plugin.name + "/" + fileName + ".lang.txt")) {
+		if (!RealTools.fileExists(
+			"plugins/" + plugin.getDescription().getName() + "/" + fileName + ".lang.txt"
+		)) {
 			RealTools.extractDefaultFile(plugin, fileName + ".lang.txt");
 		}
 		try {
-			BufferedReader reader = new BufferedReader(
-				new FileReader("plugins/" + plugin.name + "/" + fileName + ".lang.txt")
-			);
+			BufferedReader reader = new BufferedReader(new FileReader(
+				"plugins/" + plugin.getDescription().getName() + "/" + fileName + ".lang.txt"
+			));
 			String buffer;
 			StringTokenizer line;
 			while ((buffer = reader.readLine()) != null) {
 				if ((buffer.length() > 0) && (buffer.charAt(0) != '#')) {
 					line = new StringTokenizer(buffer, "=");
 					if (line.countTokens() >= 2) {
-						String key = line.nextToken().trim();
-						String value = line.nextToken().trim();
+						String key = line.nextToken();
+						String value = line.nextToken();
 						if (!key.equals("") && !value.equals("")) {
 							translations.put(key, value);
 						}
@@ -60,21 +65,29 @@ public class RealTranslationFile
 			reader.close();
 		} catch (Exception e) {
 			if (fileName.equals("en")) {
-				plugin.log.info(
-					"You can create plugins/" + plugin.name + "/" + fileName + ".lang.txt file"
-					+ " to change texts"
-				);
+				plugin
+					.getServer()
+					.getLogger()
+					.log(
+						Level.INFO,
+						"You can create plugins/" + plugin.getDescription().getName() + "/" + fileName
+							+ ".lang.txt file" + " to change texts"
+					);
 			} else {
-				plugin.log.warning(
-					"Needs plugins/" + plugin.name + "/" + fileName + ".lang.txt file"
-					+ " (check your language configuration)"
-				);
+				plugin
+					.getServer()
+					.getLogger()
+					.log(
+						Level.WARNING,
+						"Needs plugins/" + plugin.getDescription().getName() + "/" + fileName + ".lang.txt file"
+							+ " (check your language configuration)"
+					);
 			}
 		}
 		return this;
 	}
 
-	//-------------------------------------------------------------------------------------------- tr
+	// ------------------------------------------------------------------------------------------- tr
 	public String tr(String text)
 	{
 		String translated = translations.get(text);

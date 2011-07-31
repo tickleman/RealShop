@@ -4,6 +4,8 @@
    4    ;    1 ;    1 ; cobblestone
    6    ;    5 ;    4 ; sapling
    7    ;  999 ;    0 ; bedrock
+   9    ;    1 ;    1 ; water
+  11    ;   10 ;   10 ; lava
   12    ;    1 ;    1 ; sand
   13    ;    1 ;    1 ; gravel
   14    ;  300 ;  270 ; gold ore
@@ -39,8 +41,6 @@
  296    ;    5 ;    3 ; wheat
  318    ;    5 ;    4 ; flint
  319    ;    5 ;    4 ; raw porkshop
- 326    ;    5 ;    1 ; water bucket
- 327    ;   50 ;   10 ; lava bucket
  329    ;   10 ;    9 ; saddle
  331    ;   10 ;    9 ; redstone
  332    ;    1 ;    1 ; snowball

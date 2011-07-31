@@ -61,6 +61,23 @@ public class RealItemStack
 		return typeId;
 	}
 
+	//------------------------------------------------------------------- typeIdDurabilityDamageValue
+	/**
+	 * Return the damage value of a typeId:damage (for items that have damage values only)
+	 */
+	public static int typeIdDurabilityDamageValue(String typeIdDurability)
+	{
+		if (!typeIdDurability.contains(":")) {
+			return 0;
+		} else {
+			if (!typeIdHasDamage(Integer.parseInt(typeIdDurability.split(":")[0]))) {
+				return 0;
+			} else {
+				return Integer.parseInt(typeIdDurability.split(":")[1]);
+			}
+		}
+	}
+
 	//----------------------------------------------------------------- typeIdDurabilityWithoutDamage
 	/**
 	 * Return the typeIdDurability identifier without its damage value
@@ -84,6 +101,14 @@ public class RealItemStack
 				return typeIdDurability.split(":")[0];
 			}
 		}
+	}
+
+	public static boolean typeIdDurabilityContainsDamage(String typeIdDurability)
+	{
+		Integer typeId = typeIdDurability.contains(":")
+			? Integer.parseInt(typeIdDurability.split(":")[0])
+			: Integer.parseInt(typeIdDurability);
+		return RealItemStack.typeIdHasDamage(typeId);
 	}
 
 	//------------------------------------------------------------------------------- typeIdHasDamage
@@ -116,8 +141,11 @@ public class RealItemStack
 	//--------------------------------------------------------------------------- getTypeIdDurability
 	public String getTypeIdDurability()
 	{
-		if (getDamage() > 0) {
-			return getTypeId() + ":" + getDamage();
+		if (
+			(getDamage() > 0)
+			|| ((getDurability() > 0) && !RealItemStack.typeIdHasDamage(getTypeId()))
+		) {
+			return getTypeId() + ":" + getDurability();
 		} else {
 			return "" + getTypeId();
 		}

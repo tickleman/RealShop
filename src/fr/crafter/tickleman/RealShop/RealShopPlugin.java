@@ -83,7 +83,7 @@ public class RealShopPlugin extends RealPlugin
 	//-------------------------------------------------------------------------------- RealShopPlugin
 	public RealShopPlugin()
 	{
-		super("tickleman", "RealShop", "0.67");
+		super("tickleman", "RealShop", "0.68");
 		commands = new RealShopCommands(this);
 		realEconomy = new RealEconomy(this);
 		realPermissions = new RealPermissions(this);
@@ -945,6 +945,7 @@ public class RealShopPlugin extends RealPlugin
 		pm.registerEvent(Event.Type.BLOCK_DAMAGE, blockListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.BLOCK_PLACE, blockListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.INVENTORY_OPEN, playerListener, Priority.Normal, this);
+		pm.registerEvent(Event.Type.INVENTORY_TRANSACTION, playerListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_DROP_ITEM, playerListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_INTERACT, playerListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_MOVE, playerListener, Priority.Normal, this);

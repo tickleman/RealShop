@@ -192,8 +192,12 @@ public class RealPricesFile
 				// recipe price
 				price = fromRecipe(typeIdDamage, marketFile);
 			}
-			if ((price == null) && typeIdDamage.contains(":")) {
-				// item without damage code price
+			if (
+				(price == null)
+				&& RealItemStack.typeIdDurabilityContainsDamage(typeIdDamage)
+				&& typeIdDamage.contains(":")
+			) {
+				// damaged items price calculation
 				Integer typeId = Integer.parseInt(typeIdDamage.split(":")[0]);
 				Short damage = Short.parseShort(typeIdDamage.split(":")[1]);
 				price = getPrice(typeId.toString(), marketFile, recipe);

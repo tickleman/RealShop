@@ -61,4 +61,11 @@ public class RealPrice
 		return Math.ceil((double)100 * sell * (double)quantity) / (double)100;
 	}
 
+	//-------------------------------------------------------------------------------------- toString
+	@Override
+	public String toString()
+	{
+		return "[buy " + getBuy() + ", sell " + getSell() + "]";
+	}
+
 }

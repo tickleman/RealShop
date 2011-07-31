@@ -53,7 +53,7 @@ public class RealDataValuesFile
 	 */
 	public String getName(String typeIdDamage)
 	{
-		String result = names.get(typeIdDamage);
+		String result = names.get(RealItemStack.typeIdDurabilityWithoutDamage(typeIdDamage));
 		if (result == null) {
 			result = "#" + typeIdDamage;
 		}

@@ -97,7 +97,7 @@ public class RealShopTransaction
 				|| ((amount > 0) && !shop.isItemBuyAllowed(typeIdDurability))
 				|| ((amount < 0) && !shop.isItemSellAllowed(typeIdDurability))
 				|| (!shop.getFlag("damagedItems", plugin.config.shopDamagedItems.equals("true")) && (itemStack.getDamage() != 0))
-				|| (shop.getFlag("marketItemsOnly", plugin.config.shopMarketItemsOnly.equals("true")) && !plugin.marketFile.prices.containsKey(typeIdDurability))
+				|| (shop.getFlag("marketItemsOnly", plugin.config.shopMarketItemsOnly.equals("true")) && !plugin.marketFile.prices.containsKey(RealItemStack.typeIdDurabilityWithoutDamage(typeIdDurability)))
 			) {
 				if (price == null) {
 					transactionLine.comment = "no price";
@@ -107,7 +107,7 @@ public class RealShopTransaction
 					transactionLine.comment = "sell not allowed";
 				} else if (!shop.getFlag("damagedItems", plugin.config.shopDamagedItems.equals("true")) && (itemStack.getDamage() != 0)) {
 					transactionLine.comment = "damaged item";
-				} else if (shop.getFlag("marketItemsOnly", plugin.config.shopMarketItemsOnly.equals("true")) && !plugin.marketFile.prices.containsKey(typeIdDurability)) {
+				} else if (shop.getFlag("marketItemsOnly", plugin.config.shopMarketItemsOnly.equals("true")) && !plugin.marketFile.prices.containsKey(RealItemStack.typeIdDurabilityWithoutDamage(typeIdDurability))) {
 					transactionLine.comment = "not in market";
 				}
 				cancelledLines.add(transactionLine);

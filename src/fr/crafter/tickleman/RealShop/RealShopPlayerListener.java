@@ -38,7 +38,7 @@ public class RealShopPlayerListener extends PlayerListener
 	@Override
 	public void onInventoryOpen(PlayerInventoryEvent event)
 	{
-		// craftbukkit 440-740 : cratbukkit seems to never call this, sorry !
+		// craftbukkit 440-1000 : cratbukkit seems to never call this, sorry !
 		System.out.println("onInventoryOpen");
 		// exit previous chest
 		if (plugin.playersInChestCounter > 0) {

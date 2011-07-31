@@ -1236,8 +1236,8 @@ public class RealShopPlugin extends RealPlugin
 		shopsFile.save();
 		if (!silent) player.sendMessage(
 			RealColor.message
-			+ lang.tr("The shop +name was given to +client")
-			.replace("+client", RealColor.player + toPlayer + RealColor.message)
+			+ lang.tr("The shop +name was given to +player")
+			.replace("+player", RealColor.player + toPlayer + RealColor.message)
 			.replace("+name", RealColor.shop + shop.name + RealColor.message)
 			.replace("+owner", RealColor.player + player.getName() + RealColor.message)
 			.replace("  ", " ")

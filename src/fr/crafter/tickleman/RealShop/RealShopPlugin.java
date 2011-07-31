@@ -356,7 +356,14 @@ public class RealShopPlugin extends RealPlugin
 			} else {
 				// permissions only for functions that users have access to
 				if (config.shopOpOnly.equals("true")) {
-					return false;
+					if (
+						permission.equals("info")
+						|| permission.equals("shop")
+					) {
+						return true;
+					} else {
+						return false;
+					}
 				} else if (
 					permission.equals("shop")
 					|| permission.equals("help")

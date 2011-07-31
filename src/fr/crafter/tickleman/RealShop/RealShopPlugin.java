@@ -83,7 +83,7 @@ public class RealShopPlugin extends RealPlugin
 	//-------------------------------------------------------------------------------- RealShopPlugin
 	public RealShopPlugin()
 	{
-		super("tickleman", "RealShop", "0.66");
+		super("tickleman", "RealShop", "0.67");
 		commands = new RealShopCommands(this);
 		realEconomy = new RealEconomy(this);
 		realPermissions = new RealPermissions(this);
@@ -510,6 +510,7 @@ public class RealShopPlugin extends RealPlugin
 				if (param.equals("")) param = "info";
 				else if (param.equals("?"))   param = "help";
 				else if (param.equals("b"))   param = "buy";
+				else if (param.equals("c"))   param = "create";
 				else if (param.equals("chk")) param = "check";
 				else if (param.equals("cl"))  param = "close";
 				else if (param.equals("day")) param = "daily";
@@ -658,6 +659,7 @@ public class RealShopPlugin extends RealPlugin
 								if (neighbor != null) shopGive(player, neighbor, param2, true);
 							} else if (param.equals("infiniteBuy")) {
 								shop.setFlag("infiniteBuy", param2);
+								if (neighborShop != null) neighborShop.setFlag("infiniteBuy", param2);
 								player.sendMessage(
 									RealColor.message
 									+ lang.tr("Infinite buy flag is")
@@ -666,6 +668,7 @@ public class RealShopPlugin extends RealPlugin
 								);
 							} else if (param.equals("infiniteSell")) {
 								shop.setFlag("infiniteSell", param2);
+								if (neighborShop != null) neighborShop.setFlag("infiniteSell", param2);
 								player.sendMessage(
 									RealColor.message
 									+ lang.tr("Infinite sell flag is")
@@ -674,6 +677,7 @@ public class RealShopPlugin extends RealPlugin
 								);
 							} else if (param.equals("marketItemsOnly")) {
 								shop.setFlag("marketItemsOnly", param2);
+								if (neighborShop != null) neighborShop.setFlag("marketItemsOnly", param2);
 								player.sendMessage(
 									RealColor.message
 									+ lang.tr("Trade market items only flag is")
@@ -682,6 +686,7 @@ public class RealShopPlugin extends RealPlugin
 								);
 							} else if (param.equals("damagedItems")) {
 								shop.setFlag("damagedItems", param2);
+								if (neighborShop != null) neighborShop.setFlag("damagedItems", param2);
 								player.sendMessage(
 									RealColor.message
 									+ lang.tr("Damaged item buy/sell flag is")

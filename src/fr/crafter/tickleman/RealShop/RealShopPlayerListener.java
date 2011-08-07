@@ -7,7 +7,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerInventoryEvent;
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -32,18 +31,6 @@ public class RealShopPlayerListener extends PlayerListener
 	{
 		plugin = instance;
 		
-	}
-
-	//------------------------------------------------------------------------------- onInventoryOpen
-	@Override
-	public void onInventoryOpen(PlayerInventoryEvent event)
-	{
-		// craftbukkit 440-1000 : cratbukkit seems to never call this, sorry !
-		System.out.println("onInventoryOpen");
-		// exit previous chest
-		if (plugin.playersInChestCounter > 0) {
-			plugin.exitChest(event.getPlayer(), false);
-		}
 	}
 
 	//------------------------------------------------------------------------------ onPlayerDropItem

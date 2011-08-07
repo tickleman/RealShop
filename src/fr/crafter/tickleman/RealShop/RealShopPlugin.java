@@ -50,6 +50,9 @@ public class RealShopPlugin extends RealPlugin
 	/** Says if the player is into a chest, and stores chest state info */
 	public final HashMap<String, RealInChestState> inChestStates = new HashMap<String, RealInChestState>();
 
+	/** Inventory events Listener */
+	public RealShopInventoryListener inventoryListener = null;
+
 	/** Last day time, per world (ie : in reality this is the time of the NEXT day change) */
 	public HashMap<String, Long> lastDayTime = new HashMap<String, Long>();
 
@@ -83,7 +86,7 @@ public class RealShopPlugin extends RealPlugin
 	//-------------------------------------------------------------------------------- RealShopPlugin
 	public RealShopPlugin()
 	{
-		super("tickleman", "RealShop", "0.68");
+		super("tickleman", "RealShop", "0.70");
 		commands = new RealShopCommands(this);
 		realEconomy = new RealEconomy(this);
 		realPermissions = new RealPermissions(this);
@@ -944,11 +947,11 @@ public class RealShopPlugin extends RealPlugin
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvent(Event.Type.BLOCK_DAMAGE, blockListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.BLOCK_PLACE, blockListener, Priority.Normal, this);
-		pm.registerEvent(Event.Type.INVENTORY_OPEN, playerListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_DROP_ITEM, playerListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_INTERACT, playerListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_MOVE, playerListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_QUIT, playerListener, Priority.Normal, this);
+		pm.registerEvent(Event.Type.PLUGIN_DISABLE, pluginListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLUGIN_ENABLE, pluginListener, Priority.Normal, this);
 		// read configuration file
 		config = new RealShopConfig(this);

@@ -1,5 +1,7 @@
 package fr.crafter.tickleman.RealShop;
 
+import org.bukkit.event.Event;
+import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.event.server.ServerListener;
 
@@ -21,10 +23,23 @@ public class RealShopPluginListener extends ServerListener
 		this.plugin = plugin;
 	}
 
+	// ------------------------------------------------------------------------------ OnPluginDisable
+	@Override
+	public void onPluginDisable(PluginDisableEvent event)
+	{
+		if (
+			(event.getPlugin().getDescription().getName() == "Spout")
+			|| (event.getPlugin().getDescription().getName() == "RealShop")
+		) {
+			plugin.inventoryListener = null;
+		}
+	}
+
 	//-------------------------------------------------------------------------------- onPluginEnable
 	@Override
 	public void onPluginEnable(PluginEnableEvent event)
 	{
+		// iConomy
 		if (plugin.config.economyPlugin.equals("iConomy") && !iConomyLink.initialized) {
 			Plugin iConomy = plugin.getServer().getPluginManager().getPlugin("iConomy");
 			if (iConomy != null) {
@@ -38,6 +53,7 @@ public class RealShopPluginListener extends ServerListener
 				}
 			}
 		}
+		// BOSEconomy
 		if (plugin.config.economyPlugin.equals("BOSEconomy") && !BOSEconomyLink.initialized) {
 			Plugin bosEconomy = plugin.getServer().getPluginManager().getPlugin("BOSEconomy");
 			if (bosEconomy != null) {
@@ -51,6 +67,7 @@ public class RealShopPluginListener extends ServerListener
 				}
 			}
 		}
+		// Permissions
 		if (plugin.config.permissionsPlugin.equals("Permissions") && !PermissionsLink.initialized) {
 			Plugin permissions = plugin.getServer().getPluginManager().getPlugin("Permissions");
 			if (permissions != null) {
@@ -63,6 +80,18 @@ public class RealShopPluginListener extends ServerListener
 					}
 				}
 			}
+		}
+		// Spout
+		if (
+			(plugin.inventoryListener == null)
+			&& (plugin.getServer().getPluginManager().getPlugin("Spout") != null)
+			&& plugin.getServer().getPluginManager().getPlugin("Spout").isEnabled()
+		) {
+			plugin.inventoryListener = new RealShopInventoryListener(plugin);
+			plugin.getServer().getPluginManager().registerEvent(
+				Event.Type.CUSTOM_EVENT, plugin.inventoryListener, Event.Priority.Normal, plugin
+			);
+			plugin.log.info("Uses Spout to close shops immediately when living the chest", true);
 		}
 	}
 

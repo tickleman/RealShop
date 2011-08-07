@@ -25,7 +25,7 @@ public abstract class BOSEconomyLink
 	public static double getBalance(String playerName)
 	{
 		try {
-			return BOSEconomyLink.economy.getPlayerMoney(playerName);
+			return BOSEconomyLink.economy.getPlayerMoneyDouble(playerName);
 		} catch (Exception e) {
 			plugin.log.severe("BOSEconomy.getPlayerMoney() crashed with this message :");
 			plugin.log.severe(e.getMessage());
@@ -94,7 +94,7 @@ public abstract class BOSEconomyLink
 	public static boolean setBalance(String playerName, double balance)
 	{
 		try {
-			BOSEconomyLink.economy.setPlayerMoney(playerName, (int)Math.round(balance), false);
+			BOSEconomyLink.economy.addPlayerMoney(playerName, balance, false);
 			return true;
 		} catch (Exception e) {
 			plugin.log.severe("BOSEconomy.setPlayerMoney() crashed with this message :");
